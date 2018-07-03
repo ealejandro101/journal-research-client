@@ -3,11 +3,11 @@
         <div class="row justify-content-center">
             <div class="col-6">
                 
-                <h2>Post list</h2>
-                <div class="card mb-3" v-for="post in posts" :key="post.id">
+                <h2>Categorias</h2>
+                <div class="card mb-3" v-for="categoria in categorias" :key="categoria.id">
                     <div class="card-body">
-                        <h3>{{post.title}}</h3>
-                        <p v-text="post.content"></p>
+                        <h3>{{categoria.title}}</h3>
+                        <p v-text="categoria.nombre"></p>
                     </div>
                 </div>
             </div>
@@ -20,12 +20,12 @@ import axios from "axios";
 export default {
   data() {
     return {
-      posts: []
+      categorias: []
     };
   },
   mounted() {
-    axios.get("http://localhost:3000/api/Posts").then(response => {
-      this.posts = response.data;
+    axios.get("http://localhost:3000/api/Categoria").then(response => {
+      this.categorias = response.data;
     });
   }
 };
