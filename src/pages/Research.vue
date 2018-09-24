@@ -1,5 +1,6 @@
 <template>
   <div class="research">
+    <header-inicial></header-inicial>
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -12,8 +13,13 @@
 </template>
 
 <script>
+import HeaderInicial from '@/components/HeaderInicial.vue';
+
 export default {
   name: "research",
+  components: {
+		HeaderInicial
+	},
   data() {
     return {
       msg: "Welcome to Research Journal"

@@ -4,6 +4,18 @@
             <div class="col-6">
                 
                 <h2>Categorias</h2>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h3>Title</h3>
+                        <p>parrafo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                
+                <h2>Categorias</h2>
                 <div class="card mb-3" v-for="categoria in categorias" :key="categoria.id">
                     <div class="card-body">
                         <h3>{{categoria.title}}</h3>
