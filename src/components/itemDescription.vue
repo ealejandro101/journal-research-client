@@ -12,6 +12,7 @@
 export default {
 
   props: {
+    index:String,
     icono: String,
     label: String,
     texto: String

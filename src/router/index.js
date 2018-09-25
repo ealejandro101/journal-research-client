@@ -21,6 +21,5 @@ export default new Router({
         name: 'summaryJournalCard',
         component: summaryJournalCard
     }
-
 ]
 })
