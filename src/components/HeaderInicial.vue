@@ -1,6 +1,13 @@
 <template>
     <div>
-        <ul>
+        <ul v-if="isInicial">
+            <li v-for="item in opciones" v-if="item.active" :key="item.to" class="liInicial">
+                <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
+                </router-link>
+                <a v-else :href="item.link" v-text="item.text"></a>
+            </li>
+        </ul>
+        <ul v-else>
             <li v-for="item in opciones" v-if="item.active" :key="item.to">
                 <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
                 </router-link>
@@ -13,7 +20,7 @@
 <script>
 export default {
     name: 'header-inicial',
-    props: ["opciones"],
+    props: ["opciones", "isInicial"],
     data() {
         return {
         };
@@ -30,14 +37,20 @@ ul{
 li{
     float: left;
 }
-li a{
+li a, .liInicial::before{
     color: gray;
 }
-li::after{
-    content: "|";
+li::before{
     margin: 0px 1em 0px 1em;
+    content: "";
 }
-li:last-child::after{
+.liInicial::before{
+    content: "|";
+}
+.liInicial:last-child::before{
+    content: "o";
+}
+.liInicial:first-child::before{
     content: "";
 }
 </style>

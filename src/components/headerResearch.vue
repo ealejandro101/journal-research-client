@@ -1,19 +1,19 @@
 <template>
-    <div class="container-fluid noPadding">
+    <div class="container-fluid noPadding headerResearchContainer">
         <b-navbar toggleable="md" type="dark" variant="info">
             <div class="row d-flex align-items-center" style="width: 100%">
                 <div class="col-4 col-sm-3 col-md-2 col-lg-2 noPadding">
                     <logo-research></logo-research>
                 </div>
-                <div class="col-5 col-sm-7 col-md-2 col-lg-3">
-                    <barra-busqueda></barra-busqueda>
+                <div class="col-5 col-sm-7 col-md-3 col-lg-3">
+                    <barra-busqueda :isFilter="true"></barra-busqueda>
                 </div>
                 <div class="col-3 col-sm-2 noPadding removeInPc buttonMenu">
                     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
                 </div>
-                <div class="col-12 col-md-8 col-lg-7">
+                <div class="col-12 col-md-7 col-lg-7">
                     <b-collapse is-nav id="nav_collapse" class="flex-row-reverse">
-                        <header-inicial :opciones="opciones"></header-inicial>
+                        <header-inicial :opciones="opciones" :isInicial="false"></header-inicial>
                     </b-collapse>
                 </div>
             </div>
@@ -38,6 +38,9 @@ export default {
 </script>
 
 <style scoped>
+.headerResearchContainer{
+    border: solid 1px;
+}
 ul{
     list-style: none
 }
