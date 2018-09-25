@@ -19,4 +19,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.noPadding{
+  padding: 0px;
+}
+.noPadding .row{
+  margin: 0px;
+}
 </style>

@@ -1,28 +1,28 @@
 <template>
-  <div class="research">
-    <header-inicial></header-inicial>
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><router-link to="/ListaCategorias">Lista de Categorias</router-link></li>
-      <li><router-link to="/ListaRevistas">Lista de Revistas</router-link></li>
-      <br>
-      <li> </li>
-    </ul>
+  <div class="research container-fluid noPadding">
+    <header-inicial :opciones="opciones"></header-inicial>
+    <br><br><br><br>
+    <header-research :opciones="opciones"></header-research>
   </div>
 </template>
 
 <script>
 import HeaderInicial from '@/components/HeaderInicial.vue';
+import HeaderResearch from '@/components/HeaderResearch.vue';
 
 export default {
   name: "research",
   components: {
-		HeaderInicial
+		HeaderInicial, HeaderResearch
 	},
   data() {
     return {
-      msg: "Welcome to Research Journal"
+      opciones: [
+          {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
+          {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
+          {to: '/Login', text: 'Ingresar', active: true, isVuePag: true, link: ''},
+          {to: '/Registro', text: 'Registro', active: true, isVuePag: true, link: ''}
+      ]
     };
   }
 };
