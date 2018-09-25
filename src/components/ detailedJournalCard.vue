@@ -6,47 +6,48 @@
 
         <b-row>
                
-                    <b-card >                      
+                <b-card >                      
                         <b-row >
                             <b-col sm="12" md="4" lg="4" >
-                                <b-img-lazy class ="imagenCard"  center  :src="urlImg" />   
+                                <b-img-lazy class ="imagenCard" fluid center  :src="revista.imagen" /> 
                             </b-col>
+                            <b-col sm="12" md="8" lg="8" >
+                                <p  class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
+                                <p class="card-text text-justify clasDescription"  v-text="revista.descripcion" ></p>
+                            </b-col> 
+                        </b-row>
 
-                            <b-col sm="12" md="8" lg="8" >                                             
-                               
-                                <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-                                <p class="card-text text-justify clasDescription" >{{descripcion}}</p> 
-                                 
-                                                    
-                               <div v-for="(item, index) in propiedades"  :key="index">                               
-                                        <itemDescription
-                                        :key="index"
-                                        :icono="item.icono"
-                                        :label="item.label"
-                                        :texto="item.texto">
-                                        </itemDescription>                                  
-                                    </div>
-                                <div v-for="(item, index) in categorias" :key="index">
-                                     <h5>                                         
-                                        <b-badge href="#" variant="success"><b-img rounded="circle" class="iconos" :src="item.img"/> {{item.nombre}}</b-badge>
-                                        </h5>
-                                         
-                                </div>            
-                            </b-col>                              
-                        </b-row>  
-                        <b-row>
-            </b-row>
+                        <b-row >
+                          <b-col v-for="(prop,indexa) in propiedadesName" :key="indexa"  sm="6" md="6" lg="6" >
+                              <itemDescription v-if="index %2 == 0 && index !=0"                                
+                                        :icono="propiedades[prop.nombre]"
+                                        :label="prop.nombre"
+                                        :texto="revista[prop.nombre]">
+                             </itemDescription>
+                          </b-col>
+                        <b-col v-for="(prop,indexo) in propiedadesName" :key="indexo"  sm="6" md="6" lg="6" >
+                              <itemDescription v-if="index %2 != 0"                               
+                                        :icono="propiedades[prop.nombre]"
+                                        :label="prop.nombre"
+                                        :texto="revista[prop.nombre]">
+                             </itemDescription>
+                          </b-col>
+                        </b-row>                     
+
+                        <b-badge href="#" variant="success"><b-img rounded="circle" class="iconos"  :src="iconosCategorias[categorias.nombre]"/> {{categorias.nombre}}</b-badge>
+                                      
 
                    </b-card>           
         </b-row>
     </b-container>
-
-
-
     </div>
 </template>
 
 <script>
+
+import axios from "axios";
+
+
 import itemDescription from "@/components/itemDescription";
 import ingenieriaLogo from "@/assets/ingenieria_icono.png";
 import cienciasAgricolas from "@/assets/agricola_icono.png";
@@ -54,89 +55,65 @@ import cienciasBiologicas from "@/assets/biologia_icono.png";
 import cienciasSalud from "@/assets/salud_icono.png";
 import cienciasSociales from "@/assets/sociales_icono.png";
 import humanidades from "@/assets/humanidades_icono.png";
-//import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
-//import linguisticaLiteraturaArtes from "@/assets/";
+import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
+import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x167.png";
 export default {
-  /* props: {
-        titulo: String,
-        descripcion:String,
-        urlImg: String
-    },*/
-  data() {
+  props: {
+    id:String
+  },
+  data() {     
     return {
-      cienciasExactas:"fas fa-atom",
-      linguisticaLiteraturaArtes:"fas fa-paint-brush",
-      titulo: "INGENÍERIA Y CIENCIA",
-    
-      descripcion:
-        " La revista Ingeniería y Ciencia está dirigida a la comunidad académica, científica e industrial en las áreas de la ciencia y la ingeniería. Su objetivo es presentar y difundir trabajos de investigación básica y aplicada que contribuyan al desarrollo de la ciencia y la industria en el corto, mediano y/o largo plazo, en el ámbito local e internacional. Los temas de publicación incluyen: matemáticas, física, química, biología, geología, y su articulación con la práctica de la ingeniería. Los comités, editorial y científico, dan la bienvenida, entre otros, a artículos en los cuales la formalización o trasfondo teórico es presentado, el cual desemboque en una aplicación de ingeniería. De igual manera, se aprecian las publicaciones en las cuales se usa la práctica de ingeniería como medio para exponer conjeturas inherentes a las ciencias básicas.",
-      urlImg:
-        "http://jasolutions.com.co/wp-content/uploads/2017/05/ingenieriaciencia.jpg",
-      propiedades: [
-        {
-          label: "institucion:",
-          icono: "fas fa-university",
-          texto: "Escuela de Ingeniería, Universidad EAFIT"
-        },
-        {
-          label: "sku:",
-          icono: "",
-          texto: "17949165"
-        },
-        {
-          label: "ISSN:",
-          icono: "fas fa-barcode",
-          texto: "1794-9165"
-        },
-        {
-          label: "eISSN:",
-          icono: "far fa-file-alt",
-          texto: "2256-4314"
-        },
-
-        {
-          label: "DOI:",
-          icono: "fab fa-codepen",
-          texto: "10.17230/ingciencia"
-        },
-        {
-          label: "Teléfono:",
-          icono: "fas fa-phone",
-          texto: "(57-4) 261 9500, ext. 9672"
-        },
-        {
-          label: "Dirección:",
-          icono: "fas fa-map-marked-alt",
-          texto: "Carrera 49 7Sur-50"
-        },
-        {
-          label: "Ciudad:",
-          icono: "fas fa-city",
-          texto: "Medellín – Antioquia"
-        }
-      ],
-      etiquetas: [
-        { nombre: "Biología", img:"http://jasolutions.com.co/wp-content/uploads/2017/04/ingenieria-200x167.png" },
-        { nombre: "Ciencia" , img:""},
-        { nombre: "Desarrollo", img:"" },
-        { nombre: "Física" , img:""},
-        { nombre: "Geología" , img:""},
-        { nombre: "Industria" ,img:"" },
-        { nombre: "Ingeniería",img:""},
-        { nombre: "Matemáticas",img:"" },
-        { nombre: "Química",img:"" }
-      ],
-      categorias: [
-        { nombre: "Ingeniería", img:ingenieriaLogo },
-        { nombre: "Ciencias exactas y de la tierra", img:cienciasAgricolas }
-      ]
+      revista:{},
+      categorias:{},
+      iconosCategorias:{
+        "Ciencias Agrícolas y Ambientales":cienciasAgricolas,
+        "Ciencias Biológicas":cienciasBiologicas,
+        "Ciencias Exactas":cienciasExactas,
+        "Ciencias Sociales":cienciasSociales,
+        "Ingeniería":ingenieriaLogo,
+        "Ciencias de la salud":cienciasSalud,     
+        "Humanidades":humanidades,
+        "Lingüística, literatura y artes":linguisticaLiteraturaArtes
+    }, 
+      propiedades: {
+        "institucion":"fas fa-university",
+        "sku": "",
+        "issn": "fas fa-barcode",
+        "eissn": "far fa-file-alt",
+        "doi": "fab fa-codepen",
+       "telefono": "fas fa-phone",
+        "direccion": "fas fa-map-marked-alt",
+        "ciudad": "fas fa-city"
+      },
+      propiedadesName:[
+        {nombre:"institucion"},
+        {nombre:"issn"},
+        {nombre:"eissn"},
+        {nombre:"doi"},
+        {nombre:"telefono"},
+        {nombre:"direccion"},
+        {nombre:"ciudad"}        
+      ]      
     };
   },
-  methods: {},
+   mounted() {
+    axios.get("http://localhost:3000/api/Revista/"+this.id).then(response => {
+      this.revista = response.data;
+    }); 
+    axios.get("http://localhost:3000/api/Categoria/"+7).then(response => {
+      this.categorias = response.data;
+    });  
+  },
+  methods: {
+     
+
+
+  },
   components: {
     itemDescription
   }
 };
+
 </script>
 
 <style scoped>

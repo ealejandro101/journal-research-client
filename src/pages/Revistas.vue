@@ -1,5 +1,9 @@
+
+
 <template>
-    <div class="container my-5">
+
+
+   <div class="container my-5">
         <div class="row justify-content-center">
         <div class="col-6">
             
@@ -32,19 +36,21 @@
         >
         </summaryJournalCard>
 
-<detailedJournalCard></detailedJournalCard>
+<detailedJournalCard
+        :id="6"
+></detailedJournalCard>
 
 
     </div>    
 
 
+
 </template>
 
 <script>
-
 import axios from "axios";
-import summaryJournalCard   from '@/components/summaryJournalCard '
-import   detailedJournalCard from '@/components/ detailedJournalCard'
+import summaryJournalCard from "@/components/summaryJournalCard ";
+import detailedJournalCard from "@/components/ detailedJournalCard";
 
 export default {
   data() {
@@ -54,14 +60,13 @@ export default {
   },
   mounted() {
     axios.get("http://localhost:3000/api/Revista").then(response => {
-      this.revistas = response.data;
+      //this.revistas = response.data;
     });
   },
-  components:{
-      summaryJournalCard,
-      detailedJournalCard
+  components: {
+    summaryJournalCard,
+    detailedJournalCard
   }
-
 };
 </script>
 
