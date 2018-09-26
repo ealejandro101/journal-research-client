@@ -5,12 +5,12 @@
         <b-row>
             <b-card>                      
                 <b-row >
-                    <b-col sm="12" md="4" lg="4" >
+                    <b-col sm="12" md="2" lg="2" >
                         <div class="divSummaryImg">
                             <b-img-lazy class ="imagenCard"  center  :src="urlImg" /> 
                         </div>
                     </b-col>
-                    <b-col sm="12" md="8" lg="8" >                                             
+                    <b-col sm="12" md="10" lg="10" >                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
                         <p class="card-text text-justify clasDescription" >
                             {{valor}} 
