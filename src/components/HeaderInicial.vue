@@ -1,14 +1,14 @@
 <template>
     <div>
-        <ul v-if="isInicial">
+        <ul v-if="isInicial" class="inicialHeader">
             <li v-for="item in opciones" v-if="item.active" :key="item.to" class="liInicial">
                 <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
                 </router-link>
                 <a v-else :href="item.link" v-text="item.text"></a>
             </li>
         </ul>
-        <ul v-else>
-            <li v-for="item in opciones" v-if="item.active" :key="item.to">
+        <ul v-else class="d-flex inicialHeaderResearch">
+            <li v-for="item in opciones" v-if="item.active" :key="item.to" class="d-flex">
                 <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
                 </router-link>
                 <a v-else :href="item.link" v-text="item.text"></a>
@@ -52,5 +52,27 @@ li::before{
 }
 .liInicial:first-child::before{
     content: "";
+}
+.inicialHeaderResearch li a:hover{
+    color: #000;
+    text-decoration: none;
+}
+@media (max-width: 768px){
+    .inicialHeaderResearch{
+        justify-content: center;
+        padding-top: 0.5em;
+    }
+}
+@media (max-width: 575px){
+    .inicialHeaderResearch{
+        display: inline-block !important;
+    }
+    .inicialHeaderResearch li{
+        float: none;
+        justify-content: center;
+    }
+    .inicialHeaderResearch li::before{
+        margin: 0px;
+    }
 }
 </style>

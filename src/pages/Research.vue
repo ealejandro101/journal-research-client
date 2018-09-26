@@ -2,7 +2,7 @@
   <div class="research noPadding" v-scroll="handleScroll">
     <div class="section grid">
       <div class="align-top headerInicial">
-          <header-inicial :opciones="opciones" :isInicial="true" class="d-flex justify-content-end"></header-inicial>
+          <header-inicial :opciones="opciones" :isInicial="true" class="d-flex justify-content-end col-0"></header-inicial>
       </div>
       <div class="align-middle">
         <div class="container-fluid noPadding">
@@ -35,6 +35,7 @@
         </div>
         <div class="col-12 col-md-6 d-flex align-items-center">
           <div class="justify-content-center">
+            <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas ResearcH</h5>
             <p class="cifra"><span>146</span><br> revistas en 5 países</p> <br>
             <div class="img">
               <img src="@/assets/mapa.png" alt="">
@@ -113,7 +114,6 @@ a {
   position: fixed;
   width: 100%;
   display: none;
-  position: -webkit-sticky;
   top: 0;
   left: 0;
   z-index: 1;
@@ -141,4 +141,8 @@ a {
   margin-left: auto;
   margin-right: auto;
 }
+/*.imgProceosResearch img{
+  max-height: inherit;
+  width: auto;
+}*/
 </style>
