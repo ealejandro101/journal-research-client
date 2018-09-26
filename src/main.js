@@ -27,6 +27,18 @@ Vue.directive('scroll', {
   }
 })
 
+// variables globales
+Vue.mixin({
+  data() {
+    return {
+      urlBaseApi:"http://localhost:3000/api/",
+      get urlBase() {
+        return "http://localhost:3000/api/";
+      }
+    }
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

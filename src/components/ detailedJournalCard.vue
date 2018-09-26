@@ -33,6 +33,7 @@
                 </b-col>
             </b-row>
                 <hr>
+
               <b-row>
                 <h4  class="text-left">Categorías</h4>
               </b-row>
@@ -98,10 +99,10 @@ export default {
     };
   },
   mounted() {
-    axios.get("http://localhost:3000/api/Revista/" + this.id).then(response => {
+    axios.get(process.env.ROOT_API+"Revista/" + this.id).then(response => {
       this.revista = response.data;
     });
-    axios.get("http://localhost:3000/api/Categoria/" + 7).then(response => {
+    axios.get(process.env.ROOT_API+"Categoria/"+ 7).then(response => {
       this.categorias = response.data;
     });
   },
@@ -117,7 +118,7 @@ export default {
   width: 30px;
   height: 30px;
 }
-img {
+.imagenCard {
   position: relative;
   height: -webkit-fill-available;
   width: auto;
