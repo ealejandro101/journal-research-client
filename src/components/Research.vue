@@ -1,13 +1,18 @@
 <template>
   <div class="research">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><router-link to="/ListaCategorias">Lista de Categorias</router-link></li>
-      <li><router-link to="/ListaRevistas">Lista de Revistas</router-link></li>
-      <br>
-      <li> </li>
-    </ul>
+    <div class="research-descripcion">
+      <h1>{{ msg }}</h1>
+			<p>ResearcH es una <strong>red </strong>sin ánimo de lucro que publica información de las revistas científicas con el fin de sugerir a los investigadores sobre dónde publicar sus manuscritos.</p>
+      <p>Los editores pueden suscribir un acuerdo con Journals &amp; Authors para que su revista pueda ser publicada en ResearcH. Este acuerdo buscará también difundir en el sitio web (<a href="http://journalsandauthors.com/www.jasolutions.com.co">www.jasolutions.com.co</a>) y en nuestras cuentas oficiales de redes sociales información de la revista relacionada con convocatorias de recepción de artículos (Call for Papers), guía para autores, alcances, política editorial e información sobre integrantes del comité editorial.</p>
+      <p>Journals &amp; Authors adquiere únicamente los derechos de difusión y no hará uso comercial o lucrativo de los contenidos publicados en cada una de las revistas suscritas.</p>
+		</div>
+    <Categorias/>
+    <div>
+      <h2>Essential Links</h2>
+      <ul>
+        <li><router-link to="/ListaRevistas">Lista de Revistas</router-link></li>
+      </ul>
+    </div>
   </div>
 </template>
 
