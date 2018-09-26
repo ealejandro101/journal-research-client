@@ -20,9 +20,15 @@
 <script>
 export default {
     name: 'header-inicial',
-    props: ["opciones", "isInicial"],
+    props: ["isInicial"],
     data() {
         return {
+            opciones: [
+                {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
+                {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
+                {to: '/Login', text: 'Ingresa', active: true, isVuePag: true, link: ''},
+                {to: '/Registro', text: 'Registrate', active: true, isVuePag: true, link: ''}
+            ]
         };
     }
 };

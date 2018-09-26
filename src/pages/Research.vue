@@ -2,7 +2,7 @@
   <div class="research noPadding" v-scroll="handleScroll">
     <div class="section grid">
       <div class="align-top headerInicial">
-          <header-inicial :opciones="opciones" :isInicial="true" class="d-flex justify-content-end col-0"></header-inicial>
+          <header-inicial :isInicial="true" class="d-flex justify-content-end col-0"></header-inicial>
       </div>
       <div class="align-middle">
         <div class="container-fluid noPadding">
@@ -21,7 +21,7 @@
       <div class="align-end"></div>
     </div>
     <div class="header">
-      <header-research :opciones="opciones"></header-research>
+      <header-research></header-research>
     </div>
     
     <div class="section seccionEstadisticas d-flex">
@@ -36,13 +36,16 @@
         <div class="col-12 col-md-6 d-flex align-items-center">
           <div class="justify-content-center">
             <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas ResearcH</h5>
-            <p class="cifra"><span>146</span><br> revistas en 5 países</p> <br>
+            <p class="cifra"><span>Más de 100</span><br> revistas en más de 5 países</p> <br>
             <div class="img">
               <img src="@/assets/mapa.png" alt="">
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="section">
+      <filtros-busqueda></filtros-busqueda>
     </div>
   </div>
 </template>
@@ -51,21 +54,17 @@
 import HeaderInicial from '@/components/HeaderInicial';
 import HeaderResearch from '@/components/HeaderResearch';
 import BarraBusqueda from '@/components/BarraBusqueda';
-import LogoResearch from '@/components/LogoResearch'
+import LogoResearch from '@/components/LogoResearch';
+import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 
 export default {
   name: "research",
   components: {
-		HeaderInicial, HeaderResearch, BarraBusqueda, LogoResearch
+		HeaderInicial, HeaderResearch, BarraBusqueda, LogoResearch, FiltrosBusqueda
 	},
   data() {
     return {
-      opciones: [
-          {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-          {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
-          {to: '/Login', text: 'Ingresa', active: true, isVuePag: true, link: ''},
-          {to: '/Registro', text: 'Registrate', active: true, isVuePag: true, link: ''}
-      ]
+      
     };
   },
   methods: {
