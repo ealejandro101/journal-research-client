@@ -3,7 +3,7 @@
         <b-card  class="d-flex">
             <b-row>
                 <b-col sm="12" md="4" lg="4" >
-                  <div>
+                  <div  class="divSummaryImg">
                       <b-img class ="imagenCard" fluid center  :src="revista.imagen" /> 
                     </div>
                 </b-col>
@@ -11,36 +11,41 @@
                   <p  class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
                   <p class="card-text text-justify clasDescription"  v-text="revista.descripcion" ></p>
                   <hr>
-                </b-col>
-                
-            </b-row> 
-            
-            <b-row>
-                <b-col v-for="(prop, indexo) in propiedadesName1" :key="prop.nombre"  sm="6" md="6" lg="6" >
-                      <itemDescription                                
-                      :icono="propiedades[prop.nombre]"
-                      :label="prop.nombre"
-                      :texto="revista[prop.nombre]">
-                    </itemDescription>   
-                </b-col>
+                  <b-row>
+                        <b-col v-for="(prop, indexo) in propiedadesName1" :key="prop.nombre"  sm="6" md="6" lg="6" >
+                            <itemDescription                                
+                            :icono="propiedades[prop.nombre]"
+                            :label="prop.nombre"
+                            :texto="revista[prop.nombre]">
+                          </itemDescription>   
+                      </b-col>
 
-                <b-col  v-for="(propa,indexa) in propiedadesName2" :key="indexa"  sm="6" md="6" lg="6" >
-                    <itemDescription                                
-                                :icono="propiedades[propa.nombre]"
-                                :label="propa.nombre"
-                                :texto="revista[propa.nombre]">
-                    </itemDescription>
-                </b-col>
-            </b-row>
+                      <b-col  v-for="(propa,indexa) in propiedadesName2" :key="indexa"  sm="6" md="6" lg="6" >
+                          <itemDescription                                
+                                      :icono="propiedades[propa.nombre]"
+                                      :label="propa.nombre"
+                                      :texto="revista[propa.nombre]">
+                          </itemDescription>
+                      </b-col>
+                  </b-row>
                 <hr>
+                  <b-row  align-self="start" >
+                      <b-col align-self="start" >                     
+                      <h4  class="text-left">Categorías</h4> 
+                      <br>
+                      <b-badge href="#" variant="success"><b-img rounded="circle" class="iconos"  :src="iconosCategorias[categorias.nombre]"/> {{categorias.nombre}}</b-badge>
+                      
+                      </b-col>
 
-              <b-row>
-                <h4  class="text-left">Categorías</h4>
-              </b-row>
+                    <b-col align-self="start">
+                      <h4  class="text-left">Palabras Claves</h4> 
+                      <br>
+                      <b-badge href="#" variant="success"><b-img rounded="circle" class="iconos"  :src="iconosCategorias[categorias.nombre]"/> {{categorias.nombre}}</b-badge>
+                    </b-col>
 
-              <b-row align-v="start">
-                <b-badge href="#" variant="success"><b-img rounded="circle" class="iconos"  :src="iconosCategorias[categorias.nombre]"/> {{categorias.nombre}}</b-badge>
-              </b-row>
+                  </b-row>    
+               </b-col>               
+           </b-row>            
         </b-card>           
     </div>
 </template>
@@ -118,11 +123,14 @@ export default {
   width: 30px;
   height: 30px;
 }
-.imagenCard {
-  position: relative;
-  height: -webkit-fill-available;
+.divSummaryImg{
+    position: absolute;
+    width: calc(100% - 30px);
+    top: 0;
+    bottom: 0;
+}
+.divSummaryImg img{
+  height: 100%;
   width: auto;
-  height: -moz-available-fill;
-  height: -ms-fill-available;
 }
 </style>
