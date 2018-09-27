@@ -44,9 +44,6 @@
         </div>
       </div>
     </div>
-    <div class="section">
-      <filtros-busqueda></filtros-busqueda>
-    </div>
   </div>
 </template>
 
