@@ -12,7 +12,7 @@
                   <p class="card-text text-justify clasDescription"  v-text="revista.descripcion" ></p>
                   <hr>
                   <b-row>
-                        <b-col v-for="(prop, indexo) in propiedadesName1" :key="prop.nombre"  sm="6" md="6" lg="6" >
+                        <b-col v-for="(prop, indexo) in propiedadesName1" :key="indexo"  sm="6" md="6" lg="6" >
                             <itemDescription                                
                             :icono="propiedades[prop.nombre]"
                             :label="prop.nombre"

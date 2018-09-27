@@ -54,7 +54,13 @@ img{
   }
 }
 .check .custom-control-label::before, .check .custom-control-label::after{
-    right: -1.5rem !important;
     left: auto !important;
+    right: -4px !important
+
 }
+.check .custom-control-label{
+  width: calc(100% - 11px);
+}
+
+
 </style>

@@ -13,9 +13,13 @@
                                 <b-img rounded="circle" class="iconos"  :src="opcion.logo"/> 
                             </b-col>   
                              <b-col sm="10" md="10" lg="10" > 
-                                <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
-                                                                    {{opcion.nombre}}                                                                                                
-                                </b-form-checkbox>                                    
+                               <div class="content-check">
+                                    <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
+                                        {{opcion.nombre}}
+                                    </b-form-checkbox> 
+                               </div>
+                                  
+                                                              
                             </b-col>  
                         </b-row>
                     </b-contanier>  
@@ -96,6 +100,12 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x1
 .iconos {
   width: 40px;
   height: 30px;
+}
+
+.check{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
 }
 
 </style>
