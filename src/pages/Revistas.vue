@@ -15,9 +15,7 @@
       </div>
           <b-row>
             <b-col sm="12" md="12" lg="2">
-             <logo-research></logo-research>
-                <h5>Filtros de busqueda</h5>
-
+                <filtros-busqueda></filtros-busqueda>
             </b-col>            
             <b-col  class="body-card-revistas" sm="12" md="12" lg="10">      
            
@@ -51,7 +49,8 @@ import summaryJournalCard from "@/components/summaryJournalCard ";
 import detailedJournalCard from "@/components/ detailedJournalCard";
 import HeaderResearch from '@/components/HeaderResearch';
 import BarraBusqueda from '@/components/BarraBusqueda';
-import LogoResearch from '@/components/LogoResearch'
+import LogoResearch from '@/components/LogoResearch';
+import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 
 export default {
   data() {
@@ -69,7 +68,8 @@ export default {
     detailedJournalCard,
     HeaderResearch,
     BarraBusqueda,
-    LogoResearch
+    LogoResearch,
+    FiltrosBusqueda
   }
 };
 </script>
