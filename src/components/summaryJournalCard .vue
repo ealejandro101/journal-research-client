@@ -11,7 +11,7 @@
                     </b-col>
                     <b-col sm="12" md="8" lg="9" :class="classColDescription">                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-                        <p class="card-text text-justify clasDescription col-0">
+                        <p class="card-text text-justify cardDescription col-0">
                             {{valor}} 
                             <a href="#" class="card-link">
                                 <b-badge pill variant="primary">
@@ -72,6 +72,15 @@ export default {
 }
 .colSummaryResponsive{
     width: 100%;
+    max-width: 100%;
+    justify-content: center;
+    display: flex;
+}
+.colSummaryResponsive .cardDescription{
+    display: none;
+}
+.colSummaryResponsive .divSummaryImg{
+    position: relative;
 }
 .rowResponsive{
     display: block;

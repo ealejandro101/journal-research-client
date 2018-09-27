@@ -4,7 +4,7 @@
         <header-research></header-research>
       </div>
         <b-row>
-          <b-col id="divFiltros" sm="12" md="12" lg="2">
+          <b-col id="divFiltros" sm="12" md="12" lg="3">
               <filtros-busqueda></filtros-busqueda>
           </b-col>            
           <b-col id="divRevistas" class="body-card-revistas" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas">      
@@ -28,8 +28,8 @@
               </summaryJournalCard>
             </b-row> 
           </b-col> 
-          <b-col id="divDetailedJournal" sm="12" md="12" lg="10">
-              <detailedJournalCard  id="6"></detailedJournalCard>
+          <b-col id="divDetailedJournal" sm="12" md="12" lg="8">
+              <detailedJournalCard id="6"></detailedJournalCard>
           </b-col> 
         </b-row>       
       </div>    
@@ -46,7 +46,7 @@ import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 export default {
   data() {
     return {
-      revistas: [], smDivRevistas: '12', mdDivRevistas: '12', lgDivRevistas: '10'    
+      revistas: [], smDivRevistas: '12', mdDivRevistas: '12', lgDivRevistas: '9'    
     };
   }/*,
   mounted() {
@@ -56,8 +56,10 @@ export default {
   }*/,
   methods: {
     openJournal: function(){
-      this.$el.querySelector("#divFiltros").style.display = "none";
-      this.lgDivRevistas = "2";
+      this.$el.querySelector("#divFiltros").style.flex = "none";
+      this.$el.querySelector("#divFiltros").style.width = "0px";
+      this.$el.querySelector("#divFiltros").style.padding = "0px";
+      this.lgDivRevistas = "4";
       this.$el.querySelector("#divDetailedJournal").style.display = "inline";
     }
   },
@@ -92,5 +94,17 @@ export default {
 .summaryCard{
   margin: 1em 10%;
   width: 80%;
+}
+#divFiltros{
+  transition-property: width;
+  transition-timing-function: linear;
+  transition-duration: 0.5s;
+  transition-delay: 0s;
+}
+#divRevistas{
+  transition-property: all;
+  transition-timing-function: linear;
+  transition-duration: 0.5s;
+  transition-delay: 0s;
 }
 </style>
