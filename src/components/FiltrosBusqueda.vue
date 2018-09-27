@@ -13,8 +13,8 @@
                                 <b-img rounded="circle" class="iconos"  :src="opcion.logo"/> 
                             </b-col>   
                              <b-col sm="10" md="10" lg="10" > 
-                                <b-form-checkbox  class="float-left check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
-                                    {{opcion.nombre}}                                                                                                
+                                <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
+                                                                    {{opcion.nombre}}                                                                                                
                                 </b-form-checkbox>                                    
                             </b-col>  
                         </b-row>
