@@ -102,7 +102,7 @@ export default {
         { nombre: "ciudad" }
       ]
     };
-  },
+  }/*,
   mounted() {
     axios.get(process.env.ROOT_API+"Revista/" + this.id).then(response => {
       this.revista = response.data;
@@ -110,7 +110,7 @@ export default {
     axios.get(process.env.ROOT_API+"Categoria/"+ 7).then(response => {
       this.categorias = response.data;
     });
-  },
+  }*/,
   methods: {},
   components: {
     itemDescription

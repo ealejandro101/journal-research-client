@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <img src="@/assets/logo.png" alt="logo research">
+        <router-link to="/"><img src="@/assets/logo.png" alt="logo research"></router-link>
     </div>
 </template>
 
