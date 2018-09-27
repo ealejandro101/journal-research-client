@@ -1,12 +1,12 @@
 <template>
-<div @click="changeClass()">
-    <b-container>
+<div>
+    <b-container class="containerSummaryCard">
         <b-row>
             <b-card class="cardSummaryJournal">                      
                 <b-row :class="classRowResponsive">
                     <b-col sm="12" md="4" lg="3" :class="classColSummaryImg">
                         <div class="divSummaryImg">
-                            <b-img-lazy class ="imagenCard"  center  :src="urlImg" /> 
+                            <b-img class ="imagenCard"  center  :src="urlImg" /> 
                         </div>
                     </b-col>
                     <b-col sm="12" md="8" lg="9" :class="classColDescription">                                             
@@ -32,28 +32,26 @@ export default {
   props: {
     titulo: String,
     descripcion:String,
-    urlImg: String
+    urlImg: String,
+    classColSummaryImg: String,
+    classColDescription: String,
+    classRowResponsive: String
   },
   data(){
       return{
-          valor:this.descripcion.substring(0,250)+"....", 
-          classColSummaryImg: 'colSummaryImg',
-          classColDescription: '',
-          classRowResponsive: ''
+          valor:this.descripcion.substring(0,250)+"...."
           }
       }
   ,
   methods: {
-   changeClass: function(){
-       this.classColSummaryImg = "colSummaryResponsive";
-       this.classColDescription = "colSummaryResponsive";
-       this.classRowResponsive = "rowResponsive"
-   }
   }
 };
 </script>
 
 <style scoped>
+.containerSummaryCard{
+    cursor: pointer;
+}
 .divSummaryImg{
     position: absolute;
     width: calc(100% - 30px);
@@ -81,6 +79,10 @@ export default {
 }
 .colSummaryResponsive .divSummaryImg{
     position: relative;
+}
+.colSummaryResponsive .divSummaryImg img{
+    width: 100%;
+    height: auto;
 }
 .rowResponsive{
     display: block;

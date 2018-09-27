@@ -7,22 +7,20 @@
                 <b-btn v-b-toggle.collapse1 variant="primary" class="tituloFiltro">{{item.titulo}}<i class="fas fa-caret-down"></i></b-btn>
             </div>
             <b-collapse visible  id="collapse1" class="mt-2">
-                    <b-contanier >
-                        <b-row   v-for="opcion in item.opciones" :key="opcion.id"> 
-                           <b-col  sm="2" md="2" lg="2">
-                                <b-img rounded="circle" class="iconos"  :src="opcion.logo"/> 
-                            </b-col>   
-                             <b-col sm="10" md="10" lg="10" > 
-                               <div class="content-check">
-                                    <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
-                                        {{opcion.nombre}}
-                                    </b-form-checkbox> 
-                               </div>
-                                  
-                                                              
-                            </b-col>  
-                        </b-row>
-                    </b-contanier>  
+                <div class="container">
+                    <b-row   v-for="opcion in item.opciones" :key="opcion.id"> 
+                        <b-col  sm="2" md="2" lg="2">
+                            <b-img rounded="circle" class="iconos"  :src="opcion.logo"/> 
+                        </b-col>   
+                            <b-col sm="10" md="10" lg="10" > 
+                            <div class="content-check">
+                                <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
+                                    {{opcion.nombre}}
+                                </b-form-checkbox> 
+                            </div>                         
+                        </b-col>  
+                    </b-row>
+                </div>  
             </b-collapse>   
         </div>
     </div>
@@ -56,32 +54,32 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x1
                         },
                           {
                             nombre: "Ciencias Agrícolas y Ambientales",
-                            id: "Ciencias Agrícolas y Ambientales",
+                            id: "agricolasyambientales",
                             logo:cienciasAgricolas
                         },
                          {
                             nombre: "Ciencias Biológicas",
-                            id: "Ciencias Biológicas",
+                            id: "cienciasbiologicas",
                             logo:cienciasBiologicas
                         },
                         {
                             nombre: "Ciencias Exactas",
-                            id: "Ciencias Exactas",
+                            id: "cienciasexactas",
                             logo:cienciasExactas
                         },
                          {
                             nombre: "Ciencias Sociales",
-                            id: "Ciencias Sociales",
+                            id: "cienciassociales",
                             logo:cienciasSociales
                         },
                          {
                             nombre: "Ciencias de la salud",
-                            id: "Ciencias de la salud",
+                            id: "cienciassalud",
                             logo:cienciasSalud
                         },
                          {
                             nombre: "Lingüística, literatura y artes",
-                            id: "Lingüística, literatura y artes",
+                            id: "linguisticaliteraturaartes",
                             logo:linguisticaLiteraturaArtes
                         },
                         ]
