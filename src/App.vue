@@ -53,4 +53,8 @@ img{
     display: none;
   }
 }
+.check .custom-control-label::before, .check .custom-control-label::after{
+    right: -1.5rem !important;
+    left: auto !important;
+}
 </style>

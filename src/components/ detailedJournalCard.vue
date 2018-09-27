@@ -75,9 +75,9 @@ export default {
         "Ciencias Biológicas": cienciasBiologicas,
         "Ciencias Exactas": cienciasExactas,
         "Ciencias Sociales": cienciasSociales,
-        Ingeniería: ingenieriaLogo,
+        "Ingeniería": ingenieriaLogo,
         "Ciencias de la salud": cienciasSalud,
-        Humanidades: humanidades,
+        "Humanidades": humanidades,
         "Lingüística, literatura y artes": linguisticaLiteraturaArtes
       },
       propiedades: {
