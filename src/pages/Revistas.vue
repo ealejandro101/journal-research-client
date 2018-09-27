@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="containerPage">
     <div id="headerResearch" class="headerS">
       <header-research></header-research>
     </div>
@@ -8,8 +8,8 @@
         <b-col id="divFiltros" sm="12" md="12" lg="3">
             <filtros-busqueda></filtros-busqueda>
         </b-col>            
-        <b-col id="divRevistas" class="body-card-revistas" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas">      
-          <div class="divContentRevistas">
+        <b-col id="divRevistas" class="body-card-revistas dinamicHeigth" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas">      
+          <div class="divContentRevistas dinamicHeigth">
             <div class="row d-flex justify-content-center">
               <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                 <barra-busqueda style="width:100%; margin-top:20px; margin-left:20px;"  :isFilter="false"></barra-busqueda>
@@ -37,7 +37,7 @@
             </b-row>
           </div>
         </b-col> 
-        <b-col id="divDetailedJournal" sm="12" md="12" lg="8">
+        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="12" md="12" lg="8">
             <detailedJournalCard 
               @detailedCard:close="detailedClouse"
               :id="idActualJournal"
@@ -58,6 +58,8 @@ import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 import imgJournalDefoult from '@/assets/journalImgDefault.jpeg';
 
 export default {
+  props: {
+  },
   data() {
     return {
       revistas: [], 
@@ -142,7 +144,6 @@ export default {
   background-color: #d8d1bb;
   height: 100%;
   width: 100%;
-  min-height: 100vh;
   
 }
 #divDetailedJournal{
@@ -166,9 +167,10 @@ export default {
   transition-delay: 0s;
   padding: 0px;
 }
-.divContentRevistas, #divDetailedJournal{
+.dinamicHeigth{
   overflow-y: auto;
   height: 100vh;
+  padding-bottom: 7em;
 }
 .divContentRevistas{
   padding-right: 15px;

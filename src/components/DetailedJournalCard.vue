@@ -53,7 +53,7 @@
 
 <script>
 import axios from "axios";
-
+import imgJournalDefoult from '@/assets/journalImgDefault.jpeg';
 import itemDescription from "@/components/itemDescription";
 import ingenieriaLogo from "@/assets/ingenieria_icono.png";
 import cienciasAgricolas from "@/assets/agricola_icono.png";
@@ -108,6 +108,9 @@ export default {
     id: function(){
       axios.get(process.env.ROOT_API+"Revista/" + this.id).then(response => {
         this.revista = response.data;
+        if(this.revista.imagen == null){
+          this.revista.imagen = imgJournalDefoult;
+        }
       });
       axios.get(process.env.ROOT_API+"Categoria/"+ 7).then(response => {
         this.categorias = response.data;
