@@ -24,8 +24,8 @@ export default {
     data() {
         return {
             opciones: [
-                {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-                {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
+                {to: '/InfoResearcH', text: 'Qué es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
+                {to: '/FormularioNuevaRevista', text: 'Postule su revista', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
                 {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
                 {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''}
             ]
@@ -45,6 +45,9 @@ li{
 }
 li a, .liInicial::before{
     color: gray;
+}
+.inicialHeader li a{
+    color: #272727;
 }
 li::before{
     margin: 0px 1em 0px 1em;

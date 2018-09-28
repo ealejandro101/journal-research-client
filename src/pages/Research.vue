@@ -1,6 +1,6 @@
 <template>
   <div class="research noPadding" v-scroll="handleScroll">
-    <div class="section grid">
+    <div class="section mainSection grid">
       <div class="align-top headerInicial">
           <header-inicial :isInicial="true" class="d-flex justify-content-end col-0"></header-inicial>
       </div>
@@ -124,6 +124,9 @@ a {
   background: -ms-linear-gradient(left, rgba(209,209,209,1) 0%, rgba(209,209,209,1) 3%, rgba(219,219,219,1) 24%, rgba(226,226,226,1) 36%, rgba(254,254,254,1) 100%);
   background: linear-gradient(to right, rgba(209,209,209,1) 0%, rgba(209,209,209,1) 3%, rgba(219,219,219,1) 24%, rgba(226,226,226,1) 36%, rgba(254,254,254,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1d1d1', endColorstr='#fefefe', GradientType=1 );
+}
+.mainSection{
+  background-image: url('/static/fondoIndex.jpg');
 }
 .cifra span{
   font-size: xx-large;

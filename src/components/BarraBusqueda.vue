@@ -44,7 +44,7 @@ p{
   padding-top: 2px;
 }
 .filter p a{
-  color: gray;
+  color: #272727;
 }
 .searchButton{
   margin: 0px !important;
