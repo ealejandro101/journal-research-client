@@ -29,20 +29,25 @@
           <hr>
           <b-row align-self="start">
             <b-col align-self="start">
-              <h4 class="text-left">Categorías</h4>
+              <h4 class="text-left">Categoría</h4>
               <br>
               <b-badge href="#" variant="success">
                 <b-img rounded="circle" class="iconos" :src="iconosCategorias[categorias.nombre]" />
                 {{categorias.nombre}}
               </b-badge>
             </b-col>
+ 
 
             <b-col align-self="start">
+              <!--
               <h4 class="text-left">Palabras Claves</h4>
+              -->
               <br>
+             <!-- 
               <b-badge href="#" variant="success">
                 <b-img rounded="circle" class="iconos" :src="iconosCategorias[categorias.nombre]" />
                 {{categorias.nombre}}</b-badge>
+            -->
             </b-col>
           </b-row>
         </b-col>
@@ -111,10 +116,11 @@ export default {
         if(this.revista.imagen == null){
           this.revista.imagen = imgJournalDefoult;
         }
+        axios.get(process.env.ROOT_API+"Categoria/"+this.revista.categoriaId).then(response => {
+          this.categorias = response.data;
+        });
       });
-      axios.get(process.env.ROOT_API+"Categoria/"+ 7).then(response => {
-        this.categorias = response.data;
-      });
+      
     }
   }
   ,
