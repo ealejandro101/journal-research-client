@@ -47,6 +47,7 @@ export default {
     border-bottom: solid 1px;
     border-color: #bfbdbd;
     min-height: 5em;
+    background-color: #fff;
 }
 ul{
     list-style: none
