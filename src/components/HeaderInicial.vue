@@ -54,7 +54,7 @@ li::before{
     content: "|";
 }
 .liInicial:last-child::before{
-    content: "o";
+    content: "|";
 }
 .liInicial:first-child::before{
     content: "";

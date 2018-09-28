@@ -82,9 +82,7 @@ export default {
 .rowResponsive{
     display: block;
 }
-@media (max-width: 768px) {
-    .divSummaryImg, .divSummaryImg img{
-        max-height: 35vh;
-    }
+.divSummaryImg, .divSummaryImg img{
+    max-height: 35vh;
 }
 </style>
