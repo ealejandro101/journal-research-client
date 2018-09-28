@@ -20,7 +20,7 @@ export default new Router({
         component: Revistas
     },
     {
-        path: '/ListaRevistas/:id',
+        path: '/ListaRevistas/:search',
         name: 'RevistasParam',
         component: Revistas
     },

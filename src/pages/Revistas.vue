@@ -5,16 +5,11 @@
     </div>
     <div class="container-fluid">
       <b-row>
-        <b-col id="divFiltros" sm="12" md="12" lg="3">
+        <b-col id="divFiltros" sm="4" md="4" lg="3">
             <filtros-busqueda></filtros-busqueda>
         </b-col>            
         <b-col id="divRevistas" class="body-card-revistas dinamicHeigth" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas">      
           <div class="divContentRevistas dinamicHeigth">
-            <div class="row d-flex justify-content-center">
-              <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-                <barra-busqueda style="width:100%; margin-top:20px; margin-left:20px;"  :isFilter="false"></barra-busqueda>
-              </div> 
-            </div>  
             <!--<b-row @click="openJournal()">   
               <summaryJournalCard  class="summaryCard"
                 :classColSummaryImg="summaryColSummaryImg"
@@ -37,7 +32,7 @@
             </b-row>
           </div>
         </b-col> 
-        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="12" md="12" lg="8">
+        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="6" md="7" lg="8">
             <detailedJournalCard 
               @detailedCard:close="detailedClouse"
               :id="idActualJournal"
@@ -58,13 +53,14 @@ import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 import imgJournalDefoult from '@/assets/journalImgDefault.jpeg';
 
 export default {
-  props: {
+  props:{
+    
   },
   data() {
     return {
       revistas: [], 
-      smDivRevistas: '12', 
-      mdDivRevistas: '12', 
+      smDivRevistas: '8', 
+      mdDivRevistas: '8', 
       lgDivRevistas: '9',
       summaryColSummaryImg: 'colSummaryImg',
       summaryColDescription: '',
@@ -74,16 +70,57 @@ export default {
     };
   },
   mounted() {
-    axios.get(process.env.ROOT_API+"Revista").then(response => {
-      this.revistas = response.data;
-      this.revistas.forEach(element => {
-        if(element.imagen == null){
-          element.imagen = imgJournalDefoult;
-        }
-      });
-    });
+    let parametro = this.$route.params.search;
+    if(parametro !== undefined){     
+      this.getJournalsParam(parametro);
+    }else{
+      this.getJournals();
+    }
+  },
+  watch:{
+    "$route.params.search": function(){
+      let parametro = this.$route.params.search;
+      if(parametro === undefined){
+        this.getJournals();
+      }else{
+        this.getJournalsParam(parametro);
+      }
+      
+    }
   },
   methods: {
+    getJournalsParam: function(parametro){
+      let query;
+      query = {
+        "where":{
+          "or":
+          [
+            {"descripcion": {"regexp":"/"+parametro+"/i"} },
+            {"titulo": {"regexp":"/"+parametro+"/i"} },
+            {"tituloCorto": {"regexp":"/"+parametro+"/i"} },
+            {"subtitulo": {"regexp":"/"+parametro+"/i"} }
+          ]
+        }
+      } 
+      axios.get(process.env.ROOT_API+"Revista/?filter="+JSON.stringify(query)).then(response => {
+        this.revistas = response.data;
+        this.revistas.forEach(element => {
+            if(element.imagen == null){
+              element.imagen = imgJournalDefoult;
+            }
+          });
+      });
+    },
+    getJournals: function(){
+      axios.get(process.env.ROOT_API+"Revista").then(response => {
+        this.revistas = response.data;
+        this.revistas.forEach(element => {
+          if(element.imagen == null){
+            element.imagen = imgJournalDefoult;
+          }
+        });
+      });
+    },
     openJournal: function(journalId){
       if(this.state){
         let divFiltros = this.$el.querySelector("#divFiltros");
@@ -94,6 +131,8 @@ export default {
         divFiltros.style.paddingRigth = "0px";
         this.idActualJournal = journalId.toString();
         this.lgDivRevistas = "4";
+        this.mdDivRevistas = "5";
+        this.smDivRevistas = "6";
         this.$el.querySelector("#divDetailedJournal").style.display = "inline";
         this.summaryColSummaryImg = "colSummaryResponsive";
         this.summaryColDescription = "colSummaryResponsive";
@@ -117,6 +156,8 @@ export default {
       divFiltros.style.paddingRigth = "15px";
       this.$el.querySelector("#divDetailedJournal").style.display = "none";
       this.lgDivRevistas = "9";
+      this.mdDivRevistas = "8";
+      this.smDivRevistas = "8";
       this.summaryColSummaryImg = "colSummaryImg";
       this.summaryColDescription = "";
       this.summaryRowResponsive = "";
@@ -169,10 +210,17 @@ export default {
 }
 .dinamicHeigth{
   overflow-y: auto;
-  height: 100vh;
-  padding-bottom: 7em;
+  height: calc(100vh - 5em);
 }
 .divContentRevistas{
   padding-right: 15px;
+}
+@media (max-width: 576px){
+  #divDetailedJournal{
+    position: fixed !important;
+  }
+  #divFiltros{
+    display: inline;
+  }
 }
 </style>

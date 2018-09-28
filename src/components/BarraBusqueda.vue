@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col noPadding">
-        <b-form-input v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder="¿Busca dónde publicar?"/>
+        <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder="¿Busca dónde publicar?"/>
       </div>
       <router-link :to="'/ListaRevistas/'+parametro">
         <b-button size="sm" class="my-2 my-sm-0 searchButton" type="submit">
@@ -27,6 +27,11 @@ export default {
     return {
       categorias: [], parametro: ''
     };
+  },
+  methods:{
+    routeRevistas: function () {
+      this.$router.push({path: '/ListaRevistas/'+this.parametro.toString()})
+    }
   }
 };
 </script>

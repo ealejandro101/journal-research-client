@@ -1,7 +1,7 @@
 <template>
     <div>
         <h6>Filtros de busqueda</h6>
-        <div v-for="item in filtros" :key="item.titulo">
+        <!--<div v-for="item in filtros" :key="item.titulo">
             
             <div>
                 <b-btn v-b-toggle.collapse1 variant="primary" class="tituloFiltro">{{item.titulo}}<i class="fas fa-caret-down"></i></b-btn>
@@ -22,7 +22,7 @@
                     </b-row>
                 </div>  
             </b-collapse>   
-        </div>
+        </div>-->
     </div>
 </template>
 
@@ -105,5 +105,4 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x1
     padding: 0px;
     width: 100%;
 }
-
 </style>

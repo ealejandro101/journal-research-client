@@ -4,14 +4,14 @@
         <b-row>
             <b-card class="cardSummaryJournal">                      
                 <b-row :class="classRowResponsive">
-                    <b-col sm="12" md="4" lg="3" :class="classColSummaryImg">
-                        <div class="divSummaryImg">
+                    <b-col sm="12" md="4" lg="3" class="d-flex justify-content-center" :class="classColSummaryImg">
+                        <div class="divSummaryImg divImg">
                             <b-img class ="imagenCard"  center  :src="urlImg" /> 
                         </div>
                     </b-col>
                     <b-col sm="12" md="8" lg="9" :class="classColDescription">                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-                        <p class="card-text text-justify cardDescription col-0">
+                        <p class="card-text text-justify cardDescription">
                             {{valor}} 
                             <a href="#" class="card-link">
                                 <b-badge pill variant="primary">
@@ -53,14 +53,13 @@ export default {
     cursor: pointer;
 }
 .divSummaryImg{
-    position: absolute;
+    position: relative;
     width: calc(100% - 30px);
-    top: 0;
-    bottom: 0;
+    display: flex;
+    align-items: center;
 }
 .divSummaryImg img{
-  height: 100%;
-  width: auto;
+    object-fit: contain
 }
 .colSummaryImg{
     min-height: 10em;
@@ -80,11 +79,12 @@ export default {
 .colSummaryResponsive .divSummaryImg{
     position: relative;
 }
-.colSummaryResponsive .divSummaryImg img{
-    width: 100%;
-    height: auto;
-}
 .rowResponsive{
     display: block;
+}
+@media (max-width: 768px) {
+    .divSummaryImg, .divSummaryImg img{
+        max-height: 35vh;
+    }
 }
 </style>
