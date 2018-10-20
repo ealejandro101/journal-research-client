@@ -5,10 +5,10 @@
     </div>
     <div class="container-fluid">
       <b-row>
-        <b-col id="divFiltros" sm="4" md="4" lg="3">
+        <b-col id="divFiltros" sm="3" md="3" lg="2" xl="2">
             <filtros-busqueda></filtros-busqueda>
         </b-col>            
-        <b-col id="divRevistas" class="body-card-revistas dinamicHeigth" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas">      
+        <b-col id="divRevistas" class="body-card-revistas dinamicHeigth" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas" :xl="xlDivRevistas">      
           <div class="divContentRevistas dinamicHeigth">
             <!--<b-row @click="openJournal()">   
               <summaryJournalCard  class="summaryCard"
@@ -32,7 +32,7 @@
             </b-row>
           </div>
         </b-col> 
-        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="6" md="7" lg="8">
+        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="9" md="9" lg="10" xl="10">
             <detailedJournalCard 
               @detailedCard:close="detailedClouse"
               :id="idActualJournal"
@@ -59,9 +59,10 @@ export default {
   data() {
     return {
       revistas: [], 
-      smDivRevistas: '8', 
-      mdDivRevistas: '8', 
-      lgDivRevistas: '9',
+      smDivRevistas: '9', 
+      mdDivRevistas: '9', 
+      lgDivRevistas: '10',
+      xlDivRevistas: '10',
       summaryColSummaryImg: 'colSummaryImg',
       summaryColDescription: '',
       summaryRowResponsive: '',
@@ -130,9 +131,10 @@ export default {
         divFiltros.style.paddingLeft = "0px";
         divFiltros.style.paddingRigth = "0px";
         this.idActualJournal = journalId.toString();
-        this.lgDivRevistas = "4";
-        this.mdDivRevistas = "5";
-        this.smDivRevistas = "6";
+        this.xlDivRevistas = "2";
+        this.lgDivRevistas = "2";
+        this.mdDivRevistas = "3";
+        this.smDivRevistas = "3";
         this.$el.querySelector("#divDetailedJournal").style.display = "inline";
         this.summaryColSummaryImg = "colSummaryResponsive";
         this.summaryColDescription = "colSummaryResponsive";
@@ -155,9 +157,10 @@ export default {
       divFiltros.style.paddingLeft = "15px";
       divFiltros.style.paddingRigth = "15px";
       this.$el.querySelector("#divDetailedJournal").style.display = "none";
-      this.lgDivRevistas = "9";
-      this.mdDivRevistas = "8";
-      this.smDivRevistas = "8";
+      this.xlDivRevistas = "10";
+      this.lgDivRevistas = "10";
+      this.mdDivRevistas = "9";
+      this.smDivRevistas = "9";
       this.summaryColSummaryImg = "colSummaryImg";
       this.summaryColDescription = "";
       this.summaryRowResponsive = "";
