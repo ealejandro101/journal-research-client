@@ -67,7 +67,7 @@ import cienciasSalud from "@/assets/salud_icono.png";
 import cienciasSociales from "@/assets/sociales_icono.png";
 import humanidades from "@/assets/humanidades_icono.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
-import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x167.png";
+import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 export default {
   props: {
     id: String

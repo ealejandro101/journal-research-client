@@ -28,6 +28,11 @@ img{
     width: 100%;
     height: auto;
 }
+.block-center{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 @media (max-width: 575px){
   .col-0{
     display: none !important;
@@ -61,6 +66,8 @@ img{
 .check .custom-control-label{
   width: calc(100% - 11px);
 }
-
+.no-list-style{
+  list-style: none;
+}
 
 </style>

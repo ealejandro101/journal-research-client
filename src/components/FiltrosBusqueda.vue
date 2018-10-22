@@ -35,7 +35,7 @@ import cienciasSalud from "@/assets/ciencias-de-la-salud-200x167.png";
 import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
 import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
-import linguisticaLiteraturaArtes from "@/assets/linguistica-letras-y-arte-200x167.png";
+import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
     export default {
         name: "filtros-busqueda",
         data() {

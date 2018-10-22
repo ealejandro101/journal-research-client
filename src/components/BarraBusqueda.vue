@@ -4,7 +4,7 @@
       <div class="col noPadding">
         <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder=""/>
       </div>
-      <router-link :to="'/ListaRevistas/'+parametro">
+      <router-link :to="'/ListaRevistas/search='+parametro">
         <b-button size="sm" class="my-2 my-sm-0 searchButton" type="submit">
           Buscar
         </b-button>
@@ -30,7 +30,7 @@ export default {
   },
   methods:{
     routeRevistas: function () {
-      this.$router.push({path: '/ListaRevistas/'+this.parametro.toString()})
+      this.$router.push({path: '/ListaRevistas/search='+this.parametro.toString()})
     }
   }
 };

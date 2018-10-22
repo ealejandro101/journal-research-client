@@ -71,26 +71,40 @@ export default {
     };
   },
   mounted() {
-    let parametro = this.$route.params.search;
-    if(parametro !== undefined){     
-      this.getJournalsParam(parametro);
-    }else{
-      this.getJournals();
-    }
+    this.changeParams();
   },
   watch:{
     "$route.params.search": function(){
-      let parametro = this.$route.params.search;
-      if(parametro === undefined){
-        this.getJournals();
-      }else{
-        this.getJournalsParam(parametro);
-      }
-      
+      this.changeParams();
     }
   },
   methods: {
-    getJournalsParam: function(parametro){
+    changeParams: function() {
+      let parametro = this.$route.params.search;
+      let prefix, postfix;
+      if(parametro === undefined){
+        this.getJournals();
+      }else{
+        prefix = parametro.split("=")[0];
+        postfix = parametro.split("=")[1];
+        switch (prefix) {
+          case "search":
+              this.getJournalsSearch(postfix);
+            break;
+          case "category":
+              this.getJournalsParam('{"where": {"categoriaId": '+postfix+'}}');
+            break;
+          default:
+            this.getJournals();
+            break;
+        }
+      }
+    },
+    getJournalsSearch: function(parametro){
+      if(parametro == ""){
+        this.getJournals();
+        return;
+      }
       let query;
       query = {
         "where":{
@@ -104,6 +118,16 @@ export default {
         }
       } 
       axios.get(process.env.ROOT_API+"Revista/?filter="+JSON.stringify(query)).then(response => {
+        this.revistas = response.data;
+        this.revistas.forEach(element => {
+            if(element.imagen == null){
+              element.imagen = imgJournalDefoult;
+            }
+          });
+      });
+    },
+    getJournalsParam: function(query){
+      axios.get(process.env.ROOT_API+"Revista?filter="+query).then(response => {
         this.revistas = response.data;
         this.revistas.forEach(element => {
             if(element.imagen == null){

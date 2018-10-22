@@ -47,18 +47,21 @@
         </div>
       </div>
     </div>
-    <div class="section">
+    <div id="categorySection" class="section">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12 contentMoreSection">
             <h5>Categorías</h5>
-            <categorias></categorias>
+            <categorias :categories="this.categories" @category:click="routeRevistasWithCategory"></categorias>
           </div>
         </div>
       </div>
     </div>
     <div class="header">
       <header-research></header-research>
+    </div>
+    <div>
+      <footer-research :socialNetworks="this.socialNetworks"></footer-research>
     </div>
   </div>
 </template>
@@ -70,16 +73,110 @@ import BarraBusqueda from '@/components/BarraBusqueda';
 import LogoResearch from '@/components/LogoResearch';
 import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 import Categorias from '@/components/Categorias';
+import FooterResearch from '@/components/FooterResearch';
+import axios from "axios";
+import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
+import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";
+import cienciasBiologicas from "@/assets/ciencias-biologicas-200x167.png";
+import cienciasSalud from "@/assets/ciencias-de-la-salud-200x167.png";
+import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
+import humanidades from "@/assets/humanidades-200x167.png";
+import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
+import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 
 export default {
   name: "research",
   components: {
-		HeaderInicial, HeaderResearch, BarraBusqueda, LogoResearch, FiltrosBusqueda, Categorias
+    HeaderInicial, HeaderResearch, BarraBusqueda, LogoResearch, FiltrosBusqueda, Categorias,
+    FooterResearch
 	},
   data() {
     return {
-      phrase: '¿Busca dónde publicar?'
+      phrase: '¿Busca dónde publicar?',
+      categories: [
+        {
+          "img": cienciasAgricolas,
+          "id": 1,
+          "nombre": "Ciencias Agrícolas y Ambientales",
+          "count": " "
+        },
+        {
+          "img": cienciasBiologicas,
+          "id": 2,
+          "nombre": "Ciencias Biológicas",
+          "count": " "
+        },
+        {
+          "img": cienciasSalud,
+          "id": 3,
+          "nombre": "Ciencias de la salud",
+          "count": " "
+        },
+        {
+          "img": cienciasExactas,
+          "id": 4,
+          "nombre": "Ciencias Exactas",
+          "count": " "
+        },
+        {
+          "img": cienciasSociales,
+          "id": 5,
+          "nombre": "Ciencias Sociales",
+          "count": " "
+        },
+        {
+          "img": ingenieriaLogo,
+          "id": 6,
+          "nombre": "Ingeniería",
+          "count": " "
+        },
+        {
+          "img": humanidades,
+          "id": 7,
+          "nombre": "Humanidades",
+          "count": " "
+        },
+        {
+          "img": linguisticaLiteraturaArtes,
+          "id": 8,
+          "nombre": "Lingüística, literatura y artes",
+          "count": " "
+        }
+      ],
+      socialNetworks: [
+        {
+            link: 'https://www.facebook.com/JournalsAuthors',
+            icon: 'fab fa-facebook',
+            label: 'Facebook'
+        },
+        {
+            link: 'https://twitter.com/jasolutions3',
+            icon: 'fab fa-twitter-square',
+            label: 'Twitter'
+        },
+        {
+            link: 'https://www.youtube.com/channel/UCKdZyyJeuI9VQkTROa7X_CA',
+            icon: 'fab fa-youtube-square',
+            label: 'Youtube'
+        },
+        {
+            link: 'http://info@jasolutions.com.co',
+            icon: 'fas fa-envelope-square',
+            label: 'Mail'
+        }
+      ]
     };
+  },
+  mounted() {
+    let query = {"categoriaId": undefined};
+    this.categories.forEach(element => {
+      query.categoriaId = element.id;
+      axios.get(process.env.ROOT_API+"Revista/count?where="+JSON.stringify(query)).then(response => {
+        element.count = response.data.count;
+      }).catch(error => {
+        console.log(error);
+      });
+    });
   },
   methods: {
     handleScroll: function (evt, el) {
@@ -88,6 +185,9 @@ export default {
       }else{
         this.$el.querySelector(".header").style.display = "none";
       }
+    },
+    routeRevistasWithCategory : function (category) {
+      this.$router.push({path: '/ListaRevistas/category='+category.toString()})
     }
   }
 };
