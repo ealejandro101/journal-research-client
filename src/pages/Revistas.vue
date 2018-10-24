@@ -22,6 +22,7 @@
             </b-row>-->             
             <b-row v-for="item in revistas" @click="openJournal(item.id)" :key="item.id">   
               <summaryJournalCard  class="summaryCard"
+                :id="item.id.toString()"
                 :classColSummaryImg="summaryColSummaryImg"
                 :classColDescription="summaryColDescription"
                 :classRowResponsive="summaryRowResponsive"
@@ -46,26 +47,24 @@
 import axios from "axios";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import DetailedJournalCard from "@/components/DetailedJournalCard";
-import HeaderResearch from '@/components/HeaderResearch';
-import BarraBusqueda from '@/components/BarraBusqueda';
-import LogoResearch from '@/components/LogoResearch';
-import FiltrosBusqueda from '@/components/FiltrosBusqueda';
-import imgJournalDefoult from '@/assets/journalImgDefault.jpeg';
+import HeaderResearch from "@/components/HeaderResearch";
+import BarraBusqueda from "@/components/BarraBusqueda";
+import LogoResearch from "@/components/LogoResearch";
+import FiltrosBusqueda from "@/components/FiltrosBusqueda";
+import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 
 export default {
-  props:{
-    
-  },
+  props: {},
   data() {
     return {
-      revistas: [], 
-      smDivRevistas: '9', 
-      mdDivRevistas: '9', 
-      lgDivRevistas: '10',
-      xlDivRevistas: '10',
-      summaryColSummaryImg: 'colSummaryImg',
-      summaryColDescription: '',
-      summaryRowResponsive: '',
+      revistas: [],
+      smDivRevistas: "9",
+      mdDivRevistas: "9",
+      lgDivRevistas: "10",
+      xlDivRevistas: "10",
+      summaryColSummaryImg: "colSummaryImg",
+      summaryColDescription: "",
+      summaryRowResponsive: "",
       state: true,
       idActualJournal: "'1'"
     };
@@ -73,8 +72,8 @@ export default {
   mounted() {
     this.changeParams();
   },
-  watch:{
-    "$route.params.search": function(){
+  watch: {
+    "$route.params.search": function() {
       this.changeParams();
     }
   },
@@ -82,17 +81,19 @@ export default {
     changeParams: function() {
       let parametro = this.$route.params.search;
       let prefix, postfix;
-      if(parametro === undefined){
+      if (parametro === undefined) {
         this.getJournals();
-      }else{
+      } else {
         prefix = parametro.split("=")[0];
         postfix = parametro.split("=")[1];
         switch (prefix) {
           case "search":
-              this.getJournalsSearch(postfix);
+            this.getJournalsSearch(postfix);
             break;
           case "category":
-              this.getJournalsParam('{"where": {"categoriaId": '+postfix+'}}');
+            this.getJournalsParam(
+              '{"where": {"categoriaId": ' + postfix + "}}"
+            );
             break;
           default:
             this.getJournals();
@@ -100,54 +101,57 @@ export default {
         }
       }
     },
-    getJournalsSearch: function(parametro){
-      if(parametro == ""){
+    getJournalsSearch: function(parametro) {
+      if (parametro == "") {
         this.getJournals();
         return;
       }
       let query;
       query = {
-        "where":{
-          "or":
-          [
-            {"descripcion": {"regexp":"/"+parametro+"/i"} },
-            {"titulo": {"regexp":"/"+parametro+"/i"} },
-            {"tituloCorto": {"regexp":"/"+parametro+"/i"} },
-            {"subtitulo": {"regexp":"/"+parametro+"/i"} }
+        where: {
+          or: [
+            { descripcion: { regexp: "/" + parametro + "/i" } },
+            { titulo: { regexp: "/" + parametro + "/i" } },
+            { tituloCorto: { regexp: "/" + parametro + "/i" } },
+            { subtitulo: { regexp: "/" + parametro + "/i" } }
           ]
         }
-      } 
-      axios.get(process.env.ROOT_API+"Revista/?filter="+JSON.stringify(query)).then(response => {
-        this.revistas = response.data;
-        this.revistas.forEach(element => {
-            if(element.imagen == null){
+      };
+      axios
+        .get(process.env.ROOT_API + "Revista/?filter=" + JSON.stringify(query))
+        .then(response => {
+          this.revistas = response.data;
+          this.revistas.forEach(element => {
+            if (element.imagen == null) {
               element.imagen = imgJournalDefoult;
             }
           });
-      });
+        });
     },
-    getJournalsParam: function(query){
-      axios.get(process.env.ROOT_API+"Revista?filter="+query).then(response => {
-        this.revistas = response.data;
-        this.revistas.forEach(element => {
-            if(element.imagen == null){
+    getJournalsParam: function(query) {
+      axios
+        .get(process.env.ROOT_API + "Revista?filter=" + query)
+        .then(response => {
+          this.revistas = response.data;
+          this.revistas.forEach(element => {
+            if (element.imagen == null) {
               element.imagen = imgJournalDefoult;
             }
           });
-      });
+        });
     },
-    getJournals: function(){
-      axios.get(process.env.ROOT_API+"Revista").then(response => {
+    getJournals: function() {
+      axios.get(process.env.ROOT_API + "Revista").then(response => {
         this.revistas = response.data;
         this.revistas.forEach(element => {
-          if(element.imagen == null){
+          if (element.imagen == null) {
             element.imagen = imgJournalDefoult;
           }
         });
       });
     },
-    openJournal: function(journalId){
-      if(this.state){
+    openJournal: function(journalId) {
+      if (this.state) {
         let divFiltros = this.$el.querySelector("#divFiltros");
         divFiltros = this.$el.querySelector("#divFiltros");
         divFiltros.style.flex = "none";
@@ -164,15 +168,15 @@ export default {
         this.summaryColDescription = "colSummaryResponsive";
         this.summaryRowResponsive = "rowResponsive";
         this.state = false;
-        let interval = setInterval(function(){
+        let interval = setInterval(function() {
           divFiltros.style.display = "none";
           clearInterval(interval);
         }, 900);
-      }else{
+      } else {
         this.idActualJournal = journalId.toString();
       }
     },
-    detailedClouse: function(){
+    detailedClouse: function() {
       let divFiltros = this.$el.querySelector("#divFiltros");
       divFiltros.style.display = "inline";
       this.state = true;
@@ -202,51 +206,50 @@ export default {
 </script>
 
 <style scoped>
-.headerS{
+.headerS {
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 1;
 }
-.body-card-revistas{
+.body-card-revistas {
   background-color: #d8d1bb;
   height: 100%;
   width: 100%;
-  
 }
-#divDetailedJournal{
+#divDetailedJournal {
   display: none;
 }
-.summaryCard{
+.summaryCard {
   margin: 1em 10%;
   width: 80%;
 }
-#divFiltros{
+#divFiltros {
   padding: 1em 0px;
   transition-property: width;
   transition-timing-function: linear;
   transition-duration: 0.6s;
   transition-delay: 0s;
 }
-#divRevistas{
+#divRevistas {
   transition-property: all;
   transition-timing-function: linear;
   transition-duration: 0.3s;
   transition-delay: 0s;
   padding: 0px;
 }
-.dinamicHeigth{
+.dinamicHeigth {
   overflow-y: auto;
   height: calc(100vh - 5em);
 }
-.divContentRevistas{
+.divContentRevistas {
   padding-right: 15px;
 }
-@media (max-width: 576px){
-  #divDetailedJournal{
+@media (max-width: 576px) {
+  #divDetailedJournal {
     position: fixed !important;
   }
-  #divFiltros{
+  #divFiltros {
     display: inline;
   }
 }

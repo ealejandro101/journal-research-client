@@ -21,10 +21,18 @@
               <itemDescription :icono="propiedades[prop.nombre]" :label="prop.nombre" :texto="revista[prop.nombre]">
               </itemDescription>
             </b-col>
-            <b-col v-for="propa in propiedadesName2" :key="propa.nombre" sm="6" md="6" lg="6">
-              <itemDescription :icono="propiedades[propa.nombre]" :label="propa.nombre" :texto="revista[propa.nombre]">
+            <b-col v-for="propa in propiedadesName2" :key="propa.nombre" sm="6" md="6" lg="6">                
+              <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" :texto="revista[propa.nombre]">
               </itemDescription>
             </b-col>
+            <b-col v-for="propa in propiedadesName3" :key="propa.nombre" sm="6" md="6" lg="6">               
+                <a  :href="revista[propa.nombre]"> 
+                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
+              </a>               
+            </b-col>
+            <a  :href="revista.url"> 
+             <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
+            </a>    
           </b-row>
           <hr>
           <b-row align-self="start">
@@ -39,15 +47,15 @@
  
 
             <b-col align-self="start">
-              <!--
-              <h4 class="text-left">Palabras Claves</h4>
-              -->
-              <br>
-             <!-- 
-              <b-badge href="#" variant="success">
-                <b-img rounded="circle" class="iconos" :src="iconosCategorias[categorias.nombre]" />
-                {{categorias.nombre}}</b-badge>
-            -->
+              
+              <h4 v-if="palabrasClavesRevista.length > 0" class="text-left">Palabras Claves</h4>
+                <div v-for="word in palabrasClavesRevista"  :key="word.id">                
+                    <b-badge  href="#" variant="primary">
+                          {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
+                    </b-badge>
+                </div>  
+            
+             
             </b-col>
           </b-row>
         </b-col>
@@ -58,7 +66,7 @@
 
 <script>
 import axios from "axios";
-import imgJournalDefoult from '@/assets/journalImgDefault.jpeg';
+import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import itemDescription from "@/components/itemDescription";
 import ingenieriaLogo from "@/assets/ingenieria_icono.png";
 import cienciasAgricolas from "@/assets/agricola_icono.png";
@@ -76,6 +84,12 @@ export default {
     return {
       revista: {},
       categorias: {},
+      palabrasClavesRevista: {},
+      palabrasClaves: {},
+      rContactos: {},
+      rAdicional: {},
+      rUbicacion: {},
+      idCity: "",
       iconosCategorias: {
         "Ciencias Agrícolas y Ambientales": cienciasAgricolas,
         "Ciencias Biológicas": cienciasBiologicas,
@@ -94,7 +108,11 @@ export default {
         doi: "fab fa-codepen",
         telefono: "fas fa-phone",
         direccion: "fas fa-map-marked-alt",
-        ciudad: "fas fa-city"
+        ciudad: "fas fa-city",
+        facebook: "fab fa-facebook-square",
+        instagram: "fab fa-instagram",
+        twitter: "fab fa-twitter-square",
+        correo: "fas fa-at"
       },
       propiedadesName1: [
         { nombre: "institucion" },
@@ -105,28 +123,76 @@ export default {
         { nombre: "doi" },
         { nombre: "telefono" },
         { nombre: "direccion" },
-        { nombre: "ciudad" }
+        { nombre: "ciudad" },
+        { nombre: "correo" }
+      ],
+      propiedadesName3: [
+        { nombre: "facebook" },
+        { nombre: "instagram" },
+        { nombre: "twitter" }
       ]
     };
   },
-  watch:{
-    id: function(){
-      axios.get(process.env.ROOT_API+"Revista/" + this.id).then(response => {
+  watch: {
+    id: function() {
+      axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
-        if(this.revista.imagen == null){
+        if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
         }
-        axios.get(process.env.ROOT_API+"Categoria/"+this.revista.categoriaId).then(response => {
-          this.categorias = response.data;
+        axios
+          .get(process.env.ROOT_API + "Categoria/" + this.revista.categoriaId)
+          .then(response => {
+            this.categorias = response.data;
+          });
+        axios
+          .get(process.env.ROOT_API + "Rcontactos/" + this.id)
+          .then(response => {
+            this.rContactos = response.data;
+            this.revista = Object.assign(this.revista, response.data);
+          });
+
+        axios
+          .get(process.env.ROOT_API + "Rubicacions/" + this.id)
+          .then(response => {
+            this.rUbicacion = response.data;
+            this.revista = Object.assign(this.revista, response.data);
+            this.idCity = response.data.ciudadId;
+          });
+
+        axios
+          .get(process.env.ROOT_API + "Ciudads/" + this.idCity)
+          .then(response => {
+            this.revista.ciudad = response.data.ciudad;
+          });
+
+        axios
+          .get(process.env.ROOT_API + "Radicionals/" + this.id)
+          .then(response => {
+            this.rAdicional = response.data;
+            this.revista = Object.assign(this.revista, response.data);
+          });
+
+        axios.get(process.env.ROOT_API + "Palabraclaves/").then(response => {
+          this.palabrasClaves = response.data;
         });
+        axios
+          .get(
+            process.env.ROOT_API +
+              "Palabrasclaves/" +
+              "?filter=%7B%22where%22%3A%20%7B%22revistaId%22%3A%20" +
+              this.id +
+              "%7D%7D"
+          )
+          .then(response => {
+            this.palabrasClavesRevista = response.data;
+          });
       });
-      
     }
-  }
-  ,
+  },
   methods: {
-    emitirCloseCard () {
-      this.$emit('detailedCard:close')
+    emitirCloseCard() {
+      this.$emit("detailedCard:close");
     }
   },
   components: {
@@ -153,12 +219,12 @@ export default {
   width: auto;
   max-height: 15em;
 }
-.divClose{
+.divClose {
   width: 100%;
   height: 2em;
   position: relative;
 }
-.divClose i{
+.divClose i {
   position: absolute;
   right: 1em;
   font-size: 2em;
