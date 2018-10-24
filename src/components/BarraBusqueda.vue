@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col noPadding">
-        <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder=""/>
+        <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder="Título - Descripción"/>
       </div>
       <router-link :to="'/ListaRevistas/search='+parametro">
         <b-button size="sm" class="my-2 my-sm-0 searchButton" type="submit">

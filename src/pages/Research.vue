@@ -142,28 +142,6 @@ export default {
           "nombre": "Lingüística, literatura y artes",
           "count": " "
         }
-      ],
-      socialNetworks: [
-        {
-            link: 'https://www.facebook.com/JournalsAuthors',
-            icon: 'fab fa-facebook',
-            label: 'Facebook'
-        },
-        {
-            link: 'https://twitter.com/jasolutions3',
-            icon: 'fab fa-twitter-square',
-            label: 'Twitter'
-        },
-        {
-            link: 'https://www.youtube.com/channel/UCKdZyyJeuI9VQkTROa7X_CA',
-            icon: 'fab fa-youtube-square',
-            label: 'Youtube'
-        },
-        {
-            link: 'http://info@jasolutions.com.co',
-            icon: 'fas fa-envelope-square',
-            label: 'Mail'
-        }
       ]
     };
   },

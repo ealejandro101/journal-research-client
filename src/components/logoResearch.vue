@@ -6,12 +6,10 @@
 
 <script>
 export default {
-    name: 'logo-research',
-    data() {
-        return {
-            
-        };
-    }
+  name: "logo-research",
+  data() {
+    return {};
+  }
 };
 </script>
 
