@@ -90,6 +90,7 @@ export default {
       rAdicional: {},
       rUbicacion: {},
       idCity: "",
+      urlDOI: "https://doi.org/",
       iconosCategorias: {
         "Ciencias Agrícolas y Ambientales": cienciasAgricolas,
         "Ciencias Biológicas": cienciasBiologicas,

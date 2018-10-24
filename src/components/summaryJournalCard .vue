@@ -11,22 +11,10 @@
                     </b-col>
                     <b-col sm="12" md="8" lg="9" :class="classColDescription">                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-
-
-                            {{codigos}}
-                        <div v-if="codigos.eISSN !=null && codigos.DOI !=null  || codigos.eISSN !='' && codigos.DOI !=''">
-                             eISSN
-                             {{codigos[eISSN]}} |
-                              DOI
-                             {{codigos[DOI]}}
-                        </div>
-
-                        <div v-if="codigos.ISSN !=null && codigos.DOI !=null  || codigos.ISSN !='' && codigos.DOI !=''">
-                             ISSN
-                             {{codigos[ISSN]}}
-                        </div>
                         
-                        <p class="card-text text-justify cardDescription">
+                          <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
+                          
+                          <p class="card-text text-justify cardDescription">
                             {{valor}} 
                             <a href="#" class="card-link">
                                 <b-badge pill variant="primary">
@@ -59,6 +47,9 @@ export default {
     return {
       valor: this.descripcion.substring(0, 250) + "....",
       codigos: { eISSN: "", DOI: "", ISSN: "" },
+      codigosQseMostraran: "",
+      rEISSN: "",
+
       Nombrecodigos: [
         { nombre: "eISSN" },
         { nombre: "DOI" },
@@ -74,6 +65,29 @@ export default {
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.codigos.ISSN = response.data.issn;
         this.codigos.DOI = response.data.doi;
+        this.codigos.eISSN = response.data.eissn;
+
+        if (this.codigos.eISSN != null && this.codigos.DOI != null) {
+          this.codigosQseMostraran =
+            "eISSN:" + this.codigos.eISSN + " | " + "DOI:" + this.codigos.DOI;
+        } else if (
+          this.codigos.ISSN != null &&
+          this.codigos.DOI != null &&
+          this.codigos.eISSN == null
+        ) {
+          this.codigosQseMostraran =
+            "ISSN:" + this.codigos.ISSN + " | " + "DOI:" + this.codigos.DOI;
+        } else if (this.codigos.eISSN == null && this.codigos.DOI == null) {
+          this.codigosQseMostraran = "ISSN:" + this.codigos.ISSN;
+        } else if (this.codigos.ISSN == null && this.codigos.DOI == null) {
+          this.codigosQseMostraran = "eISSN:" + this.codigos.eISSN;
+        } else if (
+          this.codigos.ISSN != null &&
+          this.codigos.DOI == null &&
+          this.codigos.eISSN != null
+        ) {
+          this.codigosQseMostraran = "eISSN:" + this.codigos.eISSN;
+        }
       });
     }
   }
