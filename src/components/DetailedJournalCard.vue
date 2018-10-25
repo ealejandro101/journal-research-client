@@ -19,12 +19,20 @@
               <itemDescription :icono="propiedades[prop.nombre]" :label="prop.nombre" :texto="revista[prop.nombre]">
               </itemDescription>
             </b-col>
-            <b-col v-for="propa in propiedadesName2" :key="propa.nombre" sm="6" md="6" lg="6">                
-              <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" :texto="revista[propa.nombre]">
+            <b-col v-for="propa in propiedadesName2" :key="propa.nombre" sm="6" md="6" lg="6">    
+              <div v-if="propa.nombre == 'doi' && revista[propa.nombre] != null ">
+              <a  :href="urlDOI+revista[propa.nombre]">                  
+                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
+              </a>   
+              </div>
+              <div v-else>
+                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" :texto="revista[propa.nombre]">
               </itemDescription>
+              </div>            
+              
             </b-col>
             <b-col v-for="propa in propiedadesName3" :key="propa.nombre" sm="6" md="6" lg="6">               
-                <a  :href="revista[propa.nombre]"> 
+              <a  :href="revista[propa.nombre]">                  
                 <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
               </a>               
             </b-col>
