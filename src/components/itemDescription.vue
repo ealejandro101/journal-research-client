@@ -10,7 +10,6 @@
 
 <script>
 export default {
-
   props: {
     icono: String,
     label: String,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col noPadding">
+      <div class="col noPadding">      
         <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder="Título - Descripción"/>
       </div>
       <router-link :to="'/ListaRevistas/search='+parametro">
@@ -20,39 +20,59 @@
 </template>
 
 <script>
+import axios from "axios";
+
+import Autocomplete from "vuejs-auto-complete";
+
 export default {
   name: "barra-busqueda",
   props: ["isFilter"],
+
   data() {
     return {
-      categorias: [], parametro: ''
+      revistas: {},
+      categorias: [],
+      parametro: ""
     };
   },
-  methods:{
-    routeRevistas: function () {
-      this.$router.push({path: '/ListaRevistas/search='+this.parametro.toString()})
+  mounted() {
+    this.Lrevistas;
+  },
+  methods: {
+    routeRevistas: function() {
+      this.$router.push({
+        path: "/ListaRevistas/search=" + this.parametro.toString()
+      });
+    },
+    Lrevistas: function() {
+      axios.get(process.env.ROOT_API + "Revista/").then(response => {
+        this.revistas = response.data;
+      });
     }
+  },
+  components: {
+    Autocomplete
   }
 };
 </script>
 
 <style scoped>
-p{
+p {
   margin: 0px;
 }
-.filter{
+.filter {
   padding-top: 2px;
 }
-.filter p a{
+.filter p a {
   color: #272727;
 }
-.searchButton{
+.searchButton {
   margin: 0px !important;
 }
-.searchButton a{
+.searchButton a {
   color: #fff;
 }
-.searchButton a:hover{
+.searchButton a:hover {
   color: rgb(201, 201, 201);
   text-decoration: none;
 }

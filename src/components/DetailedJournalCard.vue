@@ -32,13 +32,23 @@
               
             </b-col>
             <b-col v-for="propa in propiedadesName3" :key="propa.nombre" sm="6" md="6" lg="6">               
-              <a  :href="revista[propa.nombre]">                  
-                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
-              </a>               
+              
+              
+                <div v-if="propa.nombre != 'url' ">
+                  <a  :href="revista[propa.nombre]">                  
+                  <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
+                  </a>
+                </div>
+                <div v-else>
+                  <a  :href="revista.url"> 
+                  <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
+                  </a> 
+                </div>              
+              
+             
+                                          
             </b-col>
-            <a  :href="revista.url"> 
-             <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
-            </a>    
+              
           </b-row>
           <hr>
           <b-row align-self="start">
@@ -136,7 +146,8 @@ export default {
       propiedadesName3: [
         { nombre: "facebook" },
         { nombre: "instagram" },
-        { nombre: "twitter" }
+        { nombre: "twitter" },
+        { nombre: "url" }
       ]
     };
   },
