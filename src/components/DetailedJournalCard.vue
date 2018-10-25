@@ -2,14 +2,12 @@
   <div>
     <b-card class="d-flex">
       <div class="divClose"><i class="fas fa-times" @click="emitirCloseCard"></i></div>
-      <b-row>
-        <b-col sm="12" md="4" lg="4">
-          <div class="divSummaryImg">
-            <b-img class="imagenCard" fluid center :src="revista.imagen" />
-          </div>
-        </b-col>
-        <b-col sm="12" md="8" lg="8">
+      <b-row>      
+        <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
+           <div style="float:left" class="divSummaryImg">
+            <b-img   class="imagenCard" fluid center :src="revista.imagen" />
+          </div>
           <p class="card-text text-justify clasDescription" v-text="revista.descripcion"></p>
         </b-col>
       </b-row>
@@ -208,12 +206,12 @@ export default {
   height: 30px;
 }
 .divSummaryImg {
-  position: absolute;
-  width: calc(100% - 30px);
+  position: relative;
   top: 0;
   bottom: 0;
   display: flex;
   align-items: center;
+  padding: 1em;
 }
 .divSummaryImg img {
   height: 100%;
