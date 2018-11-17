@@ -60,7 +60,7 @@
             <b-col align-self="start">
               <h4 class="text-left">Categoría</h4>
               <br>
-              <b-badge href="#" variant="success">
+              <b-badge @click="routeRevistasWithCategory()" href="#" variant="success">
                 <b-img rounded="circle" class="iconos" :src="iconosCategorias[categorias.nombre]" />
                 {{categorias.nombre}}
               </b-badge>
@@ -117,9 +117,9 @@ export default {
         "Ciencias Biológicas": cienciasBiologicas,
         "Ciencias Exactas": cienciasExactas,
         "Ciencias Sociales": cienciasSociales,
-        Ingeniería: ingenieriaLogo,
+        "Ingeniería": ingenieriaLogo,
         "Ciencias de la salud": cienciasSalud,
-        Humanidades: humanidades,
+        "Humanidades": humanidades,
         "Lingüística, literatura y artes": linguisticaLiteraturaArtes
       },
       propiedades: {
@@ -216,6 +216,10 @@ export default {
   methods: {
     emitirCloseCard() {
       this.$emit("detailedCard:close");
+    },
+    routeRevistasWithCategory : function () {
+      this.emitirCloseCard();
+      this.$router.push({path: '/ListaRevistas/category='+this.revista.categoriaId.toString()})
     }
   },
   components: {
