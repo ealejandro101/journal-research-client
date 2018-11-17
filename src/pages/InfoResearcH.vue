@@ -51,7 +51,7 @@
                     <h5>Postular una revista</h5>
                     <p>Los editores deben suscribir un acuerdo con Journals &amp; Authors para que su revista pueda ser
                         publicada en ResearcH-CFP. Este acuerdo buscará también difundir en el sitio web
-                        (www.jasolutions.com.co) y en nuestras cuentas oficiales de redes sociales información de la
+                        <a href="http://www.jasolutions.com.co" target="_blanck">www.jasolutions.com.co</a> y en nuestras cuentas oficiales de redes sociales información de la
                         revista relacionada con convocatorias de recepción de artículos (Call for Papers), guía para
                         autores, alcances, política editorial e información sobre integrantes del comité editorial.</p>
                     <p>Journals &amp; Authors adquiere únicamente los derechos de difusión y no hará uso comercial o
@@ -62,15 +62,15 @@
                         servicios prestados por Journals &amp; Authors para el mejoramiento de su revista.</p>
                     <p>Journals &amp; Authors no se hace responsable por litigios o problemas de ningún tipo entre
                         autores y editores de las revistas.  Cualquier usuario puede informar al correo
-                        electrónico info@jasolutions.com.co sobre información inexacta, errónea, falsa, que atente
+                        electrónico <a href="mailto:info@jasolutions.com.co" target="_top">info@jasolutions.com.co</a> sobre información inexacta, errónea, falsa, que atente
                         contra la dignidad humana, viole derechos de autor o que promueva malas prácticas
                         editoriales. ResearcH no promueve ni publica anuncios de CFP de revistas depredadoras que
                         buscan engañar a los autores o investigadores.</p>
                     <h5>Procedimiento para postulación de revistas y publicación de CFP</h5>
-                    <p>Una vez el editor llene el formulario (enlace) completamente y lo envíe, un comité conformado
+                    <p>Una vez el editor llene el <a href="/#/FormularioNuevaRevista" target="_blanck">formulario</a> completamente y lo envíe, un comité conformado
                         por bibliotecólogos, hará la verificación de la información y una evaluación de los archivos
                         enviados (carátulas, videos, etc.) y del sitio web de la revista.</p>
-                    <p>Los  anuncios de CFP se deben enviar al siguiente formulario (enlace) con información
+                    <p>Los  anuncios de CFP se deben enviar al siguiente <a href="/#/FormularioNuevaRevista" target="_blanck">formulario</a> con información
                         relevante y precisa. Es obligatorio que los CFP sean publicados al mismo tiempo en los sitios
                         web de las revistas con información más amplia sobre los procesos editoriales.</p>
                     <p>Un anuncio de CFP debe contener la siguiente información: presentación breve y justificación

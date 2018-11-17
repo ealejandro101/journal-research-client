@@ -15,33 +15,38 @@
         <b-col>
           <hr>
           <b-row>
-            <b-col v-for="prop in propiedadesName1" :key="prop.nombre" sm="6" md="6" lg="6">
-              <itemDescription :icono="propiedades[prop.nombre]" :label="prop.nombre" :texto="revista[prop.nombre]">
+            <b-col v-for="prop in propiedadesName1" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
+              <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key]">
               </itemDescription>
             </b-col>
-            <b-col v-for="propa in propiedadesName2" :key="propa.nombre" sm="6" md="6" lg="6">    
-              <div v-if="propa.nombre == 'doi' && revista[propa.nombre] != null ">
-              <a  :href="urlDOI+revista[propa.nombre]">                  
-                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
-              </a>   
+            <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
+              <div v-if="propa.key == 'doi' && revista[propa.key] != null ">
+                <a target="_blanck" :href="urlDOI+revista[propa.key]">                  
+                  <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
+                </a>   
+              </div>
+              <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
+                <a target="_top" :href="'mailto:'+revista[propa.key]">                  
+                  <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
+                </a>   
               </div>
               <div v-else>
-                <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" :texto="revista[propa.nombre]">
+                <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]">
               </itemDescription>
               </div>            
               
             </b-col>
-            <b-col v-for="propa in propiedadesName3" :key="propa.nombre" sm="6" md="6" lg="6">               
+            <b-col v-for="propa in propiedadesName3" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">               
               
               
-                <div v-if="propa.nombre != 'url' ">
-                  <a  :href="revista[propa.nombre]">                  
-                  <itemDescription  :icono="propiedades[propa.nombre]" :label="propa.nombre" > </itemDescription>
+                <div v-if="propa.key != 'url'">
+                  <a :href="revista[propa.key]" target="_blanck">                  
+                    <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
                   </a>
                 </div>
                 <div v-else>
-                  <a  :href="revista.url"> 
-                  <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
+                  <a :href="revista.url" target="_blanck"> 
+                    <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
                   </a> 
                 </div>              
               
@@ -65,7 +70,7 @@
             <b-col align-self="start">
               
               <h4 v-if="palabrasClavesRevista.length > 0" class="text-left">Palabras Claves</h4>
-                <div v-for="word in palabrasClavesRevista"  :key="word.id">                
+                <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1">                
                     <b-badge  href="#" variant="primary">
                           {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
                     </b-badge>
@@ -132,22 +137,22 @@ export default {
         correo: "fas fa-at"
       },
       propiedadesName1: [
-        { nombre: "institucion" },
-        { nombre: "issn" },
-        { nombre: "eissn" }
+        { nombre: "Institucion", key:"institucion" },
+        { nombre: "ISSN", key:"issn" },
+        { nombre: "EISSN", key:"eissn" }
       ],
       propiedadesName2: [
-        { nombre: "doi" },
-        { nombre: "telefono" },
-        { nombre: "direccion" },
-        { nombre: "ciudad" },
-        { nombre: "correo" }
+        { nombre: "DOI", key:"doi" },
+        { nombre: "Teléfono", key:"telefono" },
+        { nombre: "Dirección", key:"direccion" },
+        { nombre: "Ciudad", key:"ciudad" },
+        { nombre: "Correo", key:"correo" }
       ],
       propiedadesName3: [
-        { nombre: "facebook" },
-        { nombre: "instagram" },
-        { nombre: "twitter" },
-        { nombre: "url" }
+        { nombre: "Facebook", key:"facebook" },
+        { nombre: "Instagram", key:"instagram" },
+        { nombre: "Twitter", key:"twitter" },
+        { nombre: "url", key:"url" }
       ]
     };
   },

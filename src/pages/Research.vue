@@ -29,7 +29,7 @@
         <div class="container-fluid noPadding">
           <div class="row justify-content-center">
             <div class="col-9 col-md-6 col-lg-5 col-xl-4 researchProcess">
-              <h5>Proceso ResearcH</h5>
+              <h5>Para qué sirve ResearcH</h5>
               <div class="img imgProceosResearch">
                 <img src="@/assets/proceso.png" alt="">
               </div>
@@ -61,7 +61,7 @@
       <header-research></header-research>
     </div>
     <div>
-      <footer-research :socialNetworks="this.socialNetworks"></footer-research>
+      <footer-research></footer-research>
     </div>
   </div>
 </template>

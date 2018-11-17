@@ -69,18 +69,18 @@ export default {
 
         if (this.codigos.eISSN != null && this.codigos.DOI != null) {
           this.codigosQseMostraran =
-            "eISSN:" + this.codigos.eISSN + " | " + "DOI:" + this.codigos.DOI;
+            "eISSN: " + this.codigos.eISSN + " " + "DOI: " + this.codigos.DOI;
         } else if (
           this.codigos.ISSN != null &&
           this.codigos.DOI != null &&
           this.codigos.eISSN == null
         ) {
           this.codigosQseMostraran =
-            "ISSN:" + this.codigos.ISSN + " | " + "DOI:" + this.codigos.DOI;
+            "ISSN: " + this.codigos.ISSN + " " + "DOI: " + this.codigos.DOI;
         } else if (this.codigos.eISSN == null && this.codigos.DOI == null) {
-          this.codigosQseMostraran = "ISSN:" + this.codigos.ISSN;
+          this.codigosQseMostraran = "ISSN: " + this.codigos.ISSN;
         } else if (this.codigos.ISSN == null && this.codigos.DOI == null) {
-          this.codigosQseMostraran = "eISSN:" + this.codigos.eISSN;
+          this.codigosQseMostraran = "eISSN: " + this.codigos.eISSN;
         } else if (
           this.codigos.ISSN != null &&
           this.codigos.DOI == null &&
@@ -117,7 +117,6 @@ export default {
   width: 100%;
   max-width: 100%;
   justify-content: center;
-  display: flex;
 }
 .colSummaryResponsive .cardDescription {
   display: none;
