@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h6>Filtros de busqueda</h6>
+        <h6>Filtros de búsqueda</h6>
         <!--<div v-for="item in filtros" :key="item.titulo">
             
             <div>
