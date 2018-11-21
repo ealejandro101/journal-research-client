@@ -1,29 +1,30 @@
 <template>
   <div>
     <div class="row">
-      <div class="col noPadding">      
-        <b-form-input @keyup.enter.native="routeRevistas" v-model="parametro" size="sm" class="mr-sm-2" type="text" placeholder="Título - Descripción"/>
+   
+      <div class="col noPadding">  
+        <autocomplete
+          :source="EndpointPrediccion"
+          results-property="revistas"
+          :results-display="formattedDisplay"
+          placeholder="Título - Descripción"
+          @keyup.enter.native="routeRevistas"
+          name="parametro"
+          @enter="buscarPalabra"
+          @nothingSelected="buscarPalabra"
+          >
+        </autocomplete>
+       
       </div>
-      <router-link :to="'/ListaRevistas/search='+parametro">
-        <b-button size="sm" class="my-2 my-sm-0 searchButton" type="submit">
-          Buscar
-        </b-button>
-      </router-link>
+     
+     
     </div>
-    <div v-if="isFilter" class="row d-flex justify-content-end filter">
-      <i class="fas fa-filter"></i>
-      <p>
-        <router-link to="/ListaRevistas">Filtros avanzados</router-link>
-      </p>
-    </div>
+    
   </div>
 </template>
-
 <script>
 import axios from "axios";
-
 import Autocomplete from "vuejs-auto-complete";
-
 export default {
   name: "barra-busqueda",
   props: ["isFilter"],
@@ -43,6 +44,17 @@ export default {
       this.$router.push({
         path: "/ListaRevistas/search=" + this.parametro.toString()
       });
+    },
+    buscarPalabra(input) {
+      this.$router.push({
+        path: "/ListaRevistas/search=" + input
+      });
+    },
+    EndpointPrediccion(input) {
+      return process.env.ROOT_API + "Revista/busqueda?q=" + input;
+    },
+    formattedDisplay(result) {
+      return result.titulo;
     },
     Lrevistas: function() {
       axios.get(process.env.ROOT_API + "Revista/").then(response => {
