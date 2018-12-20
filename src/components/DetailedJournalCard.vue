@@ -20,15 +20,11 @@
               </itemDescription>
             </b-col>
             <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
-              <div v-if="propa.key == 'doi' && revista[propa.key] != null ">
-                <a target="_blanck" :href="urlDOI+revista[propa.key]">                  
-                  <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
-                </a>   
+              <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
+                  <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
               </div>
               <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
-                <a target="_top" :href="'mailto:'+revista[propa.key]">                  
-                  <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
-                </a>   
+                  <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
               </div>
               <div v-else>
                 <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]">
@@ -41,15 +37,12 @@
               
                 <div v-if="propa.key != 'url'">
                   <a :href="revista[propa.key]" target="_blanck">                  
-                    <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
+                    <itemDescription   :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
                   </a>
                 </div>
-                <div v-else>
-                  <a :href="revista.url" target="_blanck"> 
-                    <itemDescription  icono="fas fa-globe" label="sitio web" > </itemDescription>
-                  </a> 
-                </div>              
-              
+                <div v-if="propa.key == 'url'">
+                    <itemDescription  :click=true  :url='revista.url' icono="fas fa-globe" texto="sitio web"  > </itemDescription>
+                </div>                          
              
                                           
             </b-col>
@@ -57,15 +50,19 @@
           </b-row>
           <hr>
           <b-row align-self="start">
+           
             <b-col align-self="start">
-              <h4 class="text-left">Categoría</h4>
-              <br>
-              <b-badge @click="routeRevistasWithCategory()" href="#" variant="success">
-                <b-img rounded="circle" class="iconos" :src="iconosCategorias[categorias.nombre]" />
-                {{categorias.nombre}}
-              </b-badge>
+              
+              <h4 v-if="categorias.length > 0" class="text-left">Categorías</h4>
+                <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
+                      <b-badge @click="routeRevistasWithCategory(categoria.id)" href="#" variant="success">
+                      <b-img rounded="circle" class="iconos" :src="iconosCategorias[nombreCategoria]" />
+                      {{categoria.nombre}}
+                     
+                    </b-badge>
+                </div>              
+             
             </b-col>
- 
 
             <b-col align-self="start">
               
@@ -74,8 +71,7 @@
                     <b-badge  href="#" variant="primary">
                           {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
                     </b-badge>
-                </div>  
-            
+                </div>              
              
             </b-col>
           </b-row>
@@ -104,7 +100,7 @@ export default {
   data() {
     return {
       revista: {},
-      categorias: {},
+      categorias: [],
       palabrasClavesRevista: {},
       palabrasClaves: {},
       rContactos: {},
@@ -146,7 +142,7 @@ export default {
         { nombre: "Teléfono", key:"telefono" },
         { nombre: "Dirección", key:"direccion" },
         { nombre: "Ciudad", key:"ciudad" },
-        { nombre: "Correo", key:"correo" }
+        { nombre: "", key:"correo" }
       ],
       propiedadesName3: [
         { nombre: "Facebook", key:"facebook" },
@@ -158,15 +154,29 @@ export default {
   },
   watch: {
     id: function() {
+      this.categorias=[];
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
         if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
         }
         axios
-          .get(process.env.ROOT_API + "Categoria/" + this.revista.categoriaId)
+          .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
           .then(response => {
-            this.categorias = response.data;
+            for (let index = 0; index <  response.data.length; index++) {              
+              let categoriaIdR=response.data[index].categoriaId;
+              axios.get(process.env.ROOT_API+'Categoria/'+categoriaIdR).then(response=>{
+                  let nombreCategoria = response.data;
+                  this.categorias.push(nombreCategoria);
+
+                  
+              }).catch(error =>{
+                console.log(error);
+                
+              })
+
+            }
+            
           });
         axios
           .get(process.env.ROOT_API + "Rcontactos/" + this.id)
@@ -174,7 +184,6 @@ export default {
             this.rContactos = response.data;
             this.revista = Object.assign(this.revista, response.data);
           });
-
         axios
           .get(process.env.ROOT_API + "Rubicacions/" + this.id)
           .then(response => {
@@ -217,9 +226,9 @@ export default {
     emitirCloseCard() {
       this.$emit("detailedCard:close");
     },
-    routeRevistasWithCategory : function () {
+    routeRevistasWithCategory : function (idCategoria) {
       this.emitirCloseCard();
-      this.$router.push({path: '/ListaRevistas/category='+this.revista.categoriaId.toString()})
+      this.$router.push({path: '/ListaRevistas/category='+idCategoria})
     }
   },
   components: {

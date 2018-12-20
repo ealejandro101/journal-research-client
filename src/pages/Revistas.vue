@@ -130,8 +130,12 @@ export default {
     },
     getJournalsParam: function(query) {
       axios
-        .get(process.env.ROOT_API + "Revista?filter=" + query)
+        .get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
         .then(response => {
+          
+          //console.log(r);
+          
+
           this.revistas = response.data;
           this.revistas.forEach(element => {
             if (element.imagen == null) {
@@ -143,6 +147,10 @@ export default {
     getJournals: function() {
       axios.get(process.env.ROOT_API + "Revista").then(response => {
         this.revistas = response.data;
+
+        
+        
+        
         this.revistas.forEach(element => {
           if (element.imagen == null) {
             element.imagen = imgJournalDefoult;

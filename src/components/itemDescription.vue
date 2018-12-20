@@ -1,9 +1,17 @@
 <template>
-    <div>
-              <p class="text-left">
-                    <strong><i :class="icono"></i> {{label}} </strong> {{texto}}
-                </p>   
+    <div  v-if="click">
+        <p class="text-left">                
+         
+              <strong><i :class="icono"></i> {{label}} </strong>                   
+              <a target="_blanck"  :href=url>{{texto}}</a>
+          </p>
 
+    </div>
+    <div v-else>
+      <p   class="text-left">                
+            <strong><i :class="icono"></i> {{label}} </strong>           
+              {{texto}} 
+        </p>
 
     </div>
 </template>
@@ -13,7 +21,9 @@ export default {
   props: {
     icono: String,
     label: String,
-    texto: String
+    texto: String,
+    click: Boolean,
+    url:String
   }
 };
 </script>

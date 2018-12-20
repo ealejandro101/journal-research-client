@@ -37,7 +37,7 @@
             <div class="col-7 col-md-5 col-xl-4 d-flex align-items-center">
               <div class="justify-content-center">
                 <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas ResearcH</h5>
-                <p class="cifra"><span>Más de 100</span><br> revistas en más de 5 países</p> <br>
+                <p class="cifra"><span>Más de {{totalJournals}}</span><br> revistas en más de {{totalCountries}} países</p> <br>
                 <div class="img">
                   <img src="@/assets/mapa.png" alt="">
                 </div>
@@ -142,19 +142,73 @@ export default {
           "nombre": "Lingüística, literatura y artes",
           "count": " "
         }
-      ]
+      ],
+      totalJournals:0,
+      totalCountries:0,
+      arrayciudadId:[],
+      arrayCountry:[],
+      arrayStates:[]
     };
   },
   mounted() {
     let query = {"categoriaId": undefined};
     this.categories.forEach(element => {
       query.categoriaId = element.id;
-      axios.get(process.env.ROOT_API+"Revista/count?where="+JSON.stringify(query)).then(response => {
+      axios.get(process.env.ROOT_API+"RevistasCategorias/count?where="+JSON.stringify(query)).then(response => {
         element.count = response.data.count;
+        
       }).catch(error => {
         console.log(error);
       });
     });
+    axios.get(process.env.ROOT_API+"Revista/count").then(response =>{
+      this.totalJournals=response.data.count;            
+    }).catch(error =>{
+        console.log(error);
+    })
+    
+    //Metodo para contar la cantidad de paises
+    /*axios.get(process.env.ROOT_API+"Rubicacions").then(response =>{
+        let respuesta= JSON.parse(JSON.stringify(response))
+        respuesta.data.forEach(revista =>{
+          this.arrayciudadId.push(revista.ciudadId);
+        })
+        //Eliminar ciudades repetidas
+        //let  arrayStates=[];
+        this.arrayciudadId =this.vectorUnico(this.arrayciudadId); 
+
+        let myArrayPersonal=[];
+
+        for (const ciudadId of this.arrayciudadId) {
+              axios.get(process.env.ROOT_API+"Ciudads/"+ciudadId).then(response =>{ 
+                    let respuestaa=JSON.parse(JSON.stringify(response));             
+                    let state_ide=respuestaa.data.state_id;
+                    this.arrayStates.push(state_ide);
+                    
+                    
+                    axios.get(process.env.ROOT_API+"Estados/"+state_ide).then(response =>{                        
+                        let paisId= response.data.country_id;
+                        this.arrayCountry.push(paisId);
+                        
+                    }).catch(error =>{
+                      console.log(error);                      
+
+                    })
+                    
+              }).catch(error =>{
+                console.log(error);
+              })            
+        
+        }
+                console.log("PAISES ID");
+                console.log(this.arrayCountry);
+                          
+       
+
+        
+    })*/
+
+
   },
   methods: {
     handleScroll: function (evt, el) {
@@ -166,7 +220,12 @@ export default {
     },
     routeRevistasWithCategory : function (category) {
       this.$router.push({path: '/ListaRevistas/category='+category.toString()})
-    }
+    },    
+    vectorUnico:function(a) {
+    return a.sort().filter(function(item, pos, ary) {
+        return !pos || item != ary[pos - 1];
+    })
+}
   }
 };
 </script>

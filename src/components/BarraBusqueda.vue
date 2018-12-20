@@ -33,7 +33,7 @@ export default {
     return {
       revistas: {},
       categorias: [],
-      parametro: ""
+      parametro: " "
     };
   },
   mounted() {
@@ -41,14 +41,21 @@ export default {
   },
   methods: {
     routeRevistas: function() {
-      this.$router.push({
+     
+      this.$router.push({       
         path: "/ListaRevistas/search=" + this.parametro.toString()
       });
+      
     },
     buscarPalabra(input) {
-      this.$router.push({
-        path: "/ListaRevistas/search=" + input
+      if(input.toString()=='undefined'){
+          input="";
+      }else{
+      this.$router.push({    
+            path: "/ListaRevistas/search=" + input 
+        
       });
+      }
     },
     EndpointPrediccion(input) {
       return process.env.ROOT_API + "Revista/busqueda?q=" + input;
