@@ -48,33 +48,39 @@
             </b-col>
               
           </b-row>
-          <hr>
-          <b-row align-self="start">
-           
-            <b-col align-self="start">
-              
-              <h4 v-if="categorias.length > 0" class="text-left">Categorías</h4>
-                <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
-                      <b-badge @click="routeRevistasWithCategory(categoria.id)" href="#" variant="success">
-                      <b-img rounded="circle" class="iconos" :src="iconosCategorias[nombreCategoria]" />
-                      {{categoria.nombre}}
-                     
-                    </b-badge>
-                </div>              
-             
-            </b-col>
-
-            <b-col align-self="start">
-              
-              <h4 v-if="palabrasClavesRevista.length > 0" class="text-left">Palabras Claves</h4>
-                <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1">                
-                    <b-badge  href="#" variant="primary">
-                          {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
-                    </b-badge>
-                </div>              
-             
-            </b-col>
-          </b-row>
+        </b-col>
+        <div v-show="indexScopus != ''" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
+          <div id="indexScopus"></div>
+        </div>
+      </b-row>
+      <hr>
+      <b-row align-self="start">
+        <b-col v-if="categorias.length > 0" align-self="start">
+          <h4 class="text-left">Categorías</h4>
+            <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
+                  <b-badge @click="routeRevistasWithCategory(categoria.id)" href="#" variant="success">
+                  <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
+                  {{categoria.nombre}}
+                  
+                </b-badge>
+            </div>
+        </b-col>
+        <b-col v-if="palabrasClavesRevista.length > 0" align-self="start">
+          <h4 class="text-left">Palabras Claves</h4>
+            <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1">                
+                <b-badge  href="#" variant="primary">
+                      {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
+                </b-badge>
+            </div>
+        </b-col>
+        <b-col v-if="rindexaciones.length > 0" align-self="start">
+          <h4 class="text-left">Indexaciones</h4>
+            <div v-for="(indexacion, i) in rindexaciones" :key="i" class="float-left ml-1 mr-1">
+              <b-badge variant="primary">
+                <a v-if="indexacion.url != ''" :href="indexacion.url" class="text-light" target="_blank" v-text="indexacion.name"></a>
+                <a v-else class="text-light" v-text="indexacion.name"></a>
+              </b-badge>
+            </div>
         </b-col>
       </b-row>
     </b-card>
@@ -101,11 +107,13 @@ export default {
     return {
       revista: {},
       categorias: [],
+      rindexaciones: [],
       palabrasClavesRevista: {},
       palabrasClaves: {},
       rContactos: {},
       rAdicional: {},
       rUbicacion: {},
+      indexScopus: '',
       idCity: "",
       urlDOI: "https://doi.org/",
       iconosCategorias: {
@@ -154,7 +162,16 @@ export default {
   },
   watch: {
     id: function() {
-      this.categorias=[];
+      this.categorias = []
+      this.rindexaciones = []
+      this.revista = {}
+      this.palabrasClavesRevista = {}
+      this.palabrasClaves = {}
+      this.rContactos = {}
+      this.rAdicional = {}
+      this.rUbicacion = {}
+      this.idCity = ""
+      this.indexScopus = ""
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
         if (this.revista.imagen == null) {
@@ -173,6 +190,29 @@ export default {
               }).catch(error =>{
                 console.log(error);
                 
+              })
+
+            }
+            
+          });
+        axios
+          .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
+          .then(respRIndex => {
+            for (let index = 0; index <  respRIndex.data.length; index++) {
+              axios.get(process.env.ROOT_API+'Indexaciones/'+respRIndex.data[index].indexacionesId).then(response=>{
+                  let indexacion = response.data;
+                  if(indexacion.indexaciones == "Scopus"){
+                    this.indexScopus = respRIndex.data[index].parametro
+                    document.getElementById("indexScopus").innerHTML = this.indexScopus
+                  }else{
+                    this.rindexaciones.push({
+                      name: indexacion.indexaciones,
+                      url: respRIndex.data[index].parametro
+                    });
+                  }
+                  
+              }).catch(error =>{
+                console.log(error);
               })
 
             }
