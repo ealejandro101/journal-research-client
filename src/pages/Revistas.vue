@@ -5,10 +5,12 @@
     </div>
     <div class="container-fluid">
       <b-row>
+
         <b-col id="divFiltros" sm="3" md="3" lg="2" xl="2">
             <filtros-busqueda></filtros-busqueda>
-        </b-col>            
-        <b-col id="divRevistas" class="body-card-revistas dinamicHeigth" :sm="smDivRevistas" :md="mdDivRevistas" :lg="lgDivRevistas" :xl="xlDivRevistas">      
+        </b-col> 
+             
+         <b-col  id="divRevistas" class="body-card-revistas dinamicHeigth">      
           <div class="divContentRevistas dinamicHeigth">
             <!--<b-row @click="openJournal()">   
               <summaryJournalCard  class="summaryCard"
@@ -20,8 +22,9 @@
                 urlImg="item.imagen">
               </summaryJournalCard>
             </b-row>-->             
-            <b-row v-for="item in revistas" @click="openJournal(item.id)" :key="item.id">   
-              <summaryJournalCard  class="summaryCard"
+            <b-row v-for="item in revistas" @click="openJournal(item.id)" :key="item.id" >   
+             <b-col   >
+                <summaryJournalCard  class="summaryCard"
                 :id="item.id.toString()"
                 :classColSummaryImg="summaryColSummaryImg"
                 :classColDescription="summaryColDescription"
@@ -30,16 +33,21 @@
                 :descripcion='item.descripcion'
                 :urlImg="item.imagen">
               </summaryJournalCard>
+             </b-col>
             </b-row>
           </div>
         </b-col> 
-        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="9" md="9" lg="10" xl="10">
+
+        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="12" md="12" lg="12" xl="12">
             <detailedJournalCard 
               @detailedCard:close="detailedClouse"
               :id="idActualJournal"
               ></detailedJournalCard>
         </b-col> 
+
+
       </b-row> 
+     
     </div>      
   </div>    
 </template>
@@ -95,6 +103,13 @@ export default {
               '{"where": {"categoriaId": ' + postfix + "}}"
             );
             break;
+          case "issn":
+            this.getPageJournalISSN(postfix);
+            break;
+
+          case "eissn":
+            this.getPageJournalEISSN(postfix);
+            break;
           default:
             this.getJournals();
             break;
@@ -129,19 +144,21 @@ export default {
         });
     },
     getJournalsParam: function(query) {
-      axios
-        .get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
-        .then(response => {
-          
-          //console.log(r);
-          
-
-          this.revistas = response.data;
-          this.revistas.forEach(element => {
+      this.revistas=[];
+      axios.get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
+        .then(response => {          
+          let revista =response.data;  
+          revista.forEach(element => {
             if (element.imagen == null) {
               element.imagen = imgJournalDefoult;
             }
+            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{                  
+                  this.revistas.push(response.data);
+            }).catch(error=>{
+              console.log(error);              
+            })
           });
+          
         });
     },
     getJournals: function() {
@@ -200,6 +217,29 @@ export default {
       this.summaryColSummaryImg = "colSummaryImg";
       this.summaryColDescription = "";
       this.summaryRowResponsive = "";
+    },
+    getPageJournalISSN:function(issn){
+      let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
+           
+       axios.get(query).then(response =>{
+          //this.revistas=response.data;
+          this.openJournal(response.data[0].id);
+       }).catch(error =>{
+          console.log(error);          
+       })
+    },
+    getPageJournalEISSN:function(eissn){
+      let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
+           
+       axios.get(query).then(response =>{
+          //this.revistas=response.data;
+           this.openJournal(response.data[0].id);
+       }).catch(error =>{
+          console.log(error);          
+       })
+
+
+
     }
   },
   components: {
@@ -231,6 +271,9 @@ export default {
 .summaryCard {
   margin: 1em 10%;
   width: 80%;
+  display: inline-block;
+  text-decoration: none;
+
 }
 #divFiltros {
   padding: 1em 0px;
@@ -252,6 +295,7 @@ export default {
 }
 .divContentRevistas {
   padding-right: 15px;
+  overflow: auto;
 }
 @media (max-width: 576px) {
   #divDetailedJournal {

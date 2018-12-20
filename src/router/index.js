@@ -16,6 +16,11 @@ export default new Router({
       component: Research
     },
     {
+      path: "/:search",
+      name: "Research",
+      component: Revistas
+    },
+    {
       path: "/ListaRevistas",
       name: "Revistas",
       component: Revistas
