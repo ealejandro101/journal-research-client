@@ -129,19 +129,21 @@ export default {
         });
     },
     getJournalsParam: function(query) {
-      axios
-        .get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
-        .then(response => {
-          
-          //console.log(r);
-          
-
-          this.revistas = response.data;
-          this.revistas.forEach(element => {
+      this.revistas=[];
+      axios.get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
+        .then(response => {          
+          let revista =response.data;  
+          revista.forEach(element => {
             if (element.imagen == null) {
               element.imagen = imgJournalDefoult;
             }
+            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{                  
+                  this.revistas.push(response.data);
+            }).catch(error=>{
+              console.log(error);              
+            })
           });
+          
         });
     },
     getJournals: function() {

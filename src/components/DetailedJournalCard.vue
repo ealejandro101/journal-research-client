@@ -56,7 +56,7 @@
               <h4 v-if="categorias.length > 0" class="text-left">Categorías</h4>
                 <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
                       <b-badge @click="routeRevistasWithCategory(categoria.id)" href="#" variant="success">
-                      <b-img rounded="circle" class="iconos" :src="iconosCategorias[nombreCategoria]" />
+                      <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
                       {{categoria.nombre}}
                      
                     </b-badge>
