@@ -95,6 +95,13 @@ export default {
               '{"where": {"categoriaId": ' + postfix + "}}"
             );
             break;
+          case "issn":
+            this.getPageJournalISSN(postfix);
+            break;
+
+          case "eissn":
+            this.getPageJournalEISSN(postfix);
+            break;
           default:
             this.getJournals();
             break;
@@ -202,6 +209,29 @@ export default {
       this.summaryColSummaryImg = "colSummaryImg";
       this.summaryColDescription = "";
       this.summaryRowResponsive = "";
+    },
+    getPageJournalISSN:function(issn){
+      let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
+           
+       axios.get(query).then(response =>{
+          this.revistas=response.data;
+          this.openJournal(response.data[0].id);
+       }).catch(error =>{
+          console.log(error);          
+       })
+    },
+    getPageJournalEISSN:function(eissn){
+      let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
+           
+       axios.get(query).then(response =>{
+          this.revistas=response.data;
+           this.openJournal(response.data[0].id);
+       }).catch(error =>{
+          console.log(error);          
+       })
+
+
+
     }
   },
   components: {
