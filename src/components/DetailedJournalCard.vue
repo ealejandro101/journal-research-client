@@ -83,6 +83,15 @@
             </div>
         </b-col>
       </b-row>
+      <br>
+    <b-row v-show="video">
+      <b-col>
+        <iframe width="700" height="400" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </b-col>
+    </b-row>
+
+
+
     </b-card>
   </div>
 </template>
@@ -115,6 +124,8 @@ export default {
       rUbicacion: {},
       indexScopus: '',
       idCity: "",
+      urlVideo:"",
+      video:false,
       show: "",
       urlDOI: "https://doi.org/",
       iconosCategorias: {
@@ -188,6 +199,8 @@ export default {
       this.rUbicacion = {}
       this.idCity = ""
       this.indexScopus = ""
+      this.urlVideo=""
+      this.video=false;
       this.show = "displayNone"
       document.getElementById("indexScopus").innerHTML = ""
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
@@ -195,6 +208,7 @@ export default {
         if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
         }
+        
         axios
           .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
           .then(response => {
@@ -259,6 +273,9 @@ export default {
           .get(process.env.ROOT_API + "Radicionals/" + this.id)
           .then(response => {
             this.rAdicional = response.data;
+            this.urlVideo=this.rAdicional.videopresentacion;
+            this.urlVideo=this.urlVideo.replace("watch?v=","embed/");
+            this.video=true;
             this.revista = Object.assign(this.revista, response.data);
           });
 
