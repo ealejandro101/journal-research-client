@@ -18,6 +18,7 @@
     "bootstrap-vue": "latest",
     "popper.js": "^1.14.4",
     "vue": "^2.5.17",
+    "vue-carousel": "^0.16.2",
     "vue-router": "^3.0.1",
     "vue2-autocomplete-js": "^0.2.2",
     "vuejs-auto-complete": "^0.7.0"

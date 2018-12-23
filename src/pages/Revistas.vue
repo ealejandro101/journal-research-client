@@ -135,7 +135,7 @@ export default {
     },
     openJournal: function(journal) {
       this.$router.push({    
-            path: "/issn=" + journal.issn
+            path: "/Revista/issn=" + journal.issn
       });
     }
   },

@@ -274,8 +274,10 @@ export default {
           .then(response => {
             this.rAdicional = response.data;
             this.urlVideo=this.rAdicional.videopresentacion;
-            this.urlVideo=this.urlVideo.replace("watch?v=","embed/");
-            this.video=true;
+            if (this.urlVideo !== null) {
+              this.urlVideo=this.urlVideo.replace("watch?v=","embed/");
+              this.video=true;
+            }
             this.revista = Object.assign(this.revista, response.data);
           });
 

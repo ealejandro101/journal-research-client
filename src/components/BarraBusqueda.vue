@@ -48,6 +48,9 @@ export default {
       
     },
     buscarPalabra(input) {
+      if(input == undefined){
+        return
+      }
       if(input.toString()=='undefined'){
           input="";
       }else{

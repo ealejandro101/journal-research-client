@@ -17,7 +17,7 @@ export default new Router({
       component: Research
     },
     {
-      path: "/:search",
+      path: "/Revista/:search",
       name: "Research",
       component: Revista
     },

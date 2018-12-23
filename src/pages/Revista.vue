@@ -11,15 +11,19 @@
           </div>
       </div>
       <div class="row">
-            <div v-for="item in revistas" @click="openJournal(item)" :key="item.id" class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
-                <summaryJournalCard  class="summaryCard"
-                    :id="item.id.toString()"
-                    :titulo='item.titulo'
-                    :descripcion='item.descripcion'
-                    :urlImg="item.imagen"
-                    :isMiniature="true">
-                </summaryJournalCard>
+        <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]">
+          <slide v-for="item in revistas" :key="item.id">
+            <div @click="openJournal(item)">
+              <summaryJournalCard class="summaryCard"
+                :id="item.id.toString()"
+                :titulo='item.titulo'
+                :descripcion='item.descripcion'
+                :urlImg="item.imagen"
+                :isMiniature="true">
+              </summaryJournalCard>
             </div>
+          </slide>
+        </carousel>
       </div>
     </div>      
   </div>    
@@ -32,6 +36,7 @@ import BarraBusqueda from "@/components/BarraBusqueda";
 import LogoResearch from "@/components/LogoResearch";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import summaryJournalCard from "@/components/summaryJournalCard ";
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
   props: {},
@@ -100,10 +105,10 @@ export default {
         .then(response => {          
           let revista =response.data;  
           revista.forEach(element => {
-            if (element.imagen == null) {
-              element.imagen = imgJournalDefoult;
-            }
-            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{                  
+            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{
+                  if (response.data.imagen == null) {
+                    response.data.imagen = imgJournalDefoult;
+                  }
                   this.revistas.push(response.data);
             }).catch(error=>{
               console.log(error);              
@@ -111,6 +116,11 @@ export default {
           });
           
         });
+    },
+    openJournal: function(journal) {
+      this.$router.push({    
+            path: "/Revista/issn=" + journal.issn
+      });
     },
     refreshJournals (idCategory) {
         this.getJournalsParam(
@@ -123,7 +133,9 @@ export default {
     HeaderResearch,
     BarraBusqueda,
     LogoResearch,
-    summaryJournalCard
+    summaryJournalCard,
+    Carousel,
+    Slide
   }
 };
 </script>
