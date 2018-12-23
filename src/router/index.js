@@ -6,6 +6,7 @@ import InfoResearcH from "@/pages/InfoResearcH";
 import FormularioNuevaRevista from "@/pages/FormularioNuevaRevista";
 import Login from "@/pages/Login";
 import Registro from "@/pages/Registro";
+import Revista from "@/pages/Revista"
 Vue.use(Router);
 
 export default new Router({
@@ -18,7 +19,7 @@ export default new Router({
     {
       path: "/:search",
       name: "Research",
-      component: Revistas
+      component: Revista
     },
     {
       path: "/ListaRevistas",

@@ -49,7 +49,7 @@
               
           </b-row>
         </b-col>
-        <div v-show="indexScopus != ''" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
+        <div v-show="indexScopus !== ''" :class="show" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
           <div id="indexScopus"></div>
         </div>
       </b-row>
@@ -115,6 +115,7 @@ export default {
       rUbicacion: {},
       indexScopus: '',
       idCity: "",
+      show: "",
       urlDOI: "https://doi.org/",
       iconosCategorias: {
         "Ciencias Agrícolas y Ambientales": cienciasAgricolas,
@@ -160,8 +161,23 @@ export default {
       ]
     };
   },
+  mounted () {
+    this.initDetailedJournal()
+  },
   watch: {
     id: function() {
+      this.initDetailedJournal()
+    }
+  },
+  methods: {
+    emitirCloseCard() {
+      this.$emit("detailedCard:close");
+    },
+    routeRevistasWithCategory : function (idCategoria) {
+      this.emitirCloseCard();
+      this.$router.push({path: '/ListaRevistas/category='+idCategoria})
+    },
+    initDetailedJournal () {
       this.categorias = []
       this.rindexaciones = []
       this.revista = {}
@@ -172,6 +188,8 @@ export default {
       this.rUbicacion = {}
       this.idCity = ""
       this.indexScopus = ""
+      this.show = "displayNone"
+      document.getElementById("indexScopus").innerHTML = ""
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
         if (this.revista.imagen == null) {
@@ -185,15 +203,10 @@ export default {
               axios.get(process.env.ROOT_API+'Categoria/'+categoriaIdR).then(response=>{
                   let nombreCategoria = response.data;
                   this.categorias.push(nombreCategoria);
-
-                  
               }).catch(error =>{
                 console.log(error);
-                
               })
-
             }
-            
           });
         axios
           .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
@@ -203,6 +216,7 @@ export default {
                   let indexacion = response.data;
                   if(indexacion.indexaciones == "Scopus"){
                     this.indexScopus = respRIndex.data[index].parametro
+                    this.show = ""
                     document.getElementById("indexScopus").innerHTML = this.indexScopus
                   }else{
                     this.rindexaciones.push({
@@ -262,15 +276,6 @@ export default {
       });
     }
   },
-  methods: {
-    emitirCloseCard() {
-      this.$emit("detailedCard:close");
-    },
-    routeRevistasWithCategory : function (idCategoria) {
-      this.emitirCloseCard();
-      this.$router.push({path: '/ListaRevistas/category='+idCategoria})
-    }
-  },
   components: {
     itemDescription
   }
@@ -305,5 +310,8 @@ export default {
   right: 1em;
   font-size: 2em;
   cursor: pointer;
+}
+.displayNone{
+  display: none !important;
 }
 </style>

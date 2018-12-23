@@ -3,13 +3,13 @@
     <b-container class="containerSummaryCard">
         <b-row>
             <b-card class="cardSummaryJournal">                      
-                <b-row :class="classRowResponsive">
-                    <b-col sm="12" md="4" lg="3" class="d-flex justify-content-center" :class="classColSummaryImg">
+                <b-row>
+                    <b-col sm="12" md="4" lg="3" class="d-flex justify-content-center">
                         <div class="divSummaryImg divImg">
                             <b-img class ="imagenCard"  center  :src="urlImg" /> 
                         </div>
                     </b-col>
-                    <b-col sm="12" md="8" lg="9" :class="classColDescription">                                             
+                    <b-col sm="12" md="8" lg="9">                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
                         
                           <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
@@ -18,7 +18,7 @@
                             {{valor}} 
                             <a href="#" class="card-link">
                                 <b-badge pill variant="primary">
-                                    Ver mas
+                                    Ver más
                                 </b-badge>
                             </a>
                         </p>                 
@@ -38,10 +38,7 @@ export default {
     id: String,
     titulo: String,
     descripcion: String,
-    urlImg: String,
-    classColSummaryImg: String,
-    classColDescription: String,
-    classRowResponsive: String
+    urlImg: String
   },
   data() {
     return {

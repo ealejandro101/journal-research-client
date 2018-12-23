@@ -6,29 +6,16 @@
     <div class="container-fluid">
       <b-row>
 
-        <b-col id="divFiltros" sm="3" md="3" lg="2" xl="2">
+        <div id="divFiltros" class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
             <filtros-busqueda></filtros-busqueda>
-        </b-col> 
+        </div> 
              
-         <b-col  id="divRevistas" class="body-card-revistas dinamicHeigth">      
-          <div class="divContentRevistas dinamicHeigth">
-            <!--<b-row @click="openJournal()">   
-              <summaryJournalCard  class="summaryCard"
-                :classColSummaryImg="summaryColSummaryImg"
-                :classColDescription="summaryColDescription"
-                :classRowResponsive="summaryRowResponsive"
-                titulo='item.titulo'
-                descripcion='item.descripcion'
-                urlImg="item.imagen">
-              </summaryJournalCard>
-            </b-row>-->             
-            <b-row v-for="item in revistas" @click="openJournal(item.id)" :key="item.id" >   
+         <div id="divRevistas" class="body-card-revistas dinamicHeigth col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 SSS">      
+          <div class="divContentRevistas dinamicHeigth">     
+            <b-row v-for="item in revistas" @click="openJournal(item)" :key="item.id" >   
              <b-col   >
                 <summaryJournalCard  class="summaryCard"
                 :id="item.id.toString()"
-                :classColSummaryImg="summaryColSummaryImg"
-                :classColDescription="summaryColDescription"
-                :classRowResponsive="summaryRowResponsive"
                 :titulo='item.titulo'
                 :descripcion='item.descripcion'
                 :urlImg="item.imagen">
@@ -36,18 +23,8 @@
              </b-col>
             </b-row>
           </div>
-        </b-col> 
-
-        <b-col id="divDetailedJournal" class="dinamicHeigth" sm="12" md="12" lg="12" xl="12">
-            <detailedJournalCard 
-              @detailedCard:close="detailedClouse"
-              :id="idActualJournal"
-              ></detailedJournalCard>
-        </b-col> 
-
-
-      </b-row> 
-     
+        </div>
+      </b-row>
     </div>      
   </div>    
 </template>
@@ -66,14 +43,6 @@ export default {
   data() {
     return {
       revistas: [],
-      smDivRevistas: "9",
-      mdDivRevistas: "9",
-      lgDivRevistas: "10",
-      xlDivRevistas: "10",
-      summaryColSummaryImg: "colSummaryImg",
-      summaryColDescription: "",
-      summaryRowResponsive: "",
-      state: true,
       idActualJournal: "'1'"
     };
   },
@@ -102,13 +71,6 @@ export default {
             this.getJournalsParam(
               '{"where": {"categoriaId": ' + postfix + "}}"
             );
-            break;
-          case "issn":
-            this.getPageJournalISSN(postfix);
-            break;
-
-          case "eissn":
-            this.getPageJournalEISSN(postfix);
             break;
           default:
             this.getJournals();
@@ -164,10 +126,6 @@ export default {
     getJournals: function() {
       axios.get(process.env.ROOT_API + "Revista").then(response => {
         this.revistas = response.data;
-
-        
-        
-        
         this.revistas.forEach(element => {
           if (element.imagen == null) {
             element.imagen = imgJournalDefoult;
@@ -175,76 +133,14 @@ export default {
         });
       });
     },
-    openJournal: function(journalId) {
-      if (this.state) {
-        let divFiltros = this.$el.querySelector("#divFiltros");
-        divFiltros = this.$el.querySelector("#divFiltros");
-        divFiltros.style.flex = "none";
-        divFiltros.style.width = "0px";
-        divFiltros.style.paddingLeft = "0px";
-        divFiltros.style.paddingRigth = "0px";
-        this.idActualJournal = journalId.toString();
-        this.xlDivRevistas = "2";
-        this.lgDivRevistas = "2";
-        this.mdDivRevistas = "3";
-        this.smDivRevistas = "3";
-        this.$el.querySelector("#divDetailedJournal").style.display = "inline";
-        this.summaryColSummaryImg = "colSummaryResponsive";
-        this.summaryColDescription = "colSummaryResponsive";
-        this.summaryRowResponsive = "rowResponsive";
-        this.state = false;
-        let interval = setInterval(function() {
-          divFiltros.style.display = "none";
-          clearInterval(interval);
-        }, 900);
-      } else {
-        this.idActualJournal = journalId.toString();
-      }
-    },
-    detailedClouse: function() {
-      let divFiltros = this.$el.querySelector("#divFiltros");
-      divFiltros.style.display = "inline";
-      this.state = true;
-      this.$el.querySelector("#divDetailedJournal").style.display = "0 0 auto";
-      divFiltros.style.width = "100%";
-      divFiltros.style.paddingLeft = "15px";
-      divFiltros.style.paddingRigth = "15px";
-      this.$el.querySelector("#divDetailedJournal").style.display = "none";
-      this.xlDivRevistas = "10";
-      this.lgDivRevistas = "10";
-      this.mdDivRevistas = "9";
-      this.smDivRevistas = "9";
-      this.summaryColSummaryImg = "colSummaryImg";
-      this.summaryColDescription = "";
-      this.summaryRowResponsive = "";
-    },
-    getPageJournalISSN:function(issn){
-      let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
-           
-       axios.get(query).then(response =>{
-          //this.revistas=response.data;
-          this.openJournal(response.data[0].id);
-       }).catch(error =>{
-          console.log(error);          
-       })
-    },
-    getPageJournalEISSN:function(eissn){
-      let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
-           
-       axios.get(query).then(response =>{
-          //this.revistas=response.data;
-           this.openJournal(response.data[0].id);
-       }).catch(error =>{
-          console.log(error);          
-       })
-
-
-
+    openJournal: function(journal) {
+      this.$router.push({    
+            path: "/issn=" + journal.issn
+      });
     }
   },
   components: {
     summaryJournalCard,
-    DetailedJournalCard,
     HeaderResearch,
     BarraBusqueda,
     LogoResearch,
