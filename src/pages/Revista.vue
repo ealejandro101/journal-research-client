@@ -6,10 +6,20 @@
     <div class="container-fluid">
       <div class="row">
           <div class="col">
-              <DetailedJournalCard v-if="idJournal !== ''" :id="idJournal"></DetailedJournalCard>
+              <DetailedJournalCard v-if="idJournal !== ''" :id="idJournal" @refreshCategory="refreshJournals"></DetailedJournalCard>
               <div v-else> No se encontraron revistas con el ISSN/EISSN dado</div>
           </div>
-          <div class="col"></div>
+      </div>
+      <div class="row">
+            <div v-for="item in revistas" @click="openJournal(item)" :key="item.id" class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3">
+                <summaryJournalCard  class="summaryCard"
+                    :id="item.id.toString()"
+                    :titulo='item.titulo'
+                    :descripcion='item.descripcion'
+                    :urlImg="item.imagen"
+                    :isMiniature="true">
+                </summaryJournalCard>
+            </div>
       </div>
     </div>      
   </div>    
@@ -21,6 +31,7 @@ import HeaderResearch from "@/components/HeaderResearch";
 import BarraBusqueda from "@/components/BarraBusqueda";
 import LogoResearch from "@/components/LogoResearch";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
+import summaryJournalCard from "@/components/summaryJournalCard ";
 
 export default {
   props: {},
@@ -62,28 +73,57 @@ export default {
       }
     },
     getPageJournalISSN:function(issn){
-      let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
-       axios.get(query).then(response =>{
-           console.log(response)
-          this.idJournal = response.data[0].id.toString()
-       }).catch(error =>{
-          console.log(error);          
-       })
+        let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
+        axios.get(query).then(response =>{
+            if(response.data.lenth == 0){
+                return
+            }
+            this.idJournal = response.data[0].id.toString()
+        }).catch(error =>{
+            console.log(error);          
+        })
     },
     getPageJournalEISSN:function(eissn){
       let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
        axios.get(query).then(response =>{
-          this.idJournal = response.data[0].id.toString()
+            if(response.data.lenth == 0){
+                return
+            }
+            this.idJournal = response.data[0].id.toString()
        }).catch(error =>{
           console.log(error);          
        })
+    },
+    getJournalsParam: function(query) {
+      this.revistas=[];
+      axios.get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
+        .then(response => {          
+          let revista =response.data;  
+          revista.forEach(element => {
+            if (element.imagen == null) {
+              element.imagen = imgJournalDefoult;
+            }
+            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{                  
+                  this.revistas.push(response.data);
+            }).catch(error=>{
+              console.log(error);              
+            })
+          });
+          
+        });
+    },
+    refreshJournals (idCategory) {
+        this.getJournalsParam(
+            '{"where": {"categoriaId": ' + idCategory + "}}"
+        );
     }
   },
   components: {
     DetailedJournalCard,
     HeaderResearch,
     BarraBusqueda,
-    LogoResearch
+    LogoResearch,
+    summaryJournalCard
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card class="d-flex">
-      <div class="divClose"><i class="fas fa-times" @click="emitirCloseCard"></i></div>
+      <div v-if="false" class="divClose"><i class="fas fa-times" @click="emitirCloseCard"></i></div>
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
@@ -198,8 +198,11 @@ export default {
         axios
           .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
           .then(response => {
-            for (let index = 0; index <  response.data.length; index++) {              
+            for (let index = 0; index <  response.data.length; index++) {
               let categoriaIdR=response.data[index].categoriaId;
+              if (index == 0) {
+                this.$emit('refreshCategory', categoriaIdR)
+              } 
               axios.get(process.env.ROOT_API+'Categoria/'+categoriaIdR).then(response=>{
                   let nombreCategoria = response.data;
                   this.categorias.push(nombreCategoria);

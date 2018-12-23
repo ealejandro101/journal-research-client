@@ -3,7 +3,7 @@
     <b-container class="containerSummaryCard">
         <b-row>
             <b-card class="cardSummaryJournal">                      
-                <b-row>
+                <b-row v-if="!isMiniature">
                     <b-col sm="12" md="4" lg="3" class="d-flex justify-content-center">
                         <div class="divSummaryImg divImg">
                             <b-img class ="imagenCard"  center  :src="urlImg" /> 
@@ -11,18 +11,33 @@
                     </b-col>
                     <b-col sm="12" md="8" lg="9">                                             
                         <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-                        
-                          <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
-                          
-                          <p class="card-text text-justify cardDescription">
-                            {{valor}} 
-                            <a href="#" class="card-link">
-                                <b-badge pill variant="primary">
-                                    Ver más
-                                </b-badge>
-                            </a>
+                        <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
+                        <p class="card-text text-justify cardDescription">
+                          {{valor}} 
+                          <a href="#" class="card-link">
+                              <b-badge pill variant="primary">
+                                  Ver más
+                              </b-badge>
+                          </a>
                         </p>                 
                     </b-col>                              
+                </b-row>
+                <b-row v-else>
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="divSummaryImg divImg">
+                            <b-img class ="imagenCard"  center  :src="urlImg" /> 
+                        </div>
+                    </div>
+                    <div class="col-12">                                             
+                        <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
+                        <p class="card-text text-justify cardDescription">
+                          <a href="#" class="card-link">
+                              <b-badge pill variant="primary">
+                                  Ver más
+                              </b-badge>
+                          </a>
+                        </p>                 
+                    </div>                              
                 </b-row>                                 
             </b-card>           
         </b-row>
@@ -38,7 +53,8 @@ export default {
     id: String,
     titulo: String,
     descripcion: String,
-    urlImg: String
+    urlImg: String,
+    isMiniature: Boolean
   },
   data() {
     return {
