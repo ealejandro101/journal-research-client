@@ -134,9 +134,15 @@ export default {
       });
     },
     openJournal: function(journal) {
-      this.$router.push({    
-            path: "/Revista/issn=" + journal.issn
-      });
+      if(journal.eissn !== undefined && journal.eissn !== '' && journal.eissn !== null){
+        this.$router.push({    
+          path: "/Revista/eissn=" + journal.eissn
+        });
+      }else{
+        this.$router.push({    
+          path: "/Revista/issn=" + journal.issn
+        });
+      }
     }
   },
   components: {

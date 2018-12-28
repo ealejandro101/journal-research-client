@@ -16,8 +16,13 @@
           <hr>
           <b-row>
             <b-col v-for="prop in propiedadesName1" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
-              <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key]">
-              </itemDescription>
+              <!--Corregir APC-->
+              <div v-if="prop.key == 'apc' && revista[prop.key] != null && revista[prop.key] == '1'">
+                  <itemDescription :icono="propiedades[prop.key]" :texto="'Tiene APC'"> </itemDescription>
+              </div>
+              <div v-else>
+                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key]"></itemDescription>
+              </div>
             </b-col>
             <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
               <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
@@ -32,9 +37,7 @@
               </div>            
               
             </b-col>
-            <b-col v-for="propa in propiedadesName3" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">               
-              
-              
+            <b-col v-for="propa in propiedadesName3" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
                 <div v-if="propa.key != 'url'">
                   <a :href="revista[propa.key]" target="_blanck">                  
                     <itemDescription   :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
@@ -150,12 +153,15 @@ export default {
         facebook: "fab fa-facebook-square",
         instagram: "fab fa-instagram",
         twitter: "fab fa-twitter-square",
-        correo: "fas fa-at"
+        correo: "fas fa-at",
+        tituloCorto: "fas fa-font"
       },
       propiedadesName1: [
-        { nombre: "Institucion", key:"institucion" },
+        { nombre: "Institución", key:"institucion" },
         { nombre: "ISSN", key:"issn" },
-        { nombre: "EISSN", key:"eissn" }
+        { nombre: "EISSN", key:"eissn" },
+        { nombre: "Titulo Corto", key: "tituloCorto" },
+        { nombre: "APC", key:"apc" },
       ],
       propiedadesName2: [
         { nombre: "DOI", key:"doi" },
@@ -275,7 +281,7 @@ export default {
             this.rAdicional = response.data;
             this.urlVideo=this.rAdicional.videopresentacion;
             if (this.urlVideo !== null) {
-              this.urlVideo=this.urlVideo.replace("watch?v=","embed/");
+              this.urlVideo = this.urlVideo.split("&")[0].replace("watch?v=","embed/");
               this.video=true;
             }
             this.revista = Object.assign(this.revista, response.data);

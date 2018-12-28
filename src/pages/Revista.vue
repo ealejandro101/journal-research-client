@@ -11,7 +11,7 @@
           </div>
       </div>
       <div class="row">
-        <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]">
+        <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
           <slide v-for="item in revistas" :key="item.id">
             <div @click="openJournal(item)">
               <summaryJournalCard class="summaryCard"
@@ -25,8 +25,8 @@
           </slide>
         </carousel>
       </div>
-    </div>      
-  </div>    
+    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";

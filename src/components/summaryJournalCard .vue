@@ -72,8 +72,6 @@ export default {
   },
   mounted() {
     this.getInfo();
-    console.log(this.urlImg);
-    
   },
   methods: {
     getInfo: function() {
