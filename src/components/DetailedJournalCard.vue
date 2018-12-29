@@ -329,18 +329,18 @@ export default {
 
         axios.get(process.env.ROOT_API + "Palabraclaves/").then(response => {
           this.palabrasClaves = response.data;
+          axios
+            .get(
+              process.env.ROOT_API +
+                "Palabrasclaves/" +
+                "?filter=%7B%22where%22%3A%20%7B%22revistaId%22%3A%20" +
+                this.id +
+                "%7D%7D"
+            )
+            .then(response => {
+              this.palabrasClavesRevista = response.data;
+            });
         });
-        axios
-          .get(
-            process.env.ROOT_API +
-              "Palabrasclaves/" +
-              "?filter=%7B%22where%22%3A%20%7B%22revistaId%22%3A%20" +
-              this.id +
-              "%7D%7D"
-          )
-          .then(response => {
-            this.palabrasClavesRevista = response.data;
-          });
       });
     }
   },
