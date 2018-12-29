@@ -144,10 +144,7 @@ export default {
         }
       ],
       totalJournals:0,
-      totalCountries:0,
-      arrayciudadId:[],
-      arrayCountry:[],
-      arrayStates:[]
+      totalCountries:0
     };
   },
   mounted() {
@@ -168,45 +165,12 @@ export default {
     })
     
     //Metodo para contar la cantidad de paises
-    /*axios.get(process.env.ROOT_API+"Rubicacions").then(response =>{
-        let respuesta= JSON.parse(JSON.stringify(response))
-        respuesta.data.forEach(revista =>{
-          this.arrayciudadId.push(revista.ciudadId);
-        })
-        //Eliminar ciudades repetidas
-        //let  arrayStates=[];
-        this.arrayciudadId =this.vectorUnico(this.arrayciudadId); 
-
-        let myArrayPersonal=[];
-
-        for (const ciudadId of this.arrayciudadId) {
-              axios.get(process.env.ROOT_API+"Ciudads/"+ciudadId).then(response =>{ 
-                    let respuestaa=JSON.parse(JSON.stringify(response));             
-                    let state_ide=respuestaa.data.state_id;
-                    this.arrayStates.push(state_ide);
-                    
-                    
-                    axios.get(process.env.ROOT_API+"Estados/"+state_ide).then(response =>{                        
-                        let paisId= response.data.country_id;
-                        this.arrayCountry.push(paisId);
-                        
-                    }).catch(error =>{
-                      console.log(error);                      
-
-                    })
-                    
-              }).catch(error =>{
-                console.log(error);
-              })            
+    let queryPaises = {"hayrevista": 1};
+    axios.get(process.env.ROOT_API+"Pais/count/?where="+JSON.stringify(queryPaises)).then(response =>{            
+        console.log(process.env.ROOT_API+"Pais/count/?where="+JSON.stringify(queryPaises));
         
-        }
-                console.log("PAISES ID");
-                console.log(this.arrayCountry);
-                          
-       
-
-        
-    })*/
+        this.totalCountries=response.data.count;  
+    })
 
 
   },
