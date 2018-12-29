@@ -5,10 +5,19 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-          <div class="col">
-              <DetailedJournalCard v-if="idJournal !== ''" :id="idJournal" @refreshCategory="refreshJournals"></DetailedJournalCard>
-              <div v-else> No se encontraron revistas con el ISSN/EISSN dado</div>
+        <div v-if="isLoading" class="col-12 d-flex justify-content-center">
+          <div style="max-width: 7em">
+            <img :src="loadingGif" alt="Cargando ...">
           </div>
+        </div>
+        <div class="col">
+          <DetailedJournalCard 
+            v-if="idJournal !== ''" 
+            :id="idJournal" @refreshCategory="refreshJournals"
+            @loaded="loaded">
+          </DetailedJournalCard>
+          <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
+        </div>
       </div>
       <div class="row">
         <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
@@ -37,21 +46,30 @@ import LogoResearch from "@/components/LogoResearch";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
+import loadingGifImport from '@/assets/gifs/loading.gif'
 
 export default {
   props: {},
   data() {
     return {
       revistas: [],
-      idJournal: ""
+      idJournal: "",
+      loadingGif: undefined,
+      isLoading: false,
+      doesNotExist: false
     };
+  },
+  created(){
+    this.loadingGif = loadingGifImport
+    this.isLoading = true
   },
   mounted() {
     this.changeParams();
   },
   watch: {
     "$route.params.search": function() {
-      this.changeParams();
+      this.isLoading = true
+      this.changeParams()
     }
   },
   methods: {
@@ -81,7 +99,8 @@ export default {
         let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
         axios.get(query).then(response =>{
             if(response.data.lenth == 0){
-                return
+              this.doesNotExist = true
+              return
             }
             this.idJournal = response.data[0].id.toString()
         }).catch(error =>{
@@ -92,7 +111,8 @@ export default {
       let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
        axios.get(query).then(response =>{
             if(response.data.lenth == 0){
-                return
+              this.doesNotExist = true
+              return
             }
             this.idJournal = response.data[0].id.toString()
        }).catch(error =>{
@@ -118,14 +138,23 @@ export default {
         });
     },
     openJournal: function(journal) {
-      this.$router.push({    
-            path: "/Revista/issn=" + journal.issn
-      });
+      if(journal.eissn !== undefined && journal.eissn !== '' && journal.eissn !== null){
+        this.$router.push({    
+          path: "/Revista/eissn=" + journal.eissn
+        });
+      }else{
+        this.$router.push({    
+          path: "/Revista/issn=" + journal.issn
+        });
+      }
     },
     refreshJournals (idCategory) {
         this.getJournalsParam(
             '{"where": {"categoriaId": ' + idCategory + "}}"
         );
+    },
+    loaded() {
+      this.isLoading = false
     }
   },
   components: {

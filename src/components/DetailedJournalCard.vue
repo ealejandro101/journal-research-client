@@ -16,23 +16,28 @@
           <hr>
           <b-row>
             <b-col v-for="prop in propiedadesName1" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
-              <!--Corregir APC-->
-              <div v-if="prop.key == 'apc' && revista[prop.key] != null && revista[prop.key] == '1'">
-                  <itemDescription :icono="propiedades[prop.key]" :texto="'Tiene APC'"> </itemDescription>
+              <div>
+                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key].toString()"></itemDescription>
+              </div>
+            </b-col>
+            <b-col v-for="prop in propiedadesName4" :key="prop.key" sm="6" md="6" lg="6">
+              <!--Propiedades de si/no  0/1-->
+              <div v-if="revista[prop.key] == 1">
+                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="'Si'"></itemDescription>
               </div>
               <div v-else>
-                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key]"></itemDescription>
+                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="'No'"></itemDescription>
               </div>
             </b-col>
             <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
               <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
-                  <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
+                  <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
               </div>
               <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
-                  <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]"> </itemDescription>
+                  <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
               </div>
               <div v-else>
-                <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key]">
+                <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()">
               </itemDescription>
               </div>            
               
@@ -45,11 +50,16 @@
                 </div>
                 <div v-if="propa.key == 'url'">
                     <itemDescription  :click=true  :url='revista.url' icono="fas fa-globe" texto="sitio web"  > </itemDescription>
-                </div>                          
-             
-                                          
+                </div>                    
             </b-col>
-              
+            <b-col v-for="prop in propiedadesName5" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
+              <!--Propiedades de img-->
+              <div>
+                <div style="max-width: 5em; margin-left: 1em;" class="float-left">
+                  <img :src="revista[prop.key]" :alt="revista[prop.key]">
+                </div>
+              </div>
+            </b-col>
           </b-row>
         </b-col>
         <div v-show="indexScopus !== ''" :class="show" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
@@ -154,14 +164,20 @@ export default {
         instagram: "fab fa-instagram",
         twitter: "fab fa-twitter-square",
         correo: "fas fa-at",
-        tituloCorto: "fas fa-font"
+        tituloCorto: "fas fa-font",
+        guiaAutores: "fab fa-autoprefixer",
+        periodicidad: "fas fa-calendar-check",
+        preprint: "fas fa-pencil-ruler",
+        apc: "fab fa-pied-piper",
+        fechaIngreso: "fas fa-calendar-alt",
       },
       propiedadesName1: [
+        { nombre: "Titulo Corto", key: "tituloCorto" },
         { nombre: "Institución", key:"institucion" },
         { nombre: "ISSN", key:"issn" },
         { nombre: "EISSN", key:"eissn" },
-        { nombre: "Titulo Corto", key: "tituloCorto" },
-        { nombre: "APC", key:"apc" },
+        { nombre: "Periodicidad", key: "periodicidad" },
+        { nombre: "Incluida desde", key: "fechaIngreso" },
       ],
       propiedadesName2: [
         { nombre: "DOI", key:"doi" },
@@ -174,7 +190,15 @@ export default {
         { nombre: "Facebook", key:"facebook" },
         { nombre: "Instagram", key:"instagram" },
         { nombre: "Twitter", key:"twitter" },
-        { nombre: "url", key:"url" }
+        { nombre: "url", key:"url" },
+        { nombre: "Guía de autores", key:"guiaAutores" },
+      ],
+      propiedadesName4: [//Propiedades de si/no  0/1
+        { nombre: "APC", key:"apc" },
+        { nombre: "Preprint", key:"preprint" }
+      ],
+      propiedadesName5: [//Propiedades con imagen
+        { nombre: "Licencia", key: "licenciaImg" }
       ]
     };
   },
@@ -211,10 +235,12 @@ export default {
       document.getElementById("indexScopus").innerHTML = ""
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
+        let auxDate = new Date(response.data.fechaIngreso);
+        this.revista.fechaIngreso = auxDate.getDay()+"/"+auxDate.getMonth()+"/"+auxDate.getFullYear()
+        this.$emit("loaded")
         if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
         }
-        
         axios
           .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
           .then(response => {
@@ -231,6 +257,11 @@ export default {
               })
             }
           });
+        axios
+          .get(process.env.ROOT_API + "Licencia/" + this.revista.licenciaId)
+          .then(response => {
+            this.revista.licenciaImg = response.data.imagen
+          })
         axios
           .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
           .then(respRIndex => {
@@ -285,6 +316,15 @@ export default {
               this.video=true;
             }
             this.revista = Object.assign(this.revista, response.data);
+            if(this.revista.periodicidadOtro){
+              this.revista.periodicidad = this.revista.periodicidadOtro
+            }else{
+              axios
+                .get(process.env.ROOT_API + "Periodicidads/" + this.revista.periodicidadId)
+                .then(response => {
+                  this.revista.periodicidad = response.data.periodicidad
+                })
+            }
           });
 
         axios.get(process.env.ROOT_API + "Palabraclaves/").then(response => {
