@@ -170,6 +170,7 @@ export default {
         preprint: "fas fa-pencil-ruler",
         apc: "fab fa-pied-piper",
         fechaIngreso: "fas fa-calendar-alt",
+        pais: "fas fa-globe-asia"
       },
       propiedadesName1: [
         { nombre: "Titulo Corto", key: "tituloCorto" },
@@ -183,6 +184,7 @@ export default {
         { nombre: "DOI", key:"doi" },
         { nombre: "Teléfono", key:"telefono" },
         { nombre: "Dirección", key:"direccion" },
+        { nombre: "País", key:"pais" },
         { nombre: "Ciudad", key:"ciudad" },
         { nombre: "", key:"correo" }
       ],
@@ -242,105 +244,112 @@ export default {
           this.revista.imagen = imgJournalDefoult;
         }
         axios
-          .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
-          .then(response => {
-            for (let index = 0; index <  response.data.length; index++) {
-              let categoriaIdR=response.data[index].categoriaId;
-              if (index == 0) {
-                this.$emit('refreshCategory', categoriaIdR)
-              } 
-              axios.get(process.env.ROOT_API+'Categoria/'+categoriaIdR).then(response=>{
-                  let nombreCategoria = response.data;
-                  this.categorias.push(nombreCategoria);
-              }).catch(error =>{
-                console.log(error);
-              })
-            }
-          });
-        axios
-          .get(process.env.ROOT_API + "Licencia/" + this.revista.licenciaId)
-          .then(response => {
-            this.revista.licenciaImg = response.data.imagen
-          })
-        axios
-          .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
-          .then(respRIndex => {
-            for (let index = 0; index <  respRIndex.data.length; index++) {
-              axios.get(process.env.ROOT_API+'Indexaciones/'+respRIndex.data[index].indexacionesId).then(response=>{
-                  let indexacion = response.data;
-                  if(indexacion.indexaciones == "Scopus"){
-                    this.indexScopus = respRIndex.data[index].parametro
-                    this.show = ""
-                    document.getElementById("indexScopus").innerHTML = this.indexScopus
-                  }else{
-                    this.rindexaciones.push({
-                      name: indexacion.indexaciones,
-                      url: respRIndex.data[index].parametro
-                    });
-                  }
-                  
-              }).catch(error =>{
-                console.log(error);
-              })
-
-            }
-            
-          });
-        axios
-          .get(process.env.ROOT_API + "Rcontactos/" + this.id)
-          .then(response => {
-            this.rContactos = response.data;
-            this.revista = Object.assign(this.revista, response.data);
-          });
-        axios
           .get(process.env.ROOT_API + "Rubicacions/" + this.id)
           .then(response => {
             this.rUbicacion = response.data;
             this.revista = Object.assign(this.revista, response.data);
             this.idCity = response.data.ciudadId;
-          });
+            axios
+              .get(process.env.ROOT_API + "Ciudads/" + this.idCity)
+              .then(response => {
+                let stateLocationId = response.data.state_id
+                this.revista.ciudad = response.data.name;
+                axios
+                  .get(process.env.ROOT_API + "Estados/" + stateLocationId)
+                  .then(response => {
+                    let contryLocationId = response.data.country_id
+                    axios
+                      .get(process.env.ROOT_API + "Pais/" + contryLocationId)
+                      .then(response => {
+                        this.revista.pais = response.data.name;
+                        axios
+                          .get(process.env.ROOT_API + "Licencia/" + this.revista.licenciaId)
+                          .then(response => {
+                            this.revista.licenciaImg = response.data.imagen
+                            axios
+                              .get(process.env.ROOT_API + "Rcontactos/" + this.id)
+                              .then(response => {
+                                this.rContactos = response.data;
+                                this.revista = Object.assign(this.revista, response.data);
+                                axios.get(process.env.ROOT_API + "Palabraclaves/").then(response => {
+                                  this.palabrasClaves = response.data;
+                                  axios.get(
+                                      process.env.ROOT_API +
+                                        "Palabrasclaves/" +
+                                        "?filter=%7B%22where%22%3A%20%7B%22revistaId%22%3A%20" +
+                                        this.id +
+                                        "%7D%7D"
+                                    ).then(response => {
+                                      this.palabrasClavesRevista = response.data;
+                                      axios
+                                        .get(process.env.ROOT_API + "Radicionals/" + this.id)
+                                        .then(response => {
+                                          this.rAdicional = response.data;
+                                          this.urlVideo=this.rAdicional.videopresentacion;
+                                          if (this.urlVideo !== null) {
+                                            this.urlVideo = this.urlVideo.split("&")[0].replace("watch?v=","embed/");
+                                            this.video=true;
+                                          }
+                                          this.revista = Object.assign(this.revista, response.data);
+                                          if(this.revista.periodicidadOtro){
+                                            this.revista.periodicidad = this.revista.periodicidadOtro
+                                          }else{
+                                            axios
+                                              .get(process.env.ROOT_API + "Periodicidads/" + this.revista.periodicidadId)
+                                              .then(response => {
+                                                this.revista.periodicidad = response.data.periodicidad
+                                              })
+                                          }
+                                          axios
+                                            .get(process.env.ROOT_API + 'RevistasCategorias?filter={"where": {"revistaId":'+this.revista.id+'}}')
+                                            .then(response => {
+                                              for (let index = 0; index <  response.data.length; index++) {
+                                                let categoriaIdR=response.data[index].categoriaId;
+                                                if (index == 0) {
+                                                  this.$emit('refreshCategory', categoriaIdR)
+                                                } 
+                                                axios.get(process.env.ROOT_API+'Categoria/'+categoriaIdR).then(response=>{
+                                                    let nombreCategoria = response.data;
+                                                    this.categorias.push(nombreCategoria);
+                                                }).catch(error =>{
+                                                  console.log(error);
+                                                })
+                                              }
+                                            });
+                                          
+                                          axios
+                                            .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
+                                            .then(respRIndex => {
+                                              for (let index = 0; index <  respRIndex.data.length; index++) {
+                                                axios.get(process.env.ROOT_API+'Indexaciones/'+respRIndex.data[index].indexacionesId).then(response=>{
+                                                    let indexacion = response.data;
+                                                    if(indexacion.indexaciones == "Scopus"){
+                                                      this.indexScopus = respRIndex.data[index].parametro
+                                                      this.show = ""
+                                                      document.getElementById("indexScopus").innerHTML = this.indexScopus
+                                                    }else{
+                                                      this.rindexaciones.push({
+                                                        name: indexacion.indexaciones,
+                                                        url: respRIndex.data[index].parametro
+                                                      });
+                                                    }
+                                                    
+                                                }).catch(error =>{
+                                                  console.log(error);
+                                                })
 
-        axios
-          .get(process.env.ROOT_API + "Ciudads/" + this.idCity)
-          .then(response => {
-            this.revista.ciudad = response.data.ciudad;
+                                              }
+                                              
+                                            });
+                                        });
+                                    });
+                                });
+                              });
+                          })
+                      });
+                  });
+              });
           });
-
-        axios
-          .get(process.env.ROOT_API + "Radicionals/" + this.id)
-          .then(response => {
-            this.rAdicional = response.data;
-            this.urlVideo=this.rAdicional.videopresentacion;
-            if (this.urlVideo !== null) {
-              this.urlVideo = this.urlVideo.split("&")[0].replace("watch?v=","embed/");
-              this.video=true;
-            }
-            this.revista = Object.assign(this.revista, response.data);
-            if(this.revista.periodicidadOtro){
-              this.revista.periodicidad = this.revista.periodicidadOtro
-            }else{
-              axios
-                .get(process.env.ROOT_API + "Periodicidads/" + this.revista.periodicidadId)
-                .then(response => {
-                  this.revista.periodicidad = response.data.periodicidad
-                })
-            }
-          });
-
-        axios.get(process.env.ROOT_API + "Palabraclaves/").then(response => {
-          this.palabrasClaves = response.data;
-          axios
-            .get(
-              process.env.ROOT_API +
-                "Palabrasclaves/" +
-                "?filter=%7B%22where%22%3A%20%7B%22revistaId%22%3A%20" +
-                this.id +
-                "%7D%7D"
-            )
-            .then(response => {
-              this.palabrasClavesRevista = response.data;
-            });
-        });
       });
     }
   },
