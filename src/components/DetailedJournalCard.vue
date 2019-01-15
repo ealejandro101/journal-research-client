@@ -97,10 +97,10 @@
         </b-col>
       </b-row>
       <br>
-    <b-row v-show="video">
-      <b-col>
-        <iframe width="700" height="400" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </b-col>
+    <b-row v-if="video" class="d-flex justify-content-center">
+      <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7">
+        <iframe style="width: 100%; height: 60vh;" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
     </b-row>
 
 
@@ -237,8 +237,10 @@ export default {
       document.getElementById("indexScopus").innerHTML = ""
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
-        let auxDate = new Date(response.data.fechaIngreso);
-        this.revista.fechaIngreso = auxDate.getDay()+"/"+auxDate.getMonth()+"/"+auxDate.getFullYear()
+        let auxDate = response.data.fechaIngreso.split("-");
+        if (auxDate.length == 3) {
+          this.revista.fechaIngreso = auxDate[0]+"/"+auxDate[1]+"/"+auxDate[2].substring(0,2)
+        }
         this.$emit("loaded")
         if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
