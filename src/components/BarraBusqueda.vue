@@ -8,10 +8,9 @@
           results-property="revistas"
           :results-display="formattedDisplay"
           placeholder="Título - Descripción"
-          @keyup.enter.native="routeRevistas"
           name="parametro"
-          @enter="buscarPalabra"
           @nothingSelected="buscarPalabra"
+          @selected="wordSelected"
           >
         </autocomplete>
        
@@ -36,28 +35,27 @@ export default {
       parametro: " "
     };
   },
-  mounted() {
-    this.Lrevistas;
-  },
   methods: {
-    routeRevistas: function() {
-     
-      this.$router.push({       
-        path: "/ListaRevistas/search=" + this.parametro.toString()
-      });
-      
-    },
     buscarPalabra(input) {
-      if(input == undefined){
-        return
-      }
-      if(input.toString()=='undefined'){
-          input="";
+      if(input == undefined || input.toString() == 'undefined'){
+        this.$router.push({    
+            path: "/ListaRevistas/search="
+        });
       }else{
-      this.$router.push({    
+        this.$router.push({    
             path: "/ListaRevistas/search=" + input 
-        
-      });
+        });
+      }
+    },
+    wordSelected (selected) {
+      if (selected.selectedObject.eissn !== null && selected.selectedObject.eissn !== undefined) {
+        this.$router.push({    
+            path: "/Revista/eissn=" + selected.selectedObject.eissn
+        });
+      }else{
+        this.$router.push({    
+            path: "/Revista/issn=" + selected.selectedObject.issn
+        });
       }
     },
     EndpointPrediccion(input) {

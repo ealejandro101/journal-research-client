@@ -4,27 +4,26 @@
       <header-research></header-research>
     </div>
     <div class="container-fluid">
-      <b-row>
-
+      <div class="row">
         <div id="divFiltros" class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
             <filtros-busqueda></filtros-busqueda>
         </div> 
-             
-         <div id="divRevistas" class="body-card-revistas dinamicHeigth col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 SSS">      
-          <div class="divContentRevistas dinamicHeigth">     
-            <b-row v-for="item in revistas" @click="openJournal(item)" :key="item.id" >   
+        <div id="divRevistas" class="body-card-revistas dinamicHeigth col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10 SSS">      
+          <div class="divContentRevistas dinamicHeigth container">     
+            <b-row v-for="item in revistas" :key="item.id" >   
              <b-col   >
-                <summaryJournalCard  class="summaryCard"
+                <summaryJournalCard  class="summaryCard" @openJournal="openJournal(item)"
                 :id="item.id.toString()"
                 :titulo='item.titulo'
                 :descripcion='item.descripcion'
-                :urlImg="item.imagen">
+                :urlImg="item.imagen"
+                >
               </summaryJournalCard>
              </b-col>
             </b-row>
           </div>
         </div>
-      </b-row>
+      </div>
     </div>      
   </div>    
 </template>
@@ -68,9 +67,7 @@ export default {
             this.getJournalsSearch(postfix);
             break;
           case "category":
-            this.getJournalsParam(
-              '{"where": {"categoriaId": ' + postfix + "}}"
-            );
+            this.getJournalsCategory(postfix);
             break;
           default:
             this.getJournals();
@@ -105,26 +102,26 @@ export default {
           });
         });
     },
-    getJournalsParam: function(query) {
+    getJournalsCategory: function(categoryId) {
       this.revistas=[];
-      axios.get(process.env.ROOT_API + "RevistasCategorias?filter=" + query)
-        .then(response => {          
-          let revista =response.data;  
-          revista.forEach(element => {
-            if (element.imagen == null) {
-              element.imagen = imgJournalDefoult;
-            }
-            axios.get(process.env.ROOT_API+"Revista/"+element.revistaId).then(response =>{                  
-                  this.revistas.push(response.data);
-            }).catch(error=>{
-              console.log(error);              
-            })
-          });
+      let query = { order: 'titulo ASC' }
+      axios.get(process.env.ROOT_API + `Categoria/${categoryId}/revistas?filter=${JSON.stringify(query)}`)
+        .then(response => {
+          this.revistas = response.data
+          for (const iterator of this.revistas) {
+            if (iterator.imagen == null) {
+              iterator.imagen = imgJournalDefoult;
+            } 
+          }
+        }).catch(error=>{
+          console.log(error);              
+        })
           
-        });
     },
     getJournals: function() {
-      axios.get(process.env.ROOT_API + "Revista").then(response => {
+      let query;
+      query = { order: 'titulo ASC' }
+      axios.get(process.env.ROOT_API + "Revista?filter=" + JSON.stringify(query)).then(response => {
         this.revistas = response.data;
         this.revistas.forEach(element => {
           if (element.imagen == null) {
@@ -164,7 +161,6 @@ export default {
 }
 .body-card-revistas {
   background-color: #d8d1bb;
-  height: 100%;
   width: 100%;
 }
 #divDetailedJournal {
@@ -179,25 +175,9 @@ export default {
 }
 #divFiltros {
   padding: 1em 0px;
-  transition-property: width;
-  transition-timing-function: linear;
-  transition-duration: 0.6s;
-  transition-delay: 0s;
 }
 #divRevistas {
-  transition-property: all;
-  transition-timing-function: linear;
-  transition-duration: 0.3s;
-  transition-delay: 0s;
   padding: 0px;
-}
-.dinamicHeigth {
-  overflow-y: auto;
-  height: calc(100vh - 5em);
-}
-.divContentRevistas {
-  padding-right: 15px;
-  overflow: auto;
 }
 @media (max-width: 576px) {
   #divDetailedJournal {

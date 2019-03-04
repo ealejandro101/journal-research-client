@@ -153,9 +153,10 @@ export default {
       },
       propiedades: {
         institucion: "fas fa-university",
+        facultad: "fas fa-warehouse",
         sku: "",
         issn: "fas fa-barcode",
-        eissn: "far fa-file-alt",
+        eissn: "far fa-file",
         doi: "fab fa-codepen",
         telefono: "fas fa-phone",
         direccion: "fas fa-map-marked-alt",
@@ -170,15 +171,21 @@ export default {
         preprint: "fas fa-pencil-ruler",
         apc: "fab fa-pied-piper",
         fechaIngreso: "fas fa-calendar-alt",
-        pais: "fas fa-globe-asia"
+        pais: "fas fa-globe-asia",
+        politicaAutoarchivo: "fas fa-archive",
+        tipoRevisionPares: "fas fa-check-square",
+        estiloCitacion: "fas fa-feather-alt"
       },
       propiedadesName1: [
         { nombre: "Titulo Corto", key: "tituloCorto" },
         { nombre: "Institución", key:"institucion" },
+        { nombre: "Facultad", key:"facultad" },
         { nombre: "ISSN", key:"issn" },
         { nombre: "EISSN", key:"eissn" },
         { nombre: "Periodicidad", key: "periodicidad" },
         { nombre: "Incluida desde", key: "fechaIngreso" },
+        { nombre: "Tipo de revisión por pares", key: "tipoRevisionPares" },
+        { nombre: "Estilo de citación", key: "estiloCitacion" }
       ],
       propiedadesName2: [
         { nombre: "DOI", key:"doi" },
@@ -186,7 +193,8 @@ export default {
         { nombre: "Dirección", key:"direccion" },
         { nombre: "País", key:"pais" },
         { nombre: "Ciudad", key:"ciudad" },
-        { nombre: "", key:"correo" }
+        { nombre: "", key:"correo" },
+        { nombre: "Política de auto archivo", key:"politicaAutoarchivo" }
       ],
       propiedadesName3: [
         { nombre: "Facebook", key:"facebook" },
@@ -318,7 +326,6 @@ export default {
                                                 })
                                               }
                                             });
-                                          
                                           axios
                                             .get(process.env.ROOT_API + 'Rindexaciones?filter={"where": {"revistaId":'+this.revista.id+'}}')
                                             .then(respRIndex => {
@@ -343,6 +350,21 @@ export default {
                                               }
                                               
                                             });
+                                          axios
+                                            .get(process.env.ROOT_API + 'Politicaautoarchivos?filter={"where": {"id":'+this.revista.politicaAutoarchivoId+'}}')
+                                            .then(respPoliticaAutoarchivo => {
+                                              this.revista.politicaAutoarchivo = respPoliticaAutoarchivo.data[0].politicaAutoarchivo
+                                            })
+                                          axios
+                                            .get(process.env.ROOT_API + `Tiporevisionpares/${this.rAdicional.tipoRevisionParesId}`)
+                                            .then(respTipoRevision => {
+                                              this.revista.tipoRevisionPares = respTipoRevision.data.tipoRevisionPares
+                                            })
+                                          axios
+                                            .get(process.env.ROOT_API + `Estilocitacions/${this.rAdicional.estiloCitacionId}`)
+                                            .then(respTipoRevision => {
+                                              this.revista.estiloCitacion = respTipoRevision.data.estiloCitacion
+                                            })
                                         });
                                     });
                                 });

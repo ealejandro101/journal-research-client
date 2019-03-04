@@ -1,33 +1,28 @@
 <template>
     <div>
-        <h6>Filtros de búsqueda</h6>
-        <!--<div v-for="item in filtros" :key="item.titulo">
-            
-            <div>
-                <b-btn v-b-toggle.collapse1 variant="primary" class="tituloFiltro">{{item.titulo}}<i class="fas fa-caret-down"></i></b-btn>
+        <h6><strong>Filtros de búsqueda</strong></h6>
+        <div>
+            <hr class="m-0">
+            <div v-for="(filter, indexFilter) in filtersWithOptions" :key="indexFilter">
+                <div @click="showFilter(filter)" class="cursor-pointer pt-3 pb-3">
+                    <p v-text="filter.name" class="m-0"></p>
+                </div>
+                <div :class="filter.style">
+                    <ul class="ulOptions">
+                        <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
+                            <input type="checkbox" :id="`input-${indexFilter}-${indexOption}`" class="w-25 align-self-center" /> 
+                            <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
+                        </li>
+                    </ul>
+                </div>
+                <hr class="m-0">
             </div>
-            <b-collapse visible  id="collapse1" class="mt-2">
-                <div class="container">
-                    <b-row   v-for="opcion in item.opciones" :key="opcion.id"> 
-                        <b-col  sm="2" md="2" lg="2">
-                            <b-img rounded="circle" class="iconos"  :src="opcion.logo"/> 
-                        </b-col>   
-                            <b-col sm="10" md="10" lg="10" > 
-                            <div class="content-check">
-                                <b-form-checkbox  class="float-rigth check"   size="sm" type="checkbox" :name="opcion.id" :id="opcion.id" :value="opcion.id">
-                                    {{opcion.nombre}}
-                                </b-form-checkbox> 
-                            </div>                         
-                        </b-col>  
-                    </b-row>
-                </div>  
-            </b-collapse>   
-        </div>-->
+        </div>
     </div>
 </template>
 
 <script>
-
+import ProviderService from "@/providerServices/providerServices.js"
 import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
 import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";
 import cienciasBiologicas from "@/assets/ciencias-biologicas-200x167.png";
@@ -40,52 +35,49 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
         name: "filtros-busqueda",
         data() {
             return {
-                filtros: [{
-                    titulo: "Categoria", 
-                    opciones: [{
-                        nombre: "Ingeniería", 
-                        id: "ingenieria",
-                        logo:ingenieriaLogo
-                        },
-                        {
-                            nombre: "Humanidades",
-                            id: "humanidades",
-                            logo:humanidades
-                        },
-                          {
-                            nombre: "Ciencias Agrícolas y Ambientales",
-                            id: "agricolasyambientales",
-                            logo:cienciasAgricolas
-                        },
-                         {
-                            nombre: "Ciencias Biológicas",
-                            id: "cienciasbiologicas",
-                            logo:cienciasBiologicas
-                        },
-                        {
-                            nombre: "Ciencias Exactas",
-                            id: "cienciasexactas",
-                            logo:cienciasExactas
-                        },
-                         {
-                            nombre: "Ciencias Sociales",
-                            id: "cienciassociales",
-                            logo:cienciasSociales
-                        },
-                         {
-                            nombre: "Ciencias de la salud",
-                            id: "cienciassalud",
-                            logo:cienciasSalud
-                        },
-                         {
-                            nombre: "Lingüística, literatura y artes",
-                            id: "linguisticaliteraturaartes",
-                            logo:linguisticaLiteraturaArtes
-                        },
+                filtersWithOptions: [
+                    {
+                        name: 'APC',
+                        style: 'filterHidden',
+                        options: [
+                            {
+                                text: 'Si',
+                                value: 1
+                            },
+                            {
+                                text: 'No',
+                                value: 0
+                            }
                         ]
-                }]
+                    }
+                ],
             };
         },
+        methods: {
+            showFilter(filter){
+                filter.style = filter.style === 'filterVisible' ? 'filterHidden' : 'filterVisible';
+            }
+        },
+        mounted (){
+            let providerService = new ProviderService(process.env.ROOT_API)
+            let filters = providerService.getEnumModel()
+            for (const key in filters) {
+                providerService.getModel(filters[key].reference).then(response => {
+                    let newFilter = {
+                        name: filters[key].title,
+                        style: 'filterHidden',
+                        options: []
+                    }
+                    for (const iterator of response.data) {
+                        newFilter.options.push({
+                            text: iterator[filters[key].attributeOfText],
+                            value: iterator[filters[key].attributeOfValue]
+                        })
+                    }
+                    this.filtersWithOptions.push(newFilter)
+                })
+            }
+        }
     }
 </script>
 
@@ -104,5 +96,15 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
     margin: 0px;
     padding: 0px;
     width: 100%;
+}
+.filterHidden{
+    display: none;
+}
+.filterVisible{
+    display: inline;
+}
+.ulOptions{
+    list-style: none;
+    padding: 0px;
 }
 </style>

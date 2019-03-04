@@ -148,12 +148,9 @@ export default {
     };
   },
   mounted() {
-    let query = {"categoriaId": undefined};
     this.categories.forEach(element => {
-      query.categoriaId = element.id;
-      axios.get(process.env.ROOT_API+"RevistasCategorias/count?where="+JSON.stringify(query)).then(response => {
+      axios.get(process.env.ROOT_API + `Categoria/${element.id}/revistas/count`).then(response => {
         element.count = response.data.count;
-        
       }).catch(error => {
         console.log(error);
       });

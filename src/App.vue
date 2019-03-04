@@ -18,6 +18,9 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+.autocomplete__icon.autocomplete--clear {
+  display: flex;
+}
 .noPadding{
   padding: 0px;
 }
@@ -69,5 +72,7 @@ img{
 .no-list-style{
   list-style: none;
 }
-
+.cursor-pointer{
+  cursor: pointer;
+}
 </style>

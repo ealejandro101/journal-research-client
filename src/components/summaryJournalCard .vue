@@ -1,6 +1,6 @@
 <template>
 <div>
-    <b-container class="containerSummaryCard">
+    <b-container class="containerSummaryCard" @click="openJournal()">
         <b-row>
             <b-card class="cardSummaryJournal">                      
                 <b-row v-if="!isMiniature">
@@ -102,6 +102,9 @@ export default {
           this.codigosQseMostraran = "eISSN:" + this.codigos.eISSN;
         }
       });
+    },
+    openJournal (){
+      this.$emit("openJournal")
     }
   }
 };
