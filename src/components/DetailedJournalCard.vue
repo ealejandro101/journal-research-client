@@ -71,7 +71,7 @@
         <b-col v-if="categorias.length > 0" align-self="start">
           <h4 class="text-left">Categorías</h4>
             <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
-                  <b-badge @click="routeRevistasWithCategory(categoria.id)" href="#" variant="success">
+                  <b-badge @click="pushViewJournalCategory(categoria.id)" href="#" variant="success">
                   <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
                   {{categoria.nombre}}
                   
@@ -80,7 +80,7 @@
         </b-col>
         <b-col v-if="palabrasClavesRevista.length > 0" align-self="start">
           <h4 class="text-left">Palabras Claves</h4>
-            <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1">                
+            <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1" @click="pushViewJournalWord(word.palabraClaveId)">         
                 <b-badge  href="#" variant="primary">
                       {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
                 </b-badge>
@@ -221,12 +221,11 @@ export default {
     }
   },
   methods: {
-    emitirCloseCard() {
-      this.$emit("detailedCard:close");
+    pushViewJournalCategory (categoryId) {
+      this.$router.push({path: '/ListaRevistas/category='+categoryId})
     },
-    routeRevistasWithCategory : function (idCategoria) {
-      this.emitirCloseCard();
-      this.$router.push({path: '/ListaRevistas/category='+idCategoria})
+    pushViewJournalWord (wordId) {
+      this.$router.push({path: '/ListaRevistas/word='+wordId})
     },
     initDetailedJournal () {
       this.categorias = []

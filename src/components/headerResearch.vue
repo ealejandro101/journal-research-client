@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 noPadding">
                     <b-collapse is-nav id="nav_collapse" class="flex-row-reverse">
-                        <header-inicial :opciones="opciones" :isInicial="false"></header-inicial>
+                        <header-inicial :inputOptions="options" :isInicial="false"></header-inicial>
                     </b-collapse>
                 </div>
             </div>
@@ -27,18 +27,18 @@ import LogoResearch from '@/components/LogoResearch'
 import HeaderInicial from '@/components/HeaderInicial'
 export default {
     name: 'header-research',
-    props: [],
+    props: ["inputOptions"],
+    components:{BarraBusqueda, LogoResearch, HeaderInicial},
     data() {
         return {
-            opciones: [
-                {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-                {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
-                {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
-                {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''}
-            ]
+            options: []
         };
     },
-    components:{BarraBusqueda, LogoResearch, HeaderInicial}
+    created (){
+        if(this.inputOptions !== undefined && this.inputOptions !== null){
+            this.options = this.inputOptions
+        }
+    }
 };
 </script>
 

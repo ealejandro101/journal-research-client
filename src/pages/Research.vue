@@ -1,11 +1,14 @@
 <template>
   <div class="research noPadding" v-scroll="handleScroll">
     <div class="section mainSection grid seccionEstadisticas">
+      <div class="header">
+        <header-research :inputOptions="optionsHeader"></header-research>
+      </div>
       <div class="align-top mainBackground">
         <div class="container-fluid noPadding">
           <div class="row d-flex justify-content-center">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 headerInicial">
-              <header-inicial :isInicial="true" class="d-flex justify-content-end"></header-inicial>
+              <header-inicial :isInicial="true" :inputOptions="optionsHeader" class="d-flex justify-content-end"></header-inicial>
             </div>
           </div>
           <div class="row d-flex justify-content-center">
@@ -56,9 +59,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="header">
-      <header-research></header-research>
     </div>
     <div>
       <footer-research></footer-research>
@@ -144,7 +144,14 @@ export default {
         }
       ],
       totalJournals:0,
-      totalCountries:0
+      totalCountries:0,
+      optionsHeader: [
+          {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
+          {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
+          {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
+          {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''},
+          {to: '', text: 'Journals & Authors', active: true, isVuePag: false, link: 'https://jasolutions.com.co/'}
+        ]
     };
   },
   mounted() {

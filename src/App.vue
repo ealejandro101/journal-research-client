@@ -75,4 +75,10 @@ img{
 .cursor-pointer{
   cursor: pointer;
 }
+.top-0{
+  top: 0px;
+}
+.bottom-0{
+  bottom: 0px;
+}
 </style>

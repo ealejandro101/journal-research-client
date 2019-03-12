@@ -1,17 +1,17 @@
 <template>
     <div>
         <ul v-if="isInicial" class="inicialHeader">
-            <li v-for="item in opciones" v-if="item.active" :key="item.to" class="liInicial">
+            <li v-for="item in options" v-if="item.active" :key="item.to" class="liInicial">
                 <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
                 </router-link>
-                <a v-else :href="item.link" v-text="item.text"></a>
+                <a v-else :href="item.link" v-text="item.text" target="_blank"></a>
             </li>
         </ul>
         <ul v-else class="d-flex inicialHeaderResearch">
-            <li v-for="item in opciones" v-if="item.active" :key="item.to" class="d-flex">
+            <li v-for="item in options" v-if="item.active" :key="item.to" class="d-flex">
                 <router-link v-if="item.isVuePag" :to="item.to" v-text="item.text">
                 </router-link>
-                <a v-else :href="item.link" v-text="item.text"></a>
+                <a v-else :href="item.link" v-text="item.text" target="_blank"></a>
             </li>
         </ul>
     </div>
@@ -20,16 +20,16 @@
 <script>
 export default {
     name: 'header-inicial',
-    props: ["isInicial"],
+    props: ["isInicial", "inputOptions"],
     data() {
         return {
-            opciones: [
-                {to: '/InfoResearcH', text: 'Qué es ResearcH', active: true, isVuePag: true},
-                {to: '/FormularioNuevaRevista', text: 'Postule su revista', active: true, isVuePag: true},
-                {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
-                {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''}
-            ]
+            options: []
         };
+    },
+    created () {
+        if(this.inputOptions !== undefined && this.inputOptions !== null){
+            this.options = this.inputOptions
+        }
     }
 };
 </script>
