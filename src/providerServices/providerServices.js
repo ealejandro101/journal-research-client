@@ -6,7 +6,7 @@ export default class ProviderService {
         this.rootAPI = rootAPI
     }
 
-    getEnumModel (){
+    getEnumModelFilters (){
         return Object.freeze({
             'periodicity': { reference: 'Periodicidads', title: 'Periodicidad', attributeOfText: 'periodicidad', attributeOfValue: 'id' },
             'category': { reference: 'Categoria', title: 'Categoría', attributeOfText: 'nombre', attributeOfValue: 'id' },

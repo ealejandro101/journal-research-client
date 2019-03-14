@@ -10,7 +10,14 @@
                 <div :class="filter.style">
                     <ul class="ulOptions">
                         <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
-                            <input type="checkbox" :id="`input-${indexFilter}-${indexOption}`" class="w-25 align-self-center" /> 
+                            <input 
+                                type="checkbox" 
+                                :id="`input-${indexFilter}-${indexOption}`" 
+                                :value="option.value"
+                                v-model="filter.response" 
+                                class="w-25 align-self-center" 
+                                @change="selectOption(filter.response)"
+                            /> 
                             <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
                         </li>
                     </ul>
@@ -39,6 +46,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                     {
                         name: 'APC',
                         style: 'filterHidden',
+                        response: [],
                         options: [
                             {
                                 text: 'Si',
@@ -56,17 +64,22 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
         methods: {
             showFilter(filter){
                 filter.style = filter.style === 'filterVisible' ? 'filterHidden' : 'filterVisible';
+            },
+            selectOption (option){
+                console.log(JSON.parse(JSON.stringify(option)));
+                
             }
         },
         mounted (){
             let providerService = new ProviderService(process.env.ROOT_API)
-            let filters = providerService.getEnumModel()
+            let filters = providerService.getEnumModelFilters()
             for (const key in filters) {
                 providerService.getModel(filters[key].reference).then(response => {
                     let newFilter = {
                         name: filters[key].title,
                         style: 'filterHidden',
-                        options: []
+                        options: [],
+                        response: []
                     }
                     for (const iterator of response.data) {
                         newFilter.options.push({
