@@ -56,9 +56,13 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                                 text: 'No',
                                 value: 0
                             }
-                        ]
+                        ],
+                        key: null,
+                        relationModelFilter: 'infoAdicional', 
+                        attributeModelFilter: 'apc'
                     }
                 ],
+                enumFilters: undefined
             };
         },
         methods: {
@@ -66,25 +70,81 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                 filter.style = filter.style === 'filterVisible' ? 'filterHidden' : 'filterVisible';
             },
             selectOption (option){
-                console.log(JSON.parse(JSON.stringify(option)));
+                let filter = {}
+                for (const iterator of this.filtersWithOptions) {
+                    if(iterator.response.length > 0){
+                        let arrayConditions = []
+                        let attributeFilter = undefined
+                        let modelFilter = undefined
+                        if(iterator.key === null){
+                            attributeFilter = iterator.attributeModelFilter
+                            modelFilter = iterator.relationModelFilter
+                        }else{
+                            attributeFilter = this.enumFilters[iterator.key].attributeModelFilter
+                            modelFilter = this.enumFilters[iterator.key].relationModelFilter
+                        }
+                        for (const iteratorCondition of iterator.response) {
+                            let condition = {}
+                            condition[attributeFilter] = iteratorCondition
+                            arrayConditions.push(condition)
+                        }
+                        if(modelFilter === null){
+                            if (filter.where.or === undefined) {
+                                filter.where.or = arrayConditions
+                            } else {
+                                filter.where.or.push(arrayConditions)
+                            }
+                        }else{
+                            if (filter.include === undefined) {
+                                filter.include = []
+                            }
+                            let thereRelation = false
+                            for (const iteratorIncludes of filter.include) {
+                                if (iteratorIncludes.relation === modelFilter) {
+                                    thereRelation = true
+                                    iteratorIncludes.scope.where.and.push({
+                                        or: arrayConditions
+                                    })
+                                    break
+                                }
+                            }
+                            if(!thereRelation){
+                                filter.include.push({
+                                    "relation": modelFilter,
+                                    "scope": {
+                                        "where": {
+                                            "and": [
+                                                {
+                                                    "or": arrayConditions
+                                                }
+                                            ]
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }
+                }
+                console.log(JSON.stringify(filter));
                 
             }
         },
         mounted (){
             let providerService = new ProviderService(process.env.ROOT_API)
-            let filters = providerService.getEnumModelFilters()
-            for (const key in filters) {
-                providerService.getModel(filters[key].reference).then(response => {
+            this.enumFilters = providerService.getEnumModelFilters()
+            for (const key in this.enumFilters) {
+                providerService.getModel(this.enumFilters[key].reference).then(response => {
                     let newFilter = {
-                        name: filters[key].title,
+                        key: key,
+                        name: this.enumFilters[key].title,
                         style: 'filterHidden',
                         options: [],
                         response: []
                     }
                     for (const iterator of response.data) {
                         newFilter.options.push({
-                            text: iterator[filters[key].attributeOfText],
-                            value: iterator[filters[key].attributeOfValue]
+                            text: iterator[this.enumFilters[key].attributeOfText],
+                            value: iterator[this.enumFilters[key].attributeOfValue]
                         })
                     }
                     this.filtersWithOptions.push(newFilter)

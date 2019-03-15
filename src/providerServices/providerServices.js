@@ -8,13 +8,13 @@ export default class ProviderService {
 
     getEnumModelFilters (){
         return Object.freeze({
-            'periodicity': { reference: 'Periodicidads', title: 'Periodicidad', attributeOfText: 'periodicidad', attributeOfValue: 'id' },
-            'category': { reference: 'Categoria', title: 'Categoría', attributeOfText: 'nombre', attributeOfValue: 'id' },
-            'languages': { reference: 'Idiomas', title: 'Idioma', attributeOfText: 'idioma', attributeOfValue: 'id' },
-            'licence': { reference: 'Licencia', title: 'Licencia', attributeOfText: 'licencia', attributeOfValue: 'id' },
-            'autoarchivePolicy': { reference: 'Politicaautoarchivos', title: 'Política de auto archivo', attributeOfText: 'politicaAutoarchivo', attributeOfValue: 'id' },
-            'citationStyle': { reference: 'Estilocitacions', title: 'Estilo citación', attributeOfText: 'estiloCitacion', attributeOfValue: 'id' },
-            'indexations': { reference: 'Indexaciones', title: 'Indexacion', attributeOfText: 'indexaciones', attributeOfValue: 'id' },
+            'periodicity': { reference: 'Periodicidads', title: 'Periodicidad', attributeOfText: 'periodicidad', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'periodicidadId' },
+            'category': { reference: 'Categoria', title: 'Categoría', attributeOfText: 'nombre', attributeOfValue: 'id', relationModelFilter: 'categorias', attributeModelFilter: 'id' },
+            'languages': { reference: 'Idiomas', title: 'Idioma', attributeOfText: 'idioma', attributeOfValue: 'id', relationModelFilter: 'idiomas', attributeModelFilter: 'id' },
+            'licence': { reference: 'Licencia', title: 'Licencia', attributeOfText: 'licencia', attributeOfValue: 'id', relationModelFilter: null, attributeModelFilter: 'licenciaId' },
+            'autoarchivePolicy': { reference: 'Politicaautoarchivos', title: 'Política de auto archivo', attributeOfText: 'politicaAutoarchivo', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'id' },
+            'citationStyle': { reference: 'Estilocitacions', title: 'Estilo citación', attributeOfText: 'estiloCitacion', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'estiloCitacionId' },
+            'indexations': { reference: 'Indexaciones', title: 'Indexacion', attributeOfText: 'indexaciones', attributeOfValue: 'id', relationModelFilter: 'indexaciones', attributeModelFilter: 'id' },
           })
     }
 
