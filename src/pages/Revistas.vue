@@ -1,12 +1,14 @@
 <template>
   <div class="containerPage d-flex flex-column">
-    <div id="headerResearch" class="headerS flex-grow-0">
+    <div id="headerResearch" class="headerS flex-grow-0" ref="headerHTML">
       <header-research :inputOptions="headerOptions"></header-research>
     </div>
     <div class="container-fluid flex-grow-1 d-flex justify-content-center p-0">
       <div class="row w-100 mt-0 mb-0">
         <div id="divFiltros" class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-            <filtros-busqueda></filtros-busqueda>
+          <div ref="filterRef" style="overflow-y: auto" class="position-sticky" v-bind:style="{top: styleTopFilter, height: heightFilter}">
+            <filtros-busqueda @usedFilters="usedFilters"></filtros-busqueda>
+          </div>
         </div> 
         <div id="divRevistas" class="body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
           <div class="alphabet container" style="display:none">
@@ -60,7 +62,8 @@ import BarraBusqueda from "@/components/BarraBusqueda";
 import LogoResearch from "@/components/LogoResearch";
 import FiltrosBusqueda from "@/components/FiltrosBusqueda";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
-import FooterResearch from '@/components/FooterResearch'
+import FooterResearch from '@/components/FooterResearch';
+import ProviderService from '@/providerServices/providerServices';
 
 export default {
   props: {},
@@ -83,11 +86,15 @@ export default {
         {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
         {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''},
         {to: '', text: 'Journals & Authors', active: true, isVuePag: false, link: 'https://jasolutions.com.co/'}
-      ]
+      ],
+      styleTopFilter: "3em",
+      heightFilter: undefined
     };
   },
   mounted() {
     this.changeParams();
+    this.styleTopFilter = this.$refs.headerHTML.offsetHeight + 16 + 'px'
+    this.heightFilter  = window.innerHeight - (this.$refs.headerHTML.offsetHeight + 16) + 'px !important'
   },
   watch: {
     "$route.params.search": function() {
@@ -139,11 +146,7 @@ export default {
         .get(process.env.ROOT_API + "Revista/?filter=" + JSON.stringify(query))
         .then(response => {
           this.revistas = response.data;
-          this.revistas.forEach(element => {
-            if (element.imagen == null) {
-              element.imagen = imgJournalDefoult;
-            }
-          });
+          this.configureImg()
         });
     },
     getJournalsCategory (categoryId) {
@@ -152,11 +155,7 @@ export default {
       axios.get(process.env.ROOT_API + `Categoria/${categoryId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
-          for (const iterator of this.revistas) {
-            if (iterator.imagen == null) {
-              iterator.imagen = imgJournalDefoult;
-            } 
-          }
+          this.configureImg()
         }).catch(error=>{
           console.log(error);              
         })
@@ -167,28 +166,20 @@ export default {
       axios.get(process.env.ROOT_API + `/Palabraclaves/${wordId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
-          for (const iterator of this.revistas) {
-            if (iterator.imagen == null) {
-              iterator.imagen = imgJournalDefoult;
-            } 
-          }
+          this.configureImg()
         }).catch(error=>{
           console.log(error);              
         })
     },
-    getJournals: function() {
+    getJournals () {
       let query;
       query = { order: 'titulo ASC' }
       axios.get(process.env.ROOT_API + "Revista?filter=" + JSON.stringify(query)).then(response => {
         this.revistas = response.data;
-        this.revistas.forEach(element => {
-          if (element.imagen == null) {
-            element.imagen = imgJournalDefoult;
-          }
-        });
+        this.configureImg()
       });
     },
-    openJournal: function(journal) {
+    openJournal (journal) {
       if(journal.eissn !== undefined && journal.eissn !== '' && journal.eissn !== null){
         this.$router.push({    
           path: "/Revista/eissn=" + journal.eissn
@@ -198,6 +189,43 @@ export default {
           path: "/Revista/issn=" + journal.issn
         });
       }
+    },
+    usedFilters (filter){
+      let providerService = new ProviderService(process.env.ROOT_API)
+      this.revistas=[];
+      filter.order = 'titulo ASC'
+      providerService.getJournalsFiltered(filter).then(response => {
+        this.revistas = response.data.revistas
+        this.configureImg()
+      })
+    },
+    configureImg(){
+      for (const iterator of this.revistas) {
+        if (iterator.imagen == null) {
+          iterator.imagen = imgJournalDefoult;
+        } 
+      }
+    },
+    vwTOpx(value) {
+      var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0],
+        x = w.innerWidth || e.clientWidth || g.clientWidth,
+        y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+      var result = (x*value)/100;
+      return(result);
+    },
+    vhTOpx(value) {
+      var w = window,
+        d = document,
+        e = d.documentElement,
+        g = d.getElementsByTagName('body')[0],
+        x = w.innerWidth || e.clientWidth || g.clientWidth,
+        y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+
+      var result = (y*value)/100;
+      return(result);
     }
   }  
 };
