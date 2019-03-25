@@ -83,6 +83,7 @@ import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
 import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
+import jsonHeaderOptions from "@/utilities/headerOptions.json"
 
 export default {
   name: "research",
@@ -145,14 +146,11 @@ export default {
       ],
       totalJournals:0,
       totalCountries:0,
-      optionsHeader: [
-          {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-          {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
-          {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
-          {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''},
-          {to: '', text: 'Journals & Authors', active: true, isVuePag: false, link: 'https://jasolutions.com.co/'}
-        ]
+      optionsHeader: undefined
     };
+  },
+  created (){
+    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.landingPageHeader))
   },
   mounted() {
     this.categories.forEach(element => {

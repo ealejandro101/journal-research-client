@@ -43,7 +43,7 @@ export default {
         });
       }else{
         this.$router.push({    
-            path: "/ListaRevistas/search=" + input 
+            path: "/ListaRevistas/search=" + encodeURIComponent(input)
         });
       }
     },

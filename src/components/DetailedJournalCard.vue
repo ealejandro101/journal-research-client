@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card class="d-flex">
-      <div v-if="false" class="divClose"><i class="fas fa-times" @click="emitirCloseCard"></i></div>
+      <div class="divClose mb-3"><i class="fas fa-long-arrow-alt-left" @click="back"></i></div>
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
@@ -29,6 +29,18 @@
                 <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="'No'"></itemDescription>
               </div>
             </b-col>
+            <b-col v-for="prop in propiedadesName6" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
+              <div>
+                <p class="text-left">
+                  <strong>
+                    <i :class="propiedades[prop.key]"></i>
+                    {{prop.nombre}}
+                  </strong>
+                  <router-link v-if="prop.key === 'ciudad'" :to="`/ListaRevistas/${prop.key}=${idCity}`" v-text="revista[prop.key].toString()"></router-link>
+                  <router-link v-else :to="`/ListaRevistas/${prop.key}=${encodeURIComponent(revista[prop.key].toString())}`" v-text="revista[prop.key].toString()"></router-link>
+                </p>
+              </div>
+            </b-col>
             <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
               <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
                   <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
@@ -39,8 +51,7 @@
               <div v-else>
                 <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()">
               </itemDescription>
-              </div>            
-              
+              </div>
             </b-col>
             <b-col v-for="propa in propiedadesName3" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
                 <div v-if="propa.key != 'url'">
@@ -178,7 +189,6 @@ export default {
       },
       propiedadesName1: [
         { nombre: "Titulo Corto", key: "tituloCorto" },
-        { nombre: "Institución", key:"institucion" },
         { nombre: "Facultad", key:"facultad" },
         { nombre: "ISSN", key:"issn" },
         { nombre: "EISSN", key:"eissn" },
@@ -192,7 +202,6 @@ export default {
         { nombre: "Teléfono", key:"telefono" },
         { nombre: "Dirección", key:"direccion" },
         { nombre: "País", key:"pais" },
-        { nombre: "Ciudad", key:"ciudad" },
         { nombre: "", key:"correo" },
         { nombre: "Política de auto archivo", key:"politicaAutoarchivo" }
       ],
@@ -209,6 +218,10 @@ export default {
       ],
       propiedadesName5: [//Propiedades con imagen
         { nombre: "Licencia", key: "licenciaImg" }
+      ],
+      propiedadesName6: [//Propiedades con filtro de busqueda de texto
+        { nombre: "Institución", key:"institucion" },
+        { nombre: "Ciudad", key:"ciudad" }
       ]
     };
   },
@@ -221,6 +234,9 @@ export default {
     }
   },
   methods: {
+    back(){
+      this.$router.go(-1)
+    },
     pushViewJournalCategory (categoryId) {
       this.$router.push({path: '/ListaRevistas/category='+categoryId})
     },
@@ -407,7 +423,7 @@ export default {
 }
 .divClose i {
   position: absolute;
-  right: 1em;
+  left: 0;
   font-size: 2em;
   cursor: pointer;
 }

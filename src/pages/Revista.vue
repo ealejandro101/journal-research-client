@@ -1,7 +1,7 @@
 <template>
   <div class="containerPage">
     <div id="headerResearch" class="headerS">
-      <header-research></header-research>
+      <header-research :inputOptions="optionsHeader"></header-research>
     </div>
     <div class="container-fluid">
       <div class="row">
@@ -47,6 +47,7 @@ import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
 import loadingGifImport from '@/assets/gifs/loading.gif'
+import jsonHeaderOptions from "@/utilities/headerOptions.json"
 
 export default {
   props: {},
@@ -56,12 +57,14 @@ export default {
       idJournal: "",
       loadingGif: undefined,
       isLoading: false,
-      doesNotExist: false
+      doesNotExist: false,
+      optionsHeader: undefined
     };
   },
   created(){
     this.loadingGif = loadingGifImport
     this.isLoading = true
+    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
   },
   mounted() {
     this.changeParams();

@@ -1,0 +1,13 @@
+{
+    "landingPageHeader": [
+        {"to": "/InfoResearcH", "text": "Que es ResearcH", "active": true, "isVuePag": true},
+        {"to": "/FormularioNuevaRevista", "text": "Postula revistas", "active": true, "isVuePag": true},
+        {"to": "", "text": "Journals & Authors", "active": true, "isVuePag": false, "link": "https://jasolutions.com.co/"}
+    ],
+    "otherPageHeader": [
+        {"to": "/", "text": "Inicio", "active": true, "isVuePag": true},
+        {"to": "/InfoResearcH", "text": "Que es ResearcH", "active": true, "isVuePag": true},
+        {"to": "/FormularioNuevaRevista", "text": "Postula revistas", "active": true, "isVuePag": true},
+        {"to": "", "text": "Journals & Authors", "active": true, "isVuePag": false, "link": "https://jasolutions.com.co/"}
+    ]
+}

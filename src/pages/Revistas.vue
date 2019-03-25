@@ -1,7 +1,7 @@
 <template>
   <div class="containerPage d-flex flex-column">
     <div id="headerResearch" class="headerS flex-grow-0" ref="headerHTML">
-      <header-research :inputOptions="headerOptions"></header-research>
+      <header-research :inputOptions="optionsHeader"></header-research>
     </div>
     <div class="container-fluid flex-grow-1 d-flex justify-content-center p-0">
       <div class="row w-100 mt-0 mb-0">
@@ -64,6 +64,7 @@ import FiltrosBusqueda from "@/components/FiltrosBusqueda";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import FooterResearch from '@/components/FooterResearch';
 import ProviderService from '@/providerServices/providerServices';
+import jsonHeaderOptions from "@/utilities/headerOptions.json"
 
 export default {
   props: {},
@@ -79,17 +80,13 @@ export default {
     return {
       revistas: [],
       idActualJournal: "'1'",
-      headerOptions:  [
-        {to: '/', text: 'Inicio', active: true, isVuePag: true, link: ''},
-        {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-        {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
-        {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
-        {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''},
-        {to: '', text: 'Journals & Authors', active: true, isVuePag: false, link: 'https://jasolutions.com.co/'}
-      ],
+      optionsHeader:  undefined,
       styleTopFilter: "3em",
       heightFilter: undefined
     };
+  },
+  created (){
+    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
   },
   mounted() {
     this.changeParams();
@@ -119,6 +116,12 @@ export default {
             break;
           case "word":
             this.getJournalsWord(postfix);
+            break;
+          case "institucion":
+            this.getJournalsInstitution(postfix);
+            break;
+          case "ciudad":
+            this.getJournalsCity(postfix);
             break;
           default:
             this.getJournals();
@@ -170,6 +173,50 @@ export default {
         }).catch(error=>{
           console.log(error);              
         })
+    },
+    getJournalsCity (cityId) {
+      this.revistas=[];
+      let query = { 
+        order: 'titulo ASC', 
+        include: [
+          {
+            "relation": "ubicacion",
+            "scope": {
+                "where": {
+                  "ciudadId": cityId
+                }
+            }
+          }
+        ]
+      }
+      axios
+        .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
+        .then(response => {
+          this.revistas = response.data.revistas;
+          this.configureImg()
+        });
+    },
+    getJournalsInstitution (institution) {
+      this.revistas=[];
+      let query = { 
+        order: 'titulo ASC', 
+        include: [
+          {
+            "relation": "contacto",
+            "scope": {
+                "where": {
+                  "institucion": institution
+                }
+            }
+          }
+        ]
+      }
+      axios
+        .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
+        .then(response => {
+          this.revistas = response.data.revistas;
+          this.configureImg()
+        });
     },
     getJournals () {
       let query;

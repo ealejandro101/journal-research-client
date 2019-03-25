@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-research></header-research>
+        <header-research :inputOptions="optionsHeader"></header-research>
         <div class="container content">
             <div class="row d-flex justify-content-center">
                 <div class="col-12 textInfo">
@@ -94,14 +94,19 @@
 <script>
 import HeaderResearch from '@/components/HeaderResearch';
 import FooterResearch from '@/components/FooterResearch';
+import jsonHeaderOptions from "@/utilities/headerOptions.json"
 
 export default {
   name: "info-research",
   components: {HeaderResearch, FooterResearch},
   data() {
       return {
+        optionsHeader: undefined
       };
-  }
+  },
+  created (){
+    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+  },
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <div > 
-      <header-research></header-research>
+      <header-research :inputOptions="optionsHeader"></header-research>
     <div class="container">
       <br>
       <h1 >Registra tu revista</h1>
@@ -16,14 +16,19 @@
 
 <script>
 import HeaderResearch from "@/components/HeaderResearch";
+import jsonHeaderOptions from "@/utilities/headerOptions.json"
 
 export default {
   data() {
-    return {};
+    return {
+      optionsHeader: undefined
+    };
   },
-
   components: {
     HeaderResearch
+  },
+  created (){
+    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
   },
   methods: {}
 };
