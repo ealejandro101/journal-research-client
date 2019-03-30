@@ -7,7 +7,7 @@
       <div class="row w-100 mt-0 mb-0">
         <div id="divFiltros" class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
           <div ref="filterRef" style="overflow-y: auto" class="position-sticky" v-bind:style="{top: styleTopFilter, height: heightFilter}">
-            <filtros-busqueda @usedFilters="usedFilters"></filtros-busqueda>
+            <filtros-busqueda @applyFilters="applyFilters"></filtros-busqueda>
           </div>
         </div> 
         <div id="divRevistas" class="body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
@@ -29,8 +29,8 @@
             </div>
           </div>
           <div class="divContentRevistas container">     
-            <b-row v-for="item in revistas" :key="item.id" >   
-             <b-col   >
+            <div class="row" v-for="item in revistas" :key="item.id" >   
+             <div class="col">
                 <summaryJournalCard  class="summaryCard" @openJournal="openJournal(item)"
                 :id="item.id.toString()"
                 :titulo='item.titulo'
@@ -38,8 +38,20 @@
                 :urlImg="item.imagen"
                 >
               </summaryJournalCard>
-             </b-col>
-            </b-row>
+             </div>
+            </div>
+            <div class="row" v-if="revistas.length === 0 && isQueryCompleted">
+              <div class="col">
+                <p class="mt-4">No hay revisitas que cumplan el filtro dado.</p>
+              </div>
+            </div>
+            <div class="row" v-if="revistas.length === 0 && !isQueryCompleted">
+              <div class="col d-flex justify-content-center">
+                <div style="width: 10em">
+                  <img :src="loadingSRC" alt="Cargando...">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -65,6 +77,7 @@ import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import FooterResearch from '@/components/FooterResearch';
 import ProviderService from '@/providerServices/providerServices';
 import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import loadingGif from "@/assets/gifs/loading.gif"
 
 export default {
   props: {},
@@ -82,7 +95,9 @@ export default {
       idActualJournal: "'1'",
       optionsHeader:  undefined,
       styleTopFilter: "3em",
-      heightFilter: undefined
+      heightFilter: undefined,
+      isQueryCompleted: false,
+      loadingSRC: undefined
     };
   },
   created (){
@@ -92,6 +107,7 @@ export default {
     this.changeParams();
     this.styleTopFilter = this.$refs.headerHTML.offsetHeight + 16 + 'px'
     this.heightFilter  = window.innerHeight - (this.$refs.headerHTML.offsetHeight + 16) + 'px !important'
+    this.loadingSRC = loadingGif
   },
   watch: {
     "$route.params.search": function() {
@@ -145,19 +161,24 @@ export default {
           ]
         }
       };
+      this.revistas = []
+      this.isQueryCompleted = false
       axios
         .get(process.env.ROOT_API + "Revista/?filter=" + JSON.stringify(query))
         .then(response => {
           this.revistas = response.data;
+          this.isQueryCompleted = true
           this.configureImg()
         });
     },
     getJournalsCategory (categoryId) {
       this.revistas=[];
+      this.isQueryCompleted = false
       let query = { order: 'titulo ASC' }
       axios.get(process.env.ROOT_API + `Categoria/${categoryId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
+          this.isQueryCompleted = true
           this.configureImg()
         }).catch(error=>{
           console.log(error);              
@@ -165,10 +186,12 @@ export default {
     },
     getJournalsWord (wordId) {
       this.revistas=[];
+      this.isQueryCompleted = false
       let query = { order: 'titulo ASC' }
       axios.get(process.env.ROOT_API + `/Palabraclaves/${wordId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
+          this.isQueryCompleted = true
           this.configureImg()
         }).catch(error=>{
           console.log(error);              
@@ -176,6 +199,7 @@ export default {
     },
     getJournalsCity (cityId) {
       this.revistas=[];
+      this.isQueryCompleted = false
       let query = { 
         order: 'titulo ASC', 
         include: [
@@ -193,11 +217,13 @@ export default {
         .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
         .then(response => {
           this.revistas = response.data.revistas;
+          this.isQueryCompleted = true
           this.configureImg()
         });
     },
     getJournalsInstitution (institution) {
       this.revistas=[];
+      this.isQueryCompleted = false
       let query = { 
         order: 'titulo ASC', 
         include: [
@@ -215,14 +241,18 @@ export default {
         .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
         .then(response => {
           this.revistas = response.data.revistas;
+          this.isQueryCompleted = true
           this.configureImg()
         });
     },
     getJournals () {
       let query;
       query = { order: 'titulo ASC' }
+      this.revistas = []
+      this.isQueryCompleted = false
       axios.get(process.env.ROOT_API + "Revista?filter=" + JSON.stringify(query)).then(response => {
         this.revistas = response.data;
+        this.isQueryCompleted = true
         this.configureImg()
       });
     },
@@ -237,12 +267,14 @@ export default {
         });
       }
     },
-    usedFilters (filter){
+    applyFilters (filter){
       let providerService = new ProviderService(process.env.ROOT_API)
       this.revistas=[];
+      this.isQueryCompleted = false
       filter.order = 'titulo ASC'
       providerService.getJournalsFiltered(filter).then(response => {
         this.revistas = response.data.revistas
+        this.isQueryCompleted = true
         this.configureImg()
       })
     },

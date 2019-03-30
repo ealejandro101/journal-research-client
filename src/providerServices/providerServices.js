@@ -22,11 +22,28 @@ export default class ProviderService {
             'licence': { reference: 'Licencia', title: 'Licencia', attributeOfText: 'licencia', attributeOfValue: 'id', relationModelFilter: null, attributeModelFilter: 'licenciaId' },
             'autoarchivePolicy': { reference: 'Politicaautoarchivos', title: 'Política de auto archivo', attributeOfText: 'politicaAutoarchivo', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'id' },
             'citationStyle': { reference: 'Estilocitacions', title: 'Estilo citación', attributeOfText: 'estiloCitacion', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'estiloCitacionId' },
-            'indexations': { reference: 'Indexaciones', title: 'Indexacion', attributeOfText: 'indexaciones', attributeOfValue: 'id', relationModelFilter: 'indexaciones', attributeModelFilter: 'id' },
+            'indexations': { reference: 'Indexaciones', title: 'Indexación', attributeOfText: 'indexaciones', attributeOfValue: 'id', relationModelFilter: 'indexaciones', attributeModelFilter: 'id' },
+            /*'country': { reference: 'Pais', title: 'País', attributeOfText: 'name', attributeOfValue: 'id', relationModelFilter: 'pais', attributeModelFilter: 'id' },*/
           })
     }
 
     getModel (model, query){
+        let filter = query === null || query === undefined ? "" : `/?filter=${JSON.stringify(query)}`
+        return axios.get(this.rootAPI + model + filter)
+    }
+
+    getModelCount (model, query){
+        let filter = query === null || query === undefined ? "" : `?filter=${JSON.stringify(query)}`
+        return axios.get(this.rootAPI + model + '/count' + filter)
+    }
+
+    getModelWithPagination (model, page, limit, query){//Si se va a utilizar page and limit, se necesita establecer la query
+        if (page !== null && page !== undefined) {
+            query.skip = page
+        }
+        if (limit !== null && limit !== undefined) {
+            query.limit = limit
+        }
         let filter = query === null || query === undefined ? "" : `/?filter=${JSON.stringify(query)}`
         return axios.get(this.rootAPI + model + filter)
     }

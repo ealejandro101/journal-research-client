@@ -15,11 +15,13 @@
         <b-col>
           <hr>
           <b-row>
-            <b-col v-for="prop in propiedadesName1" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
-              <div>
-                <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key].toString()"></itemDescription>
-              </div>
-            </b-col>
+            <template v-for="prop in propiedadesName1">
+              <b-col sm="6" md="6" lg="6" v-if="!isVoid(revista[prop.key])" :key="prop.key">
+                <div>
+                  <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="revista[prop.key].toString()"></itemDescription>
+                </div>
+              </b-col>
+            </template>
             <b-col v-for="prop in propiedadesName4" :key="prop.key" sm="6" md="6" lg="6">
               <!--Propiedades de si/no  0/1-->
               <div v-if="revista[prop.key] == 1">
@@ -29,31 +31,41 @@
                 <itemDescription :icono="propiedades[prop.key]" :label="prop.nombre" :texto="'No'"></itemDescription>
               </div>
             </b-col>
-            <b-col v-for="prop in propiedadesName6" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
-              <div>
-                <p class="text-left">
-                  <strong>
-                    <i :class="propiedades[prop.key]"></i>
-                    {{prop.nombre}}
-                  </strong>
-                  <router-link v-if="prop.key === 'ciudad'" :to="`/ListaRevistas/${prop.key}=${idCity}`" v-text="revista[prop.key].toString()"></router-link>
-                  <router-link v-else :to="`/ListaRevistas/${prop.key}=${encodeURIComponent(revista[prop.key].toString())}`" v-text="revista[prop.key].toString()"></router-link>
-                </p>
-              </div>
-            </b-col>
-            <b-col v-for="propa in propiedadesName2" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
-              <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
-                  <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
-              </div>
-              <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
-                  <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
-              </div>
-              <div v-else>
-                <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()">
-              </itemDescription>
-              </div>
-            </b-col>
-            <b-col v-for="propa in propiedadesName3" :key="propa.key" sm="6" md="6" lg="6" v-if="revista[propa.key] != undefined">    
+            <template v-for="prop in propiedadesName6">
+              <b-col  :key="prop.key" sm="6" md="6" lg="6" v-if="!isVoid(revista[prop.key])">
+                <div>
+                  <div class="text-left">
+                    <strong class="float-left">
+                      <i :class="propiedades[prop.key]"></i>
+                      {{prop.nombre}} &nbsp
+                    </strong>
+                    <p class="float-left">
+                      {{ revista[prop.key].toString() }} &nbsp
+                      <span>
+                        <router-link v-if="prop.key === 'ciudad'" :to="`/ListaRevistas/${prop.key}=${idCity}`"><i class="fas fa-sort-amount-down"></i></router-link>
+                        <router-link v-else :to="`/ListaRevistas/${prop.key}=${encodeURIComponent(revista[prop.key].toString())}`"><i class="fas fa-sort-amount-down"></i></router-link>
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </b-col>
+            </template>
+            <template v-for="propa in propiedadesName2">
+              <b-col :key="propa.key" sm="6" md="6" lg="6" v-if="!isVoid(revista[propa.key])">    
+                <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
+                    <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
+                </div>
+                <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
+                    <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
+                </div>
+                <div v-else>
+                  <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()">
+                </itemDescription>
+                </div>
+              </b-col>
+            </template>
+            <template v-for="propa in propiedadesName3">
+              <b-col  :key="propa.key" sm="6" md="6" lg="6" v-if="!isVoid(revista[propa.key])">    
                 <div v-if="propa.key != 'url'">
                   <a :href="revista[propa.key]" target="_blanck">                  
                     <itemDescription   :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
@@ -62,15 +74,19 @@
                 <div v-if="propa.key == 'url'">
                     <itemDescription  :click=true  :url='revista.url' icono="fas fa-globe" texto="sitio web"  > </itemDescription>
                 </div>                    
-            </b-col>
-            <b-col v-for="prop in propiedadesName5" :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] != undefined">
-              <!--Propiedades de img-->
-              <div>
-                <div style="max-width: 5em; margin-left: 1em;" class="float-left">
-                  <img :src="revista[prop.key]" :alt="revista[prop.key]">
+              </b-col>
+            </template>
+            <template v-for="prop in propiedadesName5">
+              <b-col :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] !== undefined">
+                <!--Propiedades de img-->
+                <div>
+                  <div style="max-width: 5em; margin-left: 1em;" class="float-left">
+                    <img :src="revista[prop.key]" :alt="revista[prop.key]">
+                  </div>
                 </div>
-              </div>
-            </b-col>
+              </b-col>
+            </template>
+            
           </b-row>
         </b-col>
         <div v-show="indexScopus !== ''" :class="show" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
@@ -390,6 +406,9 @@ export default {
               });
           });
       });
+    },
+    isVoid(param){
+      return param === null || param === undefined?true:false
     }
   },
   components: {

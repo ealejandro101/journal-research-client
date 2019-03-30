@@ -20,6 +20,9 @@
                             /> 
                             <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
                         </li>
+                        <li v-if="filter.isLarge">
+                            <p class="text-left pl-3">Ver mas...</p>
+                        </li>
                     </ul>
                 </div>
                 <hr class="m-0">
@@ -59,7 +62,8 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         ],
                         key: null,
                         relationModelFilter: 'infoAdicional', 
-                        attributeModelFilter: 'apc'
+                        attributeModelFilter: 'apc',
+                        isLarge: false
                     }
                 ],
                 enumFilters: undefined
@@ -88,13 +92,14 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                             condition[attributeFilter] = iteratorCondition
                             arrayConditions.push(condition)
                         }
-                        if(modelFilter === null){
-                            if (filter.where.or === undefined) {
+                        if(modelFilter === null){//Si el modelo es la misma revista no se debe incluir nada
+                            if (filter.where === undefined || filter.where.or === undefined) {
+                                filter.where = {}
                                 filter.where.or = arrayConditions
                             } else {
                                 filter.where.or.push(arrayConditions)
                             }
-                        }else{
+                        }else{//En este caso si
                             if (filter.include === undefined) {
                                 filter.include = []
                             }
@@ -125,14 +130,14 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         }
                     }
                 }
-                this.$emit('usedFilters', filter)
+                this.$emit('applyFilters', filter)
             }
         },
         mounted (){
             let providerService = new ProviderService(process.env.ROOT_API)
             this.enumFilters = providerService.getEnumModelFilters()
             for (const key in this.enumFilters) {
-                providerService.getModel(this.enumFilters[key].reference).then(response => {
+                providerService.getModelCount(this.enumFilters[key].reference).then(response => {
                     let newFilter = {
                         key: key,
                         name: this.enumFilters[key].title,
@@ -140,13 +145,16 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         options: [],
                         response: []
                     }
-                    for (const iterator of response.data) {
-                        newFilter.options.push({
-                            text: iterator[this.enumFilters[key].attributeOfText],
-                            value: iterator[this.enumFilters[key].attributeOfValue]
-                        })
-                    }
-                    this.filtersWithOptions.push(newFilter)
+                    newFilter.isLarge = response.data.count > 10
+                    providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, {}).then(response => {
+                        for (const iterator of response.data) {
+                            newFilter.options.push({
+                                text: iterator[this.enumFilters[key].attributeOfText],
+                                value: iterator[this.enumFilters[key].attributeOfValue]
+                            })
+                        }
+                        this.filtersWithOptions.push(newFilter)
+                    })
                 })
             }
         }
