@@ -28,6 +28,23 @@
                 <hr class="m-0">
             </div>
         </div>
+        <div v-if="showLargeFilter" class="container-popup">
+            <div class="content-popup">
+                <ul class="ulOptions">
+                    <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
+                        <input 
+                            type="checkbox" 
+                            :id="`input-${indexFilter}-${indexOption}`" 
+                            :value="option.value"
+                            v-model="filter.response" 
+                            class="w-25 align-self-center" 
+                            @change="selectOption(filter.response)"
+                        /> 
+                        <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -66,7 +83,8 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         isLarge: false
                     }
                 ],
-                enumFilters: undefined
+                enumFilters: undefined,
+                showLargeFilter: false
             };
         },
         methods: {
@@ -76,7 +94,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
             selectOption (option){
                 let filter = {}
                 for (const iterator of this.filtersWithOptions) {
-                    if(iterator.response.length > 0){
+                    if(iterator.response.length > 0){// Si se utilizo el filtro
                         let arrayConditions = []
                         let attributeFilter = undefined
                         let modelFilter = undefined
@@ -89,8 +107,16 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         }
                         for (const iteratorCondition of iterator.response) {
                             let condition = {}
-                            condition[attributeFilter] = iteratorCondition
-                            arrayConditions.push(condition)
+                            if (Array.isArray(attributeFilter)) {
+                                for (const atrFilt of attributeFilter) {
+                                    condition = {}
+                                    condition[atrFilt] = iteratorCondition
+                                    arrayConditions.push(condition)
+                                }
+                            }else{
+                                condition[attributeFilter] = iteratorCondition
+                                arrayConditions.push(condition)
+                            }
                         }
                         if(modelFilter === null){//Si el modelo es la misma revista no se debe incluir nada
                             if (filter.where === undefined || filter.where.or === undefined) {
@@ -130,6 +156,8 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         }
                     }
                 }
+                console.log(filter);
+                
                 this.$emit('applyFilters', filter)
             }
         },
@@ -153,7 +181,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                                 value: iterator[this.enumFilters[key].attributeOfValue]
                             })
                         }
-                        this.filtersWithOptions.push(newFilter)
+                        this.filtersWithOptions.unshift(newFilter)
                     })
                 })
             }

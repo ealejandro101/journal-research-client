@@ -152,9 +152,13 @@ export default {
       }
     },
     refreshJournals (idCategory) {
-        this.getJournalsParam(
-            '{"where": {"categoriaId": ' + idCategory + "}}"
-        );
+      let filter = {
+        where: {
+          categoriaId: idCategory
+        },
+        limit: 6
+      }
+      this.getJournalsParam(JSON.stringify(filter));
     },
     loaded() {
       this.isLoading = false
@@ -192,7 +196,6 @@ export default {
   width: 80%;
   display: inline-block;
   text-decoration: none;
-
 }
 #divFiltros {
   padding: 1em 0px;
