@@ -22,7 +22,7 @@ export default class ProviderService {
             'citationStyle': { reference: 'Estilocitacions', title: 'Estilo citación', attributeOfText: 'estiloCitacion', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: 'estiloCitacionId' },
             'indexations': { reference: 'Indexaciones', title: 'Indexación', attributeOfText: 'indexaciones', attributeOfValue: 'id', relationModelFilter: 'indexaciones', attributeModelFilter: 'id' },
             'languages': { reference: 'Idiomas', title: 'Idioma', attributeOfText: 'idioma', attributeOfValue: 'id', relationModelFilter: 'idiomas', attributeModelFilter: 'id' },
-            'discipline': { reference: 'Disciplinas', title: 'Disciplina', attributeOfText: 'disciplina', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: ['disciplinaId', 'disciplinaId1', 'disciplinaId2', 'disciplinaId3'] },
+            /*'discipline': { reference: 'Disciplinas', title: 'Disciplina', attributeOfText: 'disciplina', attributeOfValue: 'id', relationModelFilter: 'infoAdicional', attributeModelFilter: ['disciplinaId', 'disciplinaId1', 'disciplinaId2', 'disciplinaId3'] },*/
             'category': { reference: 'Categoria', title: 'Categoría', attributeOfText: 'nombre', attributeOfValue: 'id', relationModelFilter: 'categorias', attributeModelFilter: 'id' },
             /*'country': { reference: 'Pais', title: 'País', attributeOfText: 'name', attributeOfValue: 'id', relationModelFilter: 'pais', attributeModelFilter: 'id' },*/
           })

@@ -42,7 +42,7 @@
             </div>
             <div class="row" v-if="revistas.length === 0 && isQueryCompleted">
               <div class="col">
-                <p class="mt-4">No hay revisitas que cumplan el filtro dado.</p>
+                <p class="mt-4">No hay revistas que cumplan el filtro dado.</p>
               </div>
             </div>
             <div class="row" v-if="revistas.length === 0 && !isQueryCompleted">

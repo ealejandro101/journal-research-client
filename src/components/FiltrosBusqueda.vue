@@ -87,6 +87,34 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                 showLargeFilter: false
             };
         },
+        mounted (){
+            let providerService = new ProviderService(process.env.ROOT_API)
+            this.enumFilters = providerService.getEnumModelFilters()
+            for (const key in this.enumFilters) {
+                providerService.getModelCount(this.enumFilters[key].reference).then(response => {
+                    let newFilter = {
+                        key: key,
+                        name: this.enumFilters[key].title,
+                        style: 'filterHidden',
+                        options: [],
+                        response: []
+                    }
+                    newFilter.isLarge = response.data.count > 10
+                    let filter = {
+                        order: `${this.enumFilters[key].attributeOfText} ASC`
+                    }
+                    providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, filter).then(response => {
+                        for (const iterator of response.data) {
+                            newFilter.options.push({
+                                text: iterator[this.enumFilters[key].attributeOfText],
+                                value: iterator[this.enumFilters[key].attributeOfValue]
+                            })
+                        }
+                        this.filtersWithOptions.unshift(newFilter)
+                    })
+                })
+            }
+        },
         methods: {
             showFilter(filter){
                 filter.style = filter.style === 'filterVisible' ? 'filterHidden' : 'filterVisible';
@@ -161,31 +189,6 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                 this.$emit('applyFilters', filter)
             }
         },
-        mounted (){
-            let providerService = new ProviderService(process.env.ROOT_API)
-            this.enumFilters = providerService.getEnumModelFilters()
-            for (const key in this.enumFilters) {
-                providerService.getModelCount(this.enumFilters[key].reference).then(response => {
-                    let newFilter = {
-                        key: key,
-                        name: this.enumFilters[key].title,
-                        style: 'filterHidden',
-                        options: [],
-                        response: []
-                    }
-                    newFilter.isLarge = response.data.count > 10
-                    providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, {}).then(response => {
-                        for (const iterator of response.data) {
-                            newFilter.options.push({
-                                text: iterator[this.enumFilters[key].attributeOfText],
-                                value: iterator[this.enumFilters[key].attributeOfValue]
-                            })
-                        }
-                        this.filtersWithOptions.unshift(newFilter)
-                    })
-                })
-            }
-        }
     }
 </script>
 
