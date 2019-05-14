@@ -52,8 +52,12 @@
     </div>
     <div id="categorySection" class="section">
       <div class="container-fluid">
-        <div class="row">
-          <div class="col-12 contentMoreSection">
+        <div class="row contentMoreSection">
+          <div class="col-12 mb-5">
+            <h5>Call for Papers</h5>
+            <announcements @announcements:click="openJournal"></announcements>
+          </div>
+          <div class="col-12 mb-5">
             <h5>Categorías</h5>
             <categorias :categories="this.categories" @category:click="routeRevistasWithCategory"></categorias>
           </div>
@@ -74,6 +78,7 @@ import LogoResearch from '@/components/LogoResearch';
 import FiltrosBusqueda from '@/components/FiltrosBusqueda';
 import Categorias from '@/components/Categorias';
 import FooterResearch from '@/components/FooterResearch';
+import Announcements from "@/components/Announcements"
 import axios from "axios";
 import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
 import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";
@@ -83,13 +88,14 @@ import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
 import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
-import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import jsonHeaderOptions from "@/utilities/headerOptions.json";
+
 
 export default {
   name: "research",
   components: {
     HeaderInicial, HeaderResearch, BarraBusqueda, LogoResearch, FiltrosBusqueda, Categorias,
-    FooterResearch
+    FooterResearch, Announcements
 	},
   data() {
     return {
@@ -188,10 +194,21 @@ export default {
       this.$router.push({path: '/ListaRevistas/category='+category.toString()})
     },    
     vectorUnico:function(a) {
-    return a.sort().filter(function(item, pos, ary) {
-        return !pos || item != ary[pos - 1];
-    })
-}
+      return a.sort().filter(function(item, pos, ary) {
+          return !pos || item != ary[pos - 1];
+      })
+    },
+    openJournal(journal) {
+      if(journal.eissn !== undefined && journal.eissn !== '' && journal.eissn !== null){
+        this.$router.push({    
+          path: "/Revista/eissn=" + journal.eissn
+        });
+      }else{
+        this.$router.push({    
+          path: "/Revista/issn=" + journal.issn
+        });
+      }
+    },
   }
 };
 </script>

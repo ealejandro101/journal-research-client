@@ -36,6 +36,7 @@
                 :titulo='item.titulo'
                 :descripcion='item.descripcion'
                 :urlImg="item.imagen"
+                :convocatoria="item.convocatoria"
                 >
               </summaryJournalCard>
              </div>
@@ -118,49 +119,54 @@ export default {
     changeParams: function() {
       let parametro = this.$route.params.search;
       let prefix, postfix;
+      let query = { 
+        order: 'titulo ASC', 
+        include: [ 
+          {
+            relation: "convocatoria",
+          } 
+        ] 
+      }
       if (parametro === undefined) {
-        this.getJournals();
+        this.getJournals(query);
       } else {
         prefix = parametro.split("=")[0];
         postfix = parametro.split("=")[1];
         switch (prefix) {
           case "search":
-            this.getJournalsSearch(postfix);
+            this.getJournalsSearch(postfix, query);
             break;
           case "category":
-            this.getJournalsCategory(postfix);
+            this.getJournalsCategory(postfix, query);
             break;
           case "word":
-            this.getJournalsWord(postfix);
+            this.getJournalsWord(postfix, query);
             break;
           case "institucion":
-            this.getJournalsInstitution(postfix);
+            this.getJournalsInstitution(postfix, query);
             break;
           case "ciudad":
-            this.getJournalsCity(postfix);
+            this.getJournalsCity(postfix, query);
             break;
           default:
-            this.getJournals();
+            this.getJournals(query);
             break;
         }
       }
     },
-    getJournalsSearch: function(parametro) {
+    getJournalsSearch: function(parametro, query) {
       if (parametro == "") {
-        this.getJournals();
+        this.getJournals(query);
         return;
       }
-      let query;
-      query = {
-        where: {
-          or: [
-            { descripcion: { regexp: "/" + parametro + "/i" } },
-            { titulo: { regexp: "/" + parametro + "/i" } },
-            { tituloCorto: { regexp: "/" + parametro + "/i" } },
-            { subtitulo: { regexp: "/" + parametro + "/i" } }
-          ]
-        }
-      };
+      query.where = {
+        or: [
+          { descripcion: { regexp: "/" + parametro + "/i" } },
+          { titulo: { regexp: "/" + parametro + "/i" } },
+          { tituloCorto: { regexp: "/" + parametro + "/i" } },
+          { subtitulo: { regexp: "/" + parametro + "/i" } }
+        ]
+      }
       this.revistas = []
       this.isQueryCompleted = false
       axios
@@ -171,10 +177,9 @@ export default {
           this.configureImg()
         });
     },
-    getJournalsCategory (categoryId) {
+    getJournalsCategory (categoryId, query) {
       this.revistas=[];
       this.isQueryCompleted = false
-      let query = { order: 'titulo ASC' }
       axios.get(process.env.ROOT_API + `Categoria/${categoryId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
@@ -184,10 +189,9 @@ export default {
           console.log(error);              
         })
     },
-    getJournalsWord (wordId) {
+    getJournalsWord (wordId, query) {
       this.revistas=[];
       this.isQueryCompleted = false
-      let query = { order: 'titulo ASC' }
       axios.get(process.env.ROOT_API + `/Palabraclaves/${wordId}/revistas?filter=${JSON.stringify(query)}`)
         .then(response => {
           this.revistas = response.data
@@ -197,22 +201,17 @@ export default {
           console.log(error);              
         })
     },
-    getJournalsCity (cityId) {
+    getJournalsCity (cityId, query) {
       this.revistas=[];
       this.isQueryCompleted = false
-      let query = { 
-        order: 'titulo ASC', 
-        include: [
-          {
-            "relation": "ubicacion",
-            "scope": {
-                "where": {
-                  "ciudadId": cityId
-                }
+      query.include.push({
+        "relation": "ubicacion",
+        "scope": {
+            "where": {
+              "ciudadId": cityId
             }
-          }
-        ]
-      }
+        }
+      })
       axios
         .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
         .then(response => {
@@ -221,22 +220,17 @@ export default {
           this.configureImg()
         });
     },
-    getJournalsInstitution (institution) {
+    getJournalsInstitution (institution, query) {
       this.revistas=[];
       this.isQueryCompleted = false
-      let query = { 
-        order: 'titulo ASC', 
-        include: [
-          {
-            "relation": "contacto",
-            "scope": {
-                "where": {
-                  "institucion": institution
-                }
+      query.include.push({
+        "relation": "contacto",
+        "scope": {
+            "where": {
+              "institucion": institution
             }
-          }
-        ]
-      }
+        }
+      })
       axios
         .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
         .then(response => {
@@ -245,9 +239,7 @@ export default {
           this.configureImg()
         });
     },
-    getJournals () {
-      let query;
-      query = { order: 'titulo ASC' }
+    getJournals (query) {
       this.revistas = []
       this.isQueryCompleted = false
       axios.get(process.env.ROOT_API + "Revista?filter=" + JSON.stringify(query)).then(response => {

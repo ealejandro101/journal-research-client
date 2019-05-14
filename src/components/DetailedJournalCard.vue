@@ -1,12 +1,6 @@
 <template>
   <div>
     <b-card class="d-flex">
-      <div class="divClose mb-3">
-        <div class="d-flex align-items-center cursor-pointer" @click="back">
-          <i class="fas fa-long-arrow-alt-left position-relative float-left mr-2"></i>
-          <p class="float-left mb-0"> Volver a la lista</p>
-        </div>
-      </div>
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
@@ -255,9 +249,6 @@ export default {
     }
   },
   methods: {
-    back(){
-      this.$router.go(-1)
-    },
     pushViewJournalCategory (categoryId) {
       this.$router.push({path: '/ListaRevistas/category='+categoryId})
     },

@@ -3,20 +3,45 @@
     <div id="headerResearch" class="headerS">
       <header-research :inputOptions="optionsHeader"></header-research>
     </div>
-    <div class="container-fluid">
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <div class="col">
+          <div class="divClose mb-3">
+            <div class="d-flex align-items-center cursor-pointer" @click="back">
+              <i class="fas fa-long-arrow-alt-left position-relative float-left mr-2"></i>
+              <p class="float-left mb-0"> Volver a la lista</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <ul class="nav nav-tabs">
+            <li @click="currentSection = 1" class="nav-item">
+              <p :class="{active: currentSection == 1}" class="nav-link mb-0 cursor-pointer">Revista</p>
+            </li>
+            <li @click="currentSection = 2" class="nav-item">
+              <p :class="{active: currentSection == 2}" class="nav-link text-dark mb-0 cursor-pointer">Convocatorias - Call for Papers</p>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="row">
         <div v-if="isLoading" class="col-12 d-flex justify-content-center">
           <div style="max-width: 7em">
             <img :src="loadingGif" alt="Cargando ...">
           </div>
         </div>
-        <div class="col">
+        <div v-if="currentSection === 1" class="col">
           <DetailedJournalCard 
             v-if="idJournal !== ''" 
             :id="idJournal" @refreshCategory="refreshJournals"
             @loaded="loaded">
           </DetailedJournalCard>
           <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
+        </div>
+        <div v-if="currentSection === 2" class="col">
+          <DetailedAnnouncements :idJournal="idJournal"></DetailedAnnouncements>
         </div>
       </div>
       <div class="row">
@@ -40,6 +65,7 @@
 <script>
 import axios from "axios";
 import DetailedJournalCard from "@/components/DetailedJournalCard";
+import DetailedAnnouncements from "@/components/DetailedAnnouncements";
 import HeaderResearch from "@/components/HeaderResearch";
 import BarraBusqueda from "@/components/BarraBusqueda";
 import LogoResearch from "@/components/LogoResearch";
@@ -58,7 +84,8 @@ export default {
       loadingGif: undefined,
       isLoading: false,
       doesNotExist: false,
-      optionsHeader: undefined
+      optionsHeader: undefined,
+      currentSection: 1
     };
   },
   created(){
@@ -76,6 +103,9 @@ export default {
     }
   },
   methods: {
+    back(){
+      this.$router.go(-1)
+    },
     changeParams: function() {
       let parametro = this.$route.params.search;
       let prefix, postfix;
@@ -171,7 +201,8 @@ export default {
     LogoResearch,
     summaryJournalCard,
     Carousel,
-    Slide
+    Slide,
+    DetailedAnnouncements
   }
 };
 </script>

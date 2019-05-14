@@ -10,7 +10,10 @@
                         </div>
                     </b-col>
                     <b-col sm="12" md="8" lg="9">                                             
-                        <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
+                        <p  class="card-text text-left">
+                          <strong v-text="titulo"></strong>
+                          <i class="fas fa-bell" v-if="convocatoria !== undefined && new Date(convocatoria.fechaFinal) >= currentDate"></i>
+                        </p>
                         <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
                         <p class="card-text text-justify cardDescription">
                           {{valor}} 
@@ -19,27 +22,23 @@
                                   Ver más
                               </b-badge>
                           </a>
-                        </p>                 
-                    </b-col>                              
+                        </p>
+                    </b-col>             
                 </b-row>
-                <b-row v-else>
+                <b-row v-else style="height: 35vh;">
                     <div class="col-12 d-flex justify-content-center">
                         <div class="divSummaryImg divImg">
-                            <b-img class ="imagenCard"  center  :src="urlImg" /> 
+                            <b-img class ="imagenCard"  center  :src="urlImg" />
                         </div>
                     </div>
-                    <div class="col-12">                                             
-                        <p  class="card-text text-left"><strong v-text="titulo"></strong></p>
-                        <p class="card-text text-justify cardDescription">
-                          <a href="#" class="card-link">
-                              <b-badge pill variant="primary">
-                                  Ver más
-                              </b-badge>
-                          </a>
-                        </p>                 
-                    </div>                              
-                </b-row>                                 
-            </b-card>           
+                    <div class="col-12">
+                        <p  class="card-text text-left">
+                          <strong v-text="titulo"></strong>
+                          <b-badge pill variant="primary"> Ver más </b-badge>
+                        </p>
+                    </div>
+                </b-row>
+            </b-card>        
         </b-row>
     </b-container>
  </div>
@@ -54,7 +53,8 @@ export default {
     titulo: String,
     descripcion: String,
     urlImg: String,
-    isMiniature: Boolean
+    isMiniature: Boolean,
+    convocatoria: Object
   },
   data() {
     return {
@@ -62,7 +62,7 @@ export default {
       codigos: { eISSN: "", DOI: "", ISSN: "" },
       codigosQseMostraran: "",
       rEISSN: "",
-
+      currentDate: undefined,
       Nombrecodigos: [
         { nombre: "eISSN" },
         { nombre: "DOI" },
@@ -70,8 +70,9 @@ export default {
       ]
     };
   },
-  mounted() {
+  created() {
     this.getInfo();
+    this.currentDate = new Date()
   },
   methods: {
     getInfo: function() {

@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div v-for="item in categories" @click="onClickCategory(item.id)" :key="item.id" class="col-6 col-sm-4 col-md-3">
                 <div class="categoryCard">
-                    <div class="divImg categoryImg block-center"><img :src="item.img" alt=""></div>
+                    <div class="divImg categoryImg block-center cursor-pointer"><img :src="item.img" alt=""></div>
                     <p class="categoryTitle">{{item.nombre}} ({{item.count}})</p>
                 </div>
             </div>

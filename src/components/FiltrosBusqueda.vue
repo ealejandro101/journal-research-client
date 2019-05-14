@@ -184,8 +184,6 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         }
                     }
                 }
-                console.log(filter);
-                
                 this.$emit('applyFilters', filter)
             }
         },
