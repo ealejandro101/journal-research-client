@@ -81,4 +81,26 @@ img{
 .bottom-0{
   bottom: 0px;
 }
+.right-0{
+  right: 0;
+}
+.text-overflow-ellipsis{
+  text-overflow: ellipsis;
+}
+.backgroundImg2 {
+  background-image: url(/static/fondoIndex2.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.backgroundImg3{
+  background-image: url('/static/fondoIndex3.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+.no-bnt{
+  background: transparent !important;
+  border: none;
+}
 </style>

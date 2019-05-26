@@ -1,7 +1,7 @@
 <template>
     <div>
         <header-research :inputOptions="optionsHeader"></header-research>
-        <div class="container content">
+        <div class="container content backgroundImg4">
             <div class="row d-flex justify-content-center">
                 <div class="col-12 textInfo">
                     <h4>Sobre ResearcH – CFP</h4>
@@ -120,5 +120,10 @@ export default {
 .content{
     padding-top: 2em;
     padding-bottom: 2em;
+}
+.backgroundImg4{
+  background-image: url('/static/fondoIndex4.png');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>

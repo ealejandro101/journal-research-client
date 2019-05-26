@@ -76,7 +76,7 @@ export default {
 
 <style scoped>
 footer{
-    background-color: #eae1b4;
+    background-color: rgb(236, 217, 206);
     padding: 2em 1em;
 }
 ul{

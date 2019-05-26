@@ -3,7 +3,7 @@
     <div id="headerResearch" class="headerS">
       <header-research :inputOptions="optionsHeader"></header-research>
     </div>
-    <div class="container-fluid mt-3">
+    <div class="container-fluid mt-3 backgroundImg3">
       <div class="row">
         <div class="col">
           <div class="divClose mb-3">
@@ -20,8 +20,8 @@
             <li @click="currentSection = 1" class="nav-item">
               <p :class="{active: currentSection == 1}" class="nav-link mb-0 cursor-pointer">Revista</p>
             </li>
-            <li @click="currentSection = 2" class="nav-item">
-              <p :class="{active: currentSection == 2}" class="nav-link text-dark mb-0 cursor-pointer">Convocatorias - Call for Papers</p>
+            <li v-for="(item, index) in convocatorias" :key="index" @click="currentSection = index + 2" class="nav-item">
+              <p :class="{active: currentSection == index + 2}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">{{ item.titulo }}</p>
             </li>
           </ul>
         </div>
@@ -40,9 +40,12 @@
           </DetailedJournalCard>
           <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
         </div>
-        <div v-if="currentSection === 2" class="col">
-          <DetailedAnnouncements :idJournal="idJournal"></DetailedAnnouncements>
-        </div>
+        <template v-for="(item, index) in convocatorias">
+          <div :key="index" v-if="currentSection == index + 2" class="col">
+            <DetailedAnnouncements :idConvocatoria="item.id"></DetailedAnnouncements>
+          </div>
+        </template>
+        
       </div>
       <div class="row">
         <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
@@ -74,6 +77,7 @@ import summaryJournalCard from "@/components/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
 import loadingGifImport from '@/assets/gifs/loading.gif'
 import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import ProviderService from "@/providerServices/providerServices.js";
 
 export default {
   props: {},
@@ -85,7 +89,10 @@ export default {
       isLoading: false,
       doesNotExist: false,
       optionsHeader: undefined,
-      currentSection: 1
+      currentSection: 1,
+      convocatorias: [],
+      providerService: new ProviderService(process.env.ROOT_API),
+      idConvocatoria: undefined
     };
   },
   created(){
@@ -94,7 +101,26 @@ export default {
     this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
   },
   mounted() {
-    this.changeParams();
+    let _self = this
+    this.changeParams(function(err, data){
+      _self.providerService
+        .getModel("Convocatoria", {
+          where: {
+            revistaId: _self.idJournal,
+            fechaFinal: {
+              gte: Date.now()
+            }
+          },
+          order: 'fechaFinal DESC',
+          fields: {
+            id: true, 
+            titulo: true
+          }
+        })
+        .then(response => {
+          _self.convocatorias = response.data;
+      });
+    });
   },
   watch: {
     "$route.params.search": function() {
@@ -106,7 +132,7 @@ export default {
     back(){
       this.$router.go(-1)
     },
-    changeParams: function() {
+    changeParams: function(callback) {
       let parametro = this.$route.params.search;
       let prefix, postfix;
       if (parametro === undefined) {
@@ -116,11 +142,11 @@ export default {
         postfix = parametro.split("=")[1];
         switch (prefix) {
           case "issn":
-            this.getPageJournalISSN(postfix);
+            this.getPageJournalISSN(postfix, callback);
             break;
 
           case "eissn":
-            this.getPageJournalEISSN(postfix);
+            this.getPageJournalEISSN(postfix, callback);
             break;
           default:
             //Redireccionarlo a lista revistas
@@ -128,7 +154,7 @@ export default {
         }
       }
     },
-    getPageJournalISSN:function(issn){
+    getPageJournalISSN:function(issn, callback){
         let query=process.env.ROOT_API+'Revista/?filter={"where": {"issn":"'+issn.toString()+'"}}';
         axios.get(query).then(response =>{
             if(response.data.lenth == 0){
@@ -136,11 +162,12 @@ export default {
               return
             }
             this.idJournal = response.data[0].id.toString()
+            callback(null, null)
         }).catch(error =>{
             console.log(error);          
         })
     },
-    getPageJournalEISSN:function(eissn){
+    getPageJournalEISSN:function(eissn, callback){
       let query=process.env.ROOT_API+'Revista/?filter={"where": {"eissn":"'+eissn.toString()+'"}}';
        axios.get(query).then(response =>{
             if(response.data.lenth == 0){
@@ -148,6 +175,7 @@ export default {
               return
             }
             this.idJournal = response.data[0].id.toString()
+            callback(null, null)
        }).catch(error =>{
           console.log(error);          
        })
@@ -257,5 +285,11 @@ export default {
   #divFiltros {
     display: inline;
   }
+}
+.liNavConvocatorias{
+  max-width: 25ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

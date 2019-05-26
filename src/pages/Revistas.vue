@@ -10,7 +10,7 @@
             <filtros-busqueda @applyFilters="applyFilters"></filtros-busqueda>
           </div>
         </div> 
-        <div id="divRevistas" class="body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
+        <div id="divRevistas" class="backgroundImg2 body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
           <div class="alphabet container" style="display:none">
             <div class="row">
               <div class="col-12 pt-3">
@@ -29,16 +29,18 @@
             </div>
           </div>
           <div class="divContentRevistas container">     
-            <div class="row" v-for="item in revistas" :key="item.id" >   
+            <div class="row" v-for="item in revistas" :key="item.id" >
              <div class="col">
                 <summaryJournalCard  class="summaryCard" @openJournal="openJournal(item)"
                 :id="item.id.toString()"
                 :titulo='item.titulo'
                 :descripcion='item.descripcion'
                 :urlImg="item.imagen"
-                :convocatoria="item.convocatoria"
+                :hasAnnouncement="item.convocatoria.length > 0"
+                :announcementFinalDate="item.convocatoria[0] !== undefined?item.convocatoria[0].fechaFinal:''"
                 >
               </summaryJournalCard>
+              
              </div>
             </div>
             <div class="row" v-if="revistas.length === 0 && isQueryCompleted">
@@ -124,6 +126,14 @@ export default {
         include: [ 
           {
             relation: "convocatoria",
+            scope: {
+              where: {
+                fechaFinal: {
+                  gte: Date.now()
+                }
+              },
+              order: 'fechaFinal ASC',
+            }
           } 
         ] 
       }
@@ -314,7 +324,6 @@ export default {
   z-index: 1;
 }
 .body-card-revistas {
-  background-color: #d8d1bb;
   width: 100%;
 }
 #divDetailedJournal {

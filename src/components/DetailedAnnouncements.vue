@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="container-fluid">
-      <div v-for="(convocatoria, index) in convocatorias" :key="index" class="row">
+      <div class="row">
         <div class="col-12">
-          <div v-if="convocatoria === undefined || convocatoria.length === 0">
+          <div v-if="convocatoria === undefined">
             <p class="my-5">Actualmente esta revista no cuenta con convocatoria</p>
           </div>
           <div v-else>
@@ -13,46 +13,82 @@
                   <p v-text="convocatoria.titulo"></p>
                 </div>
                 <div class="col-12">
-                  <table class="p-3 mb-2">
-                    <td>
-                      <p class="text-secondary text-left">Convocatoria activa entre: {{ convocatoria | datesFilter }}</p>
-                    </td>
-                  </table>
+                  <p class="text-secondary text-left">Fecha de inicio: {{ convocatoria.fechaInicio | datesFilter }}</p>
+                  <p class="text-secondary text-left">Fecha de cierre: {{ convocatoria.fechaInicio | datesFilter }}</p>
                 </div>
               </div>
               <div class="row justify-content-center">
                 <div class="col mb-2 order-1 order-md-0">
                   <p v-text="convocatoria.descripcion" class="text-justify text-body"></p>
+                  <p
+                    class="text-left"
+                  >Para obtener más información, no dude en ponerse en contacto con:</p>
+                  <ul>
+                    <template v-if="convocatoria.contacto !== undefined && convocatoria.contacto.editor && convocatoria.contacto.editor !== 0">
+                      <li class="d-flex mb-2 justify-content-start">
+                        <i class="fas fa-user-edit mr-2"></i>
+                        {{convocatoria.contacto.editor}}
+                      </li>
+                    </template>
+                    <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.correo !== null && convocatoria.radicional.correo !== undefined && convocatoria.radicional.correo !== 0">
+                      <li class="d-flex mb-2 justify-content-start">
+                        <i class="fas fa-at mr-2"></i>
+                        {{convocatoria.radicional.correo}}
+                      </li>
+                    </template>
+                  </ul>
+                  <p
+                    class="text-left"
+                  >Para consultar la guía para autores y detalles de esta convocatoria visite:</p>
+                  <ul>
+                    <template v-if="convocatoria.documentoPdf !== null && convocatoria.documentoPdf !== undefined && convocatoria.video.length !== 0">
+                      <li class="d-flex justify-content-start mb-2 align-items-center">
+                        <span class="mr-1">Documento PDF:</span>
+                        <a class="text-white float-left" :href="host+'../'+convocatoria.documentoPdf.replace('convocatoriaId', convocatoria.id)" target="_blank" download>
+                          <button class="btn btn-info mr-3" title="Descargar pdf"><i class="fas fa-download"></i></button>
+                        </a>
+                      </li>
+                    </template>
+                    <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.guiaAutores !== null && convocatoria.radicional.guiaAutores !== undefined && convocatoria.radicional.guiaAutores !== 0">
+                      <li class="d-flex mb-2 justify-content-start">
+                        <a class="float-left" :href="convocatoria.radicional.guiaAutores" target="_blank">
+                          <i class="fab fa-autoprefixer"></i>
+                          Guía autores
+                        </a>
+                      </li>
+                    </template>
+                    <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.url !== null && convocatoria.radicional.url !== undefined && convocatoria.radicional.url !== 0">
+                      <li class="d-flex mb-2 justify-content-start">
+                        <a class="float-left" :href="convocatoria.radicional.url" target="_blank">
+                          <i class="fas fa-globe mr-2"></i>
+                          Sitio web
+                        </a>
+                      </li>
+                    </template>
+                    <template v-if="convocatoria.link !== null && convocatoria.link !== undefined && convocatoria.link.length !== 0">
+                      <li class="d-flex justify-content-start">
+                        <a class="float-left" :href="convocatoria.link" target="_blank">Ver más</a>
+                      </li>
+                    </template>
+                  </ul>
                 </div>
-                <div v-if="convocatoria.imagen !== null && convocatoria.imagen !== undefined && convocatoria.imagen.length !== 0"
-                      class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
-                    <div class="imgConvocatoria">
-                      <img :src="host+'../'+convocatoria.imagen.replace('convocatoriaId', convocatoria.id)" alt="img">
-                    </div>
+                <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
+                  <div class="imgConvocatoria">
+                    <img :src="convocatoria.imagen" alt="img">
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col d-flex justify-content-center mb-4">
-                  <iframe 
+                  <iframe
                     v-if="convocatoria.video !== null && convocatoria.video !== undefined && convocatoria.video.length !== 0"
-                    width="560" 
-                    height="315" 
-                    :src="convocatoria.video" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen></iframe>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
-                  <div class="col-12 d-flex justify-content-center mb-2">
-                    <a v-if="convocatoria.documentoPdf !== null && convocatoria.documentoPdf !== undefined && convocatoria.video.length !== 0"
-                        class="text-white" :href="host+'../'+convocatoria.documentoPdf.replace('convocatoriaId', convocatoria.id)" target="_blank" download>
-                      <button class="btn btn-info mr-3" title="Descargar pdf">Descargar documento PDF</button>
-                    </a>
-                    <a v-if="convocatoria.ojs !== null && convocatoria.ojs !== undefined && convocatoria.ojs.length !== 0"
-                        class="text-white" :href="convocatoria.ojs" target="_blank">
-                      <button class="btn btn-warning" title="link">OJS</button>
-                    </a>
-                  </div>
+                    width="560"
+                    height="315"
+                    :src="convocatoria.video"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
                 </div>
               </div>
             </div>
@@ -68,47 +104,47 @@
 import ProviderService from "@/providerServices/providerServices.js";
 
 export default {
-  props: ["idJournal"],
+  props: ["idConvocatoria"],
   data() {
     return {
-      convocatorias: [],
+      convocatoria: {},
       host: process.env.ROOT_API
     };
   },
   created() {
     let providerService = new ProviderService(process.env.ROOT_API);
+    let _self = this
     providerService
       .getModel("Convocatoria", {
         where: {
-          revistaId: this.idJournal,
+          id: _self.idConvocatoria,
           fechaFinal: {
             gte: Date.now()
           }
-        }
+        },
+        include: ['radicional', 'revista', 'contacto']
       })
       .then(response => {
-        this.convocatorias = response.data;
-        console.log(this.convocatorias);
-        
+        _self.convocatoria = response.data[0];
+        if (_self.convocatoria.imagen !== null && _self.convocatoria.imagen !== undefined && _self.convocatoria.imagen.length !== 0) {
+          _self.convocatoria.imagen = this.host+'../'+_self.convocatoria.imagen.replace('convocatoriaId', _self.convocatoria.id)
+        }else{
+          _self.convocatoria.imagen = _self.convocatoria.revista.imagen
+        }
       });
+  },
+  watch: {
   },
   methods: {},
   filters: {
     datesFilter(value) {
-      let fechaInicial = new Date(value.fechaInicio);
-      let fechaFinal = new Date(value.fechaFinal);
+      let fecha = new Date(value);
       return (
-        fechaInicial.getDay() +
+        fecha.getDay() +
         "/" +
-        fechaInicial.getMonth() +
+        fecha.getMonth() +
         "/" +
-        fechaInicial.getFullYear() +
-        " - " +
-        fechaFinal.getDay() +
-        "/" +
-        fechaFinal.getMonth() +
-        "/" +
-        fechaFinal.getFullYear()
+        fecha.getFullYear()
       );
     }
   }
@@ -116,7 +152,7 @@ export default {
 </script>
 
 <style scoped>
-.imgConvocatoria{
+.imgConvocatoria {
   max-width: 15em;
 }
 </style>

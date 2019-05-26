@@ -2,7 +2,18 @@
     <div>
         <h6><strong>Filtros de búsqueda</strong></h6>
         <div>
-            <hr class="m-0">
+            <div>
+                <hr>
+                <div class="d-flex align-items-center">
+                    <input 
+                    type="checkbox" 
+                    id="input-convocatoria" 
+                    class="w-25 align-self-center" 
+                    /> 
+                    <label for="input-convocatoria" class="w-75 text-left pr-2 my-0">CFP Activa</label>
+                </div>
+                <hr>
+            </div>
             <div v-for="(filter, indexFilter) in filtersWithOptions" :key="indexFilter">
                 <div @click="showFilter(filter)" class="cursor-pointer pt-3 pb-3">
                     <p v-text="filter.name" class="m-0"></p>

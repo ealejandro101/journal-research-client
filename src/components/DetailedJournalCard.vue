@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="d-flex">
+    <b-card class="d-flex" style="background-color: transparent;">
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
