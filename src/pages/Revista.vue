@@ -100,6 +100,7 @@ export default {
     this.loadingGif = loadingGifImport
     this.isLoading = true
     this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+    window.scrollTo(0, 0);
   },
   mounted() {
     let _self = this
