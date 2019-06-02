@@ -17,11 +17,11 @@
       <div class="row">
         <div class="col">
           <ul class="nav nav-tabs">
-            <li @click="currentSection = 1" class="nav-item">
-              <p :class="{active: currentSection == 1}" class="nav-link mb-0 cursor-pointer">Revista</p>
+            <li @click="changeCurrentSection(1)" class="nav-item">
+              <p :class="{active: currentSection == 1 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Revista</p>
             </li>
-            <li v-for="(item, index) in convocatorias" :key="index" @click="currentSection = index + 2" class="nav-item">
-              <p :class="{active: currentSection == index + 2}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">{{ item.titulo }}</p>
+            <li v-for="(item, index) in convocatorias" :key="index" @click="changeCurrentSection(index + 2)" class="nav-item">
+              <p :class="{active: currentSection == index + 2 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">{{ item.titulo }}</p>
             </li>
           </ul>
         </div>
@@ -32,7 +32,7 @@
             <img :src="loadingGif" alt="Cargando ...">
           </div>
         </div>
-        <div v-if="currentSection === 1" class="col">
+        <div v-show="currentSection === 1 && initialAnnouncement === undefined" class="col">
           <DetailedJournalCard 
             v-if="idJournal !== ''" 
             :id="idJournal" @refreshCategory="refreshJournals"
@@ -41,8 +41,8 @@
           <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
         </div>
         <template v-for="(item, index) in convocatorias">
-          <div :key="index" v-if="currentSection == index + 2" class="col">
-            <DetailedAnnouncements :idConvocatoria="item.id"></DetailedAnnouncements>
+          <div :key="index" v-if="currentSection == index + 2 || initialAnnouncement == item.id" class="col">
+            <DetailedAnnouncements @loaded="loaded" :idConvocatoria="item.id"></DetailedAnnouncements>
           </div>
         </template>
         
@@ -92,7 +92,8 @@ export default {
       currentSection: 1,
       convocatorias: [],
       providerService: new ProviderService(process.env.ROOT_API),
-      idConvocatoria: undefined
+      idConvocatoria: undefined,
+      initialAnnouncement: undefined
     };
   },
   created(){
@@ -133,7 +134,12 @@ export default {
       this.$router.go(-1)
     },
     changeParams: function(callback) {
-      let parametro = this.$route.params.search;
+      let search = this.$route.params.search.split('&')
+      let convocatoria = search[1]
+      if (convocatoria) {
+        this.initialAnnouncement = convocatoria.split('=')[1]
+      }
+      let parametro = search[0]
       let prefix, postfix;
       if (parametro === undefined) {
         //Poner que no se encuentra revista
@@ -220,6 +226,10 @@ export default {
     },
     loaded() {
       this.isLoading = false
+    },
+    changeCurrentSection(index){
+      this.currentSection =  index
+      this.initialAnnouncement = undefined
     }
   },
   components: {

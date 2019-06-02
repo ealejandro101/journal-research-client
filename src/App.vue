@@ -101,6 +101,6 @@ img{
 }
 .no-bnt{
   background: transparent !important;
-  border: none;
+  border: none !important;
 }
 </style>

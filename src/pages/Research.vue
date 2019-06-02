@@ -245,18 +245,19 @@ export default {
         return !pos || item != ary[pos - 1];
       });
     },
-    openJournal(journal) {
+    openJournal(announcement) {
+      let journal = announcement.revista
       if (
         journal.eissn !== undefined &&
         journal.eissn !== "" &&
         journal.eissn !== null
       ) {
         this.$router.push({
-          path: "/Revista/eissn=" + journal.eissn
+          path: "/Revista/eissn=" + journal.eissn + '&convocatoria=' + announcement.id
         });
       } else {
         this.$router.push({
-          path: "/Revista/issn=" + journal.issn
+          path: "/Revista/issn=" + journal.issn + '&convocatoria=' + announcement.id
         });
       }
     }
@@ -360,6 +361,7 @@ a {
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 50vh;
+  display: inline-grid;
 }
 
 .phrase {

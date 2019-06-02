@@ -33,6 +33,6 @@ export default {
 
 <style scoped>
 .categoryImg{
-    max-width: 10em;
+    max-width: 7em;
 }
 </style>

@@ -14,7 +14,7 @@
                 </div>
                 <div class="col-12">
                   <p class="text-secondary text-left">Fecha de inicio: {{ convocatoria.fechaInicio | datesFilter }}</p>
-                  <p class="text-secondary text-left">Fecha de cierre: {{ convocatoria.fechaInicio | datesFilter }}</p>
+                  <p class="text-secondary text-left">Fecha de cierre: {{ convocatoria.fechaFinal | datesFilter }}</p>
                 </div>
               </div>
               <div class="row justify-content-center">
@@ -73,8 +73,21 @@
                   </ul>
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
-                  <div class="imgConvocatoria">
-                    <img :src="convocatoria.imagen" alt="img">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col">
+                        <div class="imgConvocatoria">
+                          <img :src="convocatoria.imagen" alt="img">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <div>
+                          <a :href="convocatoria.imagen" target="_blank" download>Ampliar</a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -131,6 +144,7 @@ export default {
         }else{
           _self.convocatoria.imagen = _self.convocatoria.revista.imagen
         }
+        _self.$emit('loaded')
       });
   },
   watch: {
@@ -138,14 +152,10 @@ export default {
   methods: {},
   filters: {
     datesFilter(value) {
-      let fecha = new Date(value);
-      return (
-        fecha.getDay() +
-        "/" +
-        fecha.getMonth() +
-        "/" +
-        fecha.getFullYear()
-      );
+      if (value === undefined) {
+        return ''
+      }
+      return value.split('T')[0]
     }
   }
 };

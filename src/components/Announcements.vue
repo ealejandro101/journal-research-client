@@ -4,7 +4,7 @@
       <div v-if="announcements.length != 0" class="col-12">
         <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
           <slide v-for="item in announcements" :key="item.id">
-            <div class="cardAnnouncement cursor-pointer" @click="onClickAnnouncements(item.revista)">
+            <div class="cardAnnouncement cursor-pointer" @click="onClickAnnouncements(item)">
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-11 d-flex justify-content-center">
@@ -91,8 +91,8 @@ export default {
       });
   },
   methods: {
-    onClickAnnouncements(revista) {
-      this.$emit("announcements:click", revista);
+    onClickAnnouncements(announcement) {
+      this.$emit("announcements:click", announcement);
     }
   },
   filters: {
