@@ -3,5 +3,6 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  ROOT_API: '"http://localhost:3000/api/"'
+  ROOT_API: '"http://journals-research.com:3000/api/"'
 })
+//http://localhost:3000/api/

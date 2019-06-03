@@ -41,10 +41,10 @@
                     class="text-left"
                   >Para consultar la guía para autores y detalles de esta convocatoria visite:</p>
                   <ul>
-                    <template v-if="convocatoria.documentoPdf !== null && convocatoria.documentoPdf !== undefined && convocatoria.video.length !== 0">
+                    <template v-if="convocatoria.documentoPdf !== null && convocatoria.documentoPdf !== undefined && convocatoria.documentoPdf.length !== 0">
                       <li class="d-flex justify-content-start mb-2 align-items-center">
                         <span class="mr-1">Documento PDF:</span>
-                        <a class="text-white float-left" :href="host+'../'+convocatoria.documentoPdf.replace('convocatoriaId', convocatoria.id)" target="_blank" download>
+                        <a class="text-white float-left" :href="convocatoria.documentoPdf" target="_blank" download>
                           <button class="btn btn-info mr-3" title="Descargar pdf"><i class="fas fa-download"></i></button>
                         </a>
                       </li>
@@ -143,6 +143,9 @@ export default {
           _self.convocatoria.imagen = this.host+'../'+_self.convocatoria.imagen.replace('convocatoriaId', _self.convocatoria.id)
         }else{
           _self.convocatoria.imagen = _self.convocatoria.revista.imagen
+        }
+        if (_self.convocatoria.documentoPdf !== null && _self.convocatoria.documentoPdf !== undefined && _self.convocatoria.documentoPdf.length !== 0) {
+          _self.convocatoria.documentoPdf = this.host+'../'+_self.convocatoria.documentoPdf.replace('convocatoriaId', _self.convocatoria.id)
         }
         _self.$emit('loaded')
       });
