@@ -96,8 +96,10 @@ img{
 .backgroundImg3{
   background-image: url('/static/fondoIndex3.png');
   background-size: contain;
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
+  background-position-x: right;
   height: 100vh;
+  background-position-y: top;
 }
 .no-bnt{
   background: transparent !important;
