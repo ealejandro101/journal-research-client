@@ -34,7 +34,7 @@
                   <div class="row d-flex justify-content-center">
                     <div class="col-12 col-sm-8 col-md-6 col-lg-4">
                       <barra-busqueda :isFilter="true"></barra-busqueda>
-                      <div class="mt-1 text-left">
+                      <div class="mt-1">
                         <input type="checkbox" name="searchCheck" id="searchCheck">
                         <label for="searchCheck">CFP Activas</label>
                       </div>

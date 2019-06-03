@@ -71,11 +71,10 @@
                       </li>
                     </template>
                   </ul>
-                  <div>
+                  <!--<div>
                     <p class="text-left">Compartir en redes sociales</p>
                     <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
-                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5cf56caaa6e91bcc"></script>
-                  </div>
+                  </div>-->
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
                   <div class="container-fluid">
@@ -154,6 +153,8 @@ export default {
         }
         _self.$emit('loaded')
       });
+  },
+  mounted(){
   },
   watch: {
   },
