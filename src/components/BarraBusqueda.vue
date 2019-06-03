@@ -2,7 +2,7 @@
   <div>
     <div class="row">
    
-      <div class="col noPadding">  
+      <div class="col p-0">  
         <autocomplete
           :source="EndpointPrediccion"
           results-property="revistas"
