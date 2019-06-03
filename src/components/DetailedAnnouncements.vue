@@ -73,7 +73,7 @@
                   </ul>
                   <div>
                     <p class="text-left">Compartir en redes sociales</p>
-                    <div class="addthis_inline_share_toolbox_jfcj d-flex"></div>
+                    <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
                   </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
