@@ -28,6 +28,12 @@
                     </b-col>             
                 </b-row>
                 <b-row v-else style="height: 35vh;">
+                    <p  class="card-text text-left">
+                      <strong v-text="titulo"></strong>
+                      <b-button v-if="hasAnnouncement" class="no-bnt" v-b-popover.hover="'Fecha de cierre='+announcementFinalDate" title="">
+                        <i class="fas fa-bullhorn" :class="{'text-success': stateAux == 3, 'text-danger': stateAux == 1, 'text-info': stateAux == 2}"></i>
+                      </b-button>
+                    </p>
                     <div class="col-12 d-flex justify-content-center">
                         <div class="divSummaryImg divImg">
                             <b-img class ="imagenCard"  center  :src="urlImg" />
