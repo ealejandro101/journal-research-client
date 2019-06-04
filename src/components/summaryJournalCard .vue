@@ -12,7 +12,7 @@
                     <b-col sm="12" md="8" lg="9">                                             
                         <p  class="card-text text-left">
                           <strong v-text="titulo"></strong>
-                          <b-button v-if="hasAnnouncement" class="no-bnt" v-b-popover.hover="'Fecha de cierre='+finalDate" title="">
+                          <b-button v-if="hasAnnouncement" class="no-bnt" v-b-popover.hover="'Fecha de cierre='+announcementFinalDate" title="">
                             <i class="fas fa-bullhorn" :class="{'text-success': stateAux == 3, 'text-danger': stateAux == 1, 'text-info': stateAux == 2}"></i>
                           </b-button>
                         </p>
@@ -70,7 +70,6 @@ export default {
         { nombre: "ISSN" }
       ],
       stateAux: '',
-      finalDate: '',
       hasAnnouncement: '',
       titulo: '',
       descripcion: '',
@@ -82,7 +81,7 @@ export default {
   created() {
     this.getInfo();
     this.currentDate = new Date()
-    let auxFinalDate = new Date(this.announcementFinalDate)
+    let auxFinalDate = this.announcementFinalDate
     let oneWeekAfter = new Date(Date.now())
     oneWeekAfter.setDate(oneWeekAfter.getDate() + 15);
     if(new Date(auxFinalDate) < oneWeekAfter ){
@@ -92,7 +91,6 @@ export default {
     }else{
       this.stateAux = 3//'Activa'
     }
-    this.finalDate = `${auxFinalDate.getFullYear()}-${auxFinalDate.getMonth() + 1}-${auxFinalDate.getDate()}`
   },
   methods: {
     getInfo: function() {
