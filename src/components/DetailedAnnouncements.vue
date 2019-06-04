@@ -71,10 +71,11 @@
                       </li>
                     </template>
                   </ul>
-                  <!--<div>
+                  <div>
                     <p class="text-left">Compartir en redes sociales</p>
+                    <AddThis publicId="ra-5cf56caaa6e91bcc"/>
                     <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
-                  </div>-->
+                  </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
                   <div class="container-fluid">
@@ -119,9 +120,13 @@
 
 <script>
 import ProviderService from "@/providerServices/providerServices.js";
+import AddThis from 'vue-simple-addthis-share'
 
 export default {
   props: ["idConvocatoria"],
+  components: {
+    AddThis
+  },
   data() {
     return {
       convocatoria: {},
