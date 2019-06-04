@@ -120,7 +120,7 @@
 
 <script>
 import ProviderService from "@/providerServices/providerServices.js";
-import AddThis from 'vue-simple-addthis-share'
+import AddThis from '@/components/AddThis.vue'
 
 export default {
   props: ["idConvocatoria"],
