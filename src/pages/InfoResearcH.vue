@@ -1,11 +1,12 @@
 <template>
     <div>
         <header-research :inputOptions="optionsHeader"></header-research>
-        <div class="container content backgroundImg4">
+        <div class="container content">
             <div class="row d-flex justify-content-center">
                 <div class="col-12 textInfo">
-                    <h4>Sobre ResearcH – CFP</h4>
-                    <p>
+                    <h4 class="mb-5">Sobre ResearcH – CFP</h4>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/SNIMBGKfiRY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <p class="mt-5">
                         Es un sistema de revistas científicas de acceso abierto que tiene como objetivo la difusión de
                         las publicaciones seriadas y brindar a los investigadores información precisa y confiable sobre
                         dónde pueden enviar sus manuscritos. A través de la divulgación de llamados a publicar o Call

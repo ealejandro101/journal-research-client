@@ -47,21 +47,19 @@
 </template>
 
 <script>
-import axios from "axios";
+import ProviderServices from "../providerServices/providerServices";
+import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 
 export default {
   props: {
     id: String,
-    titulo: String,
-    descripcion: String,
-    urlImg: String,
-    isMiniature: Boolean,
-    hasAnnouncement: Boolean,
-    announcementFinalDate: String
+    isMiniature: {
+      default: false
+    }
   },
   data() {
     return {
-      valor: this.descripcion.substring(0, 250) + "....",
+      valor: '',
       codigos: { eISSN: "", DOI: "", ISSN: "" },
       codigosQseMostraran: "",
       rEISSN: "",
@@ -72,7 +70,13 @@ export default {
         { nombre: "ISSN" }
       ],
       stateAux: '',
-      finalDate: ''
+      finalDate: '',
+      hasAnnouncement: '',
+      titulo: '',
+      descripcion: '',
+      urlImg: '',
+      announcementFinalDate: '',
+      providerServices: new ProviderServices(process.env.ROOT_API)
     };
   },
   created() {
@@ -92,7 +96,35 @@ export default {
   },
   methods: {
     getInfo: function() {
-      axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
+      let filter = {
+        include: [ 
+          {
+            relation: "convocatoria",
+            scope: {
+              where: {
+                fechaFinal: {
+                  gte: Date.now()
+                }
+              },
+              order: 'fechaFinal ASC',
+            }
+          } 
+        ]
+      }
+      
+
+      this.providerServices.getModel(`Revista/${this.id}`, filter).then(response => {
+        let revista =  response.data
+        this.valor = revista.descripcion.substring(0, 250) + "...."
+        this.titulo =  revista.titulo
+        this.urlImg = revista.imagen?revista.imagen:imgJournalDefoult
+        if (revista.convocatoria.length !== 0) {
+          this.hasAnnouncement = true
+          this.announcementFinalDate = revista.convocatoria[0].fechaFinal.split('T')[0]
+        }else{
+          this.hasAnnouncement = false
+        }
+
         this.codigos.ISSN = response.data.issn;
         this.codigos.DOI = response.data.doi;
         this.codigos.eISSN = response.data.eissn;

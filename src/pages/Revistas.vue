@@ -31,13 +31,10 @@
           <div class="divContentRevistas container">     
             <div class="row" v-for="item in revistas" :key="item.id" >
              <div class="col">
-                <summaryJournalCard  class="summaryCard" @openJournal="openJournal(item)"
+                <summaryJournalCard  
+                class="summaryCard" 
+                @openJournal="openJournal(item)"
                 :id="item.id.toString()"
-                :titulo='item.titulo'
-                :descripcion='item.descripcion'
-                :urlImg="item.imagen"
-                :hasAnnouncement="item.convocatoria.length > 0"
-                :announcementFinalDate="item.convocatoria[0] !== undefined?item.convocatoria[0].fechaFinal:''"
                 >
               </summaryJournalCard>
               
@@ -122,20 +119,7 @@ export default {
       let parametro = this.$route.params.search;
       let prefix, postfix;
       let query = { 
-        order: 'titulo ASC', 
-        include: [ 
-          {
-            relation: "convocatoria",
-            scope: {
-              where: {
-                fechaFinal: {
-                  gte: Date.now()
-                }
-              },
-              order: 'fechaFinal ASC',
-            }
-          } 
-        ] 
+        order: 'titulo ASC'
       }
       if (parametro === undefined) {
         this.getJournals(query);

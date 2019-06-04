@@ -132,7 +132,9 @@ export default {
   },
   methods: {
     back(){
-      this.$router.go(-1)
+      this.$router.push({
+        path: '/ListaRevistas'
+      })
     },
     changeParams: function(callback) {
       let search = this.$route.params.search.split('&')
