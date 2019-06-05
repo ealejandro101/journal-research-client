@@ -119,7 +119,8 @@ export default {
       let parametro = this.$route.params.search;
       let prefix, postfix;
       let query = { 
-        order: 'titulo ASC'
+        order: 'titulo ASC',
+        include: []
       }
       if (parametro === undefined) {
         this.getJournals(query);

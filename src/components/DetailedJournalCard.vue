@@ -10,11 +10,13 @@
           <p class="card-text text-justify clasDescription" v-text="revista.descripcion"></p>
         </b-col>
       </b-row>
-      <b-row v-if="video" class="d-flex justify-content-center">
-      <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7">
-        <iframe style="width: 100%; height: 60vh;" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      </div>
-    </b-row>
+      <b-row>
+        <div class="col-12">
+          <p class="text-left">Compartir en redes sociales</p>
+          <AddThis publicId="ra-5cf56caaa6e91bcc"/>
+          <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
+        </div>
+      </b-row>
       <b-row>
         <b-col>
           <hr>
@@ -127,6 +129,11 @@
             </div>
         </b-col>
       </b-row>
+      <b-row v-if="video" class="d-flex justify-content-center">
+        <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7">
+          <iframe style="width: 100%; height: 60vh;" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </b-row>
     </b-card>
   </div>
 </template>
@@ -143,6 +150,8 @@ import cienciasSociales from "@/assets/sociales_icono.png";
 import humanidades from "@/assets/humanidades_icono.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
+import AddThis from '@/components/AddThis.vue'
+
 export default {
   props: {
     id: String
@@ -404,7 +413,7 @@ export default {
     }
   },
   components: {
-    itemDescription
+    itemDescription, AddThis
   }
 };
 </script>
