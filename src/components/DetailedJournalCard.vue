@@ -100,6 +100,11 @@
         </div>
       </b-row>
       <hr>
+      <b-row v-if="video" class="d-flex justify-content-center">
+        <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7">
+          <iframe style="width: 100%; height: 60vh;" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </b-row>
       <b-row align-self="start">
         <b-col v-if="categorias.length > 0" align-self="start">
           <h4 class="text-left">Categorías</h4>
@@ -128,11 +133,6 @@
               </b-badge>
             </div>
         </b-col>
-      </b-row>
-      <b-row v-if="video" class="d-flex justify-content-center">
-        <div class="col-12 col-sm-10 col-md-9 col-lg-8 col-xl-7">
-          <iframe style="width: 100%; height: 60vh;" :src="urlVideo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
       </b-row>
     </b-card>
   </div>
