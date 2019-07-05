@@ -21,7 +21,9 @@
               <p :class="{active: currentSection == 1 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Revista</p>
             </li>
             <li v-for="(item, index) in convocatorias" :key="index" @click="changeCurrentSection(index + 2)" class="nav-item">
-              <p :class="{active: currentSection == index + 2 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">{{ item.titulo }}</p>
+              <p :class="{active: currentSection == index + 2 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">
+                {{ 'Call for Papers ' + (index + 1) }}
+              </p>
             </li>
           </ul>
         </div>
@@ -48,19 +50,26 @@
         
       </div>
       <div class="row">
-        <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
-          <slide v-for="item in revistas" :key="item.id">
-            <div @click="openJournal(item)">
-              <summaryJournalCard class="summaryCard"
-                :id="item.id.toString()"
-                :titulo='item.titulo'
-                :descripcion='item.descripcion'
-                :urlImg="item.imagen"
-                :isMiniature="true">
-              </summaryJournalCard>
-            </div>
-          </slide>
-        </carousel>
+        <div class="col">
+          <carousel :perPageCustom="[[576, 2],[768,4],[992,6]]" style="width: 100%">
+            <slide v-for="item in revistas" :key="item.id">
+              <div @click="openJournal(item)">
+                <summaryJournalCard class="summaryCard"
+                  :id="item.id.toString()"
+                  :titulo='item.titulo'
+                  :descripcion='item.descripcion'
+                  :urlImg="item.imagen"
+                  :isMiniature="true">
+                </summaryJournalCard>
+              </div>
+            </slide>
+          </carousel>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col p-0">
+          <footer-research></footer-research>
+        </div>
       </div>
     </div>
   </div>
@@ -78,6 +87,7 @@ import { Carousel, Slide } from 'vue-carousel';
 import loadingGifImport from '@/assets/gifs/loading.gif'
 import jsonHeaderOptions from "@/utilities/headerOptions.json"
 import ProviderService from "@/providerServices/providerServices.js";
+import FooterResearch from "@/components/FooterResearch";
 
 export default {
   props: {},
@@ -103,31 +113,14 @@ export default {
     window.scrollTo(0, 0);
   },
   mounted() {
-    let _self = this
-    this.changeParams(function(err, data){
-      _self.providerService
-        .getModel("Convocatoria", {
-          where: {
-            revistaId: _self.idJournal,
-            fechaFinal: {
-              gte: Date.now()
-            }
-          },
-          order: 'fechaFinal DESC',
-          fields: {
-            id: true, 
-            titulo: true
-          }
-        })
-        .then(response => {
-          _self.convocatorias = response.data;
-      });
-    });
+    this.restartPage()
+    window.scrollTo(0, 0);
   },
   watch: {
     "$route.params.search": function() {
       this.isLoading = true
-      this.changeParams()
+      this.restartPage()
+      window.scrollTo(0, 0);
     }
   },
   methods: {
@@ -136,11 +129,39 @@ export default {
         path: '/ListaRevistas'
       })
     },
+    restartPage(){
+      let _self = this
+      this.changeParams(function(err, data){
+        _self.providerService
+          .getModel("Convocatoria", {
+            where: {
+              revistaId: _self.idJournal,
+              fechaFinal: {
+                gte: Date.now()
+              }
+            },
+            order: 'fechaFinal DESC',
+            fields: {
+              id: true, 
+              titulo: true
+            }
+          })
+          .then(response => {
+            _self.convocatorias = response.data;
+        });
+      });
+    },
     changeParams: function(callback) {
+      this.revistas = []
+      this.idJournal = ""
+      this.currentSection = 1
+      this.convocatorias = []
       let search = this.$route.params.search.split('&')
       let convocatoria = search[1]
-      if (convocatoria) {
+      if (convocatoria) {//si hay convocatoria inicialemente
         this.initialAnnouncement = convocatoria.split('=')[1]
+      }else{
+        this.changeCurrentSection(1)
       }
       let parametro = search[0]
       let prefix, postfix;
@@ -243,7 +264,8 @@ export default {
     summaryJournalCard,
     Carousel,
     Slide,
-    DetailedAnnouncements
+    DetailedAnnouncements,
+    FooterResearch
   }
 };
 </script>
@@ -305,4 +327,12 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.nav-tabs .nav-link{
+  border-color: #cacaca;
+}
+.nav-tabs .nav-link.active, .nav-tabs .nav-link:hover{
+  background-color: #efefef;
+}
+
+
 </style>

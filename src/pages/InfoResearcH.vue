@@ -107,6 +107,7 @@ export default {
   },
   created (){
     this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+    window.scrollTo(0, 0);
   },
 };
 </script>

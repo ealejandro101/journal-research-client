@@ -275,6 +275,7 @@ export default {
       this.video=false;
       this.show = "displayNone"
       document.getElementById("indexScopus").innerHTML = ""
+      
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
         let auxDate = response.data.fechaIngreso.split("-");

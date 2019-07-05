@@ -21,7 +21,7 @@
             <div class="col-12 align-self-center container-fluid noPadding">
               <div class="row">
                 <div class="container-fluid">
-                  <div class="row d-flex justify-content-center">
+                  <div class="row d-flex justify-content-center mb-2">
                     <div class="col-7 col-sm-5 col-md-4 col-lg-3">
                       <logo-research></logo-research>
                     </div>
@@ -127,7 +127,7 @@ export default {
   },
   data() {
     return {
-      phrase: "¿Busca dónde publicar?",
+      phrase: "",
       categories: [
         {
           img: cienciasAgricolas,
@@ -188,6 +188,7 @@ export default {
     this.optionsHeader = JSON.parse(
       JSON.stringify(jsonHeaderOptions.landingPageHeader)
     );
+    window.scrollTo(0, 0);
   },
   mounted() {
     this.categories.forEach(element => {
