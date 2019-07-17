@@ -11,17 +11,32 @@
           </div>
         </div> 
         <div id="divRevistas" class="backgroundImg2 body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
-          <div class="alphabet container" style="display:none">
+          <div class="numeration container">
             <div class="row">
               <div class="col-12 pt-3">
                 <nav>
                   <ul class="pagination justify-content-center" style="flex-wrap: wrap">
                     <li class="page-item disabled">
-                      <a class="page-link" href="#" tabindex="-1">Previous</a>
+                      <p class="page-link"><i class="fas fa-caret-left"></i></p>
                     </li>
-                    <li class="page-item" v-for="char in 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'" :key="char"><p class="page-link" href="#">{{char}}</p></li>
+                    <li class="page-item cursor-pointer" v-for="char in '123456789'" :key="char">
+                      <p class="page-link" @click="getJournalsByPagination(char)">{{char}}</p>
+                    </li>
                     <li class="page-item">
-                      <a class="page-link" href="#">Next</a>
+                      <p class="page-link"><i class="fas fa-caret-right"></i></p>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="alphabet container">
+            <div class="row">
+              <div class="col-12 pt-3">
+                <nav>
+                  <ul class="pagination justify-content-center" style="flex-wrap: wrap">
+                    <li class="page-item cursor-pointer" v-for="char in 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'" :key="char">
+                      <p class="page-link" @click="getJournalsByChar(char)">{{char}}</p>
                     </li>
                   </ul>
                 </nav>
@@ -160,101 +175,122 @@ export default {
         filter.push(this.$store.getters.activeConvocatoryFilter)
       }
       if (parametro == "") {
-        this.applyFilters(filter);
+        this.applyFilters({
+          filters: filter,
+          extra: {
+            page: 1,
+            order: 'revista.titulo ASC',
+            limit: this.$store.getters.getLimitJournals
+          }
+        });
         return;
       }
       this.$store.commit('setStr', parametro)
       Array.prototype.push.apply(filter, this.$store.getters.searchFilter);
-      this.applyFilters(filter);
-      /*
-
-      query.where = {
-        or: [
-          { descripcion: { regexp: "/" + parametro + "/i" } },
-          { titulo: { regexp: "/" + parametro + "/i" } },
-          { tituloCorto: { regexp: "/" + parametro + "/i" } },
-          { subtitulo: { regexp: "/" + parametro + "/i" } }
-        ]
-      }
-      this.revistas = []
-      this.isQueryCompleted = false
-      axios
-        .get(process.env.ROOT_API + "Revista/?filter=" + JSON.stringify(query))
-        .then(response => {
-          this.revistas = response.data;
-          this.isQueryCompleted = true
-          this.configureImg()
-        });*/
+      this.applyFilters({
+        filters: filter,
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }
+      });
     },
     getJournalsCategory (categoryId, query) {
-      this.revistas=[];
-      this.isQueryCompleted = false
-      axios.get(process.env.ROOT_API + `Categoria/${categoryId}/revistas?filter=${JSON.stringify(query)}`)
-        .then(response => {
-          this.revistas = response.data
-          this.isQueryCompleted = true
-          this.configureImg()
-        }).catch(error=>{
-          console.log(error);              
-        })
+      let enumFilters = this.$store.getters.getEnumModelFilters
+      this.applyFilters({
+        filters: [{
+          model: enumFilters.category.model,
+          response: [categoryId],
+          attribute: enumFilters.category.attributeModelFilter
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }
+      });
     },
     getJournalsWord (wordId, query) {
-      this.revistas=[];
-      this.isQueryCompleted = false
-      axios.get(process.env.ROOT_API + `/Palabraclaves/${wordId}/revistas?filter=${JSON.stringify(query)}`)
-        .then(response => {
-          this.revistas = response.data
-          this.isQueryCompleted = true
-          this.configureImg()
-        }).catch(error=>{
-          console.log(error);              
-        })
+      this.applyFilters({
+        filters: [{
+          model: 'palabrasclave',
+          response: [wordId],
+          attribute: 'palabra_clave_id'
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }
+      });
     },
     getJournalsCity (cityId, query) {
-      this.revistas=[];
-      this.isQueryCompleted = false
-      query.include.push({
-        "relation": "ubicacion",
-        "scope": {
-            "where": {
-              "ciudadId": cityId
-            }
-        }
-      })
-      axios
-        .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
-        .then(response => {
-          this.revistas = response.data.revistas;
-          this.isQueryCompleted = true
-          this.configureImg()
-        });
+      this.applyFilters({
+        filters: [{
+          model: 'rubicacion',
+          response: [cityId],
+          attribute: 'ciudad_id'
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+          }
+      });
     },
     getJournalsInstitution (institution, query) {
-      this.revistas=[];
-      this.isQueryCompleted = false
-      query.include.push({
-        "relation": "contacto",
-        "scope": {
-            "where": {
-              "institucion": institution
-            }
+      this.applyFilters({
+        filters: [{
+          model: 'rcontacto',
+          response: [`'${institution}'`],
+          attribute: 'institucion'
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }  
+      });
+    },
+    getJournalsByChar(character){
+      this.applyFilters({
+        filters: [{
+          model: 'revista',
+          response: [],
+          customQuery: [
+              {
+                  value: `'${character}%'`,
+                  operator: 'LIKE',
+                  attribute: 'titulo'
+              }
+          ],
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
         }
-      })
-      axios
-        .get(process.env.ROOT_API + "Revista/filtrar?filtro=" + JSON.stringify(query))
-        .then(response => {
-          this.revistas = response.data.revistas;
-          this.isQueryCompleted = true
-          this.configureImg()
-        });
+      });
+    },
+    getJournalsByPagination(page){
+      this.applyFilters({
+        filters: this.$store.getters.lastFilterUsed,
+        extra: {
+          page,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }
+      });
     },
     getJournals (query) {
-      this.revistas = []
-      this.isQueryCompleted = false
-      axios.get(process.env.ROOT_API + "Revista?filter=" + JSON.stringify(query)).then(response => {
-        this.revistas = response.data;
-        this.isQueryCompleted = true
-        this.configureImg()
+      this.applyFilters({
+        filters: this.$store.getters.currentFilter,
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+        }
       });
     },
     openJournal (journal) {
@@ -282,6 +318,7 @@ export default {
     applyFilters (filter){
       let providerService = new ProviderService(process.env.ROOT_API)
       this.revistas=[];
+      this.$store.commit('setLastFilterUsed', filter.filters)
       this.isQueryCompleted = false
       providerService.getJournalsFiltered(filter).then(response => {
         this.revistas = response.data.revistas

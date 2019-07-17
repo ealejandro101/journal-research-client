@@ -92,7 +92,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
         mounted (){
             let currentFilter = this.$store.getters.currentFilter
             this.providerService = new ProviderService(process.env.ROOT_API)
-            this.enumFilters = this.providerService.getEnumModelFilters()
+            this.enumFilters = this.$store.getters.getEnumModelFilters
             //Aqui se obtienen los filtros actuales (curretFilter) para los filtros que no se comportan igual que los filtros de seleccion multiple (tambien APC aqui :v)
             let currentApcFilter = currentFilter.find(function(element) {
                 return element.model == 'radicional' && element.attribute == 'apc';
@@ -167,8 +167,17 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                 if (this.activeConvocatory) {
                     filter.push(this.$store.getters.activeConvocatoryFilter)
                 }
-                this.$store.commit('setCurrentFilter', filter)
-                this.$emit('applyFilters', filter)
+                let filterComplete = {
+                    filters: filter,
+                    extra: {
+                        page: 1,
+                        order: 'revista.titulo ASC',
+                        limit: this.$store.getters.getLimitJournals
+                    }
+                }
+                this.$store.commit('setCurrentFilter', filterComplete)
+                this.$store.commit('setLastFilterUsed', filter)
+                this.$emit('applyFilters', filterComplete)
             },
             showLargeFilter(index){
                 let options = []
