@@ -4,18 +4,24 @@
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
-           <div style="float:left" class="divSummaryImg">
-            <b-img   class="imagenCard" fluid center :src="revista.imagen" />
+          <div class="float-left mr-4">
+            <div class="divSummaryImg">
+              <b-img   class="imagenCard" fluid center :src="revista.imagen" />
+            </div>
+            <div v-if="revista.imagen !== undefined && revista.titulo !== undefined">
+              <AddThis 
+                publicId="ra-5cf56caaa6e91bcc"
+              />
+              <div 
+                class="addthis_inline_share_toolbox_r5ri d-flex" 
+                :data-title="revista.titulo + ' en Journals Research'"
+                :data-media="imageToShare">
+              </div>
+            </div>
           </div>
+          
           <p class="card-text text-justify clasDescription" v-text="revista.descripcion"></p>
         </b-col>
-      </b-row>
-      <b-row>
-        <div class="col-12">
-          <p class="text-left">Compartir en redes sociales</p>
-          <AddThis publicId="ra-5cf56caaa6e91bcc"/>
-          <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
-        </div>
       </b-row>
       <b-row>
         <b-col>
@@ -107,9 +113,9 @@
       </b-row>
       <b-row align-self="start">
         <b-col v-if="categorias.length > 0" align-self="start">
-          <h4 class="text-left">Categorías</h4>
+          <p class="text-left font-weight-bold">Categorías</p>
             <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
-                  <b-badge @click="pushViewJournalCategory(categoria.id)" href="#" variant="success">
+                  <b-badge @click="pushViewJournalCategory(categoria.id)" href="#" variant="light">
                   <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
                   {{categoria.nombre}}
                   
@@ -117,7 +123,7 @@
             </div>
         </b-col>
         <b-col v-if="palabrasClavesRevista.length > 0" align-self="start">
-          <h4 class="text-left">Palabras Claves</h4>
+          <p class="text-left font-weight-bold">Palabras Claves</p>
             <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1" @click="pushViewJournalWord(word.palabraClaveId)">         
                 <b-badge  href="#" variant="primary">
                       {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
@@ -125,7 +131,7 @@
             </div>
         </b-col>
         <b-col v-if="rindexaciones.length > 0" align-self="start">
-          <h4 class="text-left">Indexaciones</h4>
+          <p class="text-left font-weight-bold">Indexaciones</p>
             <div v-for="(indexacion, i) in rindexaciones" :key="i" class="float-left ml-1 mr-1">
               <b-badge variant="primary">
                 <a v-if="indexacion.url != ''" :href="indexacion.url" class="text-light" target="_blank" v-text="indexacion.name"></a>
@@ -142,12 +148,12 @@
 import axios from "axios";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import itemDescription from "@/components/itemDescription";
-import ingenieriaLogo from "@/assets/ingenieria_icono.png";
-import cienciasAgricolas from "@/assets/agricola_icono.png";
-import cienciasBiologicas from "@/assets/biologia_icono.png";
-import cienciasSalud from "@/assets/salud_icono.png";
-import cienciasSociales from "@/assets/sociales_icono.png";
-import humanidades from "@/assets/humanidades_icono.png";
+import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
+import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";
+import cienciasBiologicas from "@/assets/ciencias-biologicas-200x167.png";
+import cienciasSalud from "@/assets/ciencias-de-la-salud-200x167.png";
+import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
+import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 import AddThis from '@/components/AddThis.vue'
@@ -171,6 +177,7 @@ export default {
       urlVideo:"",
       video:false,
       show: "",
+      imageToShare: '',
       urlDOI: "https://doi.org/",
       iconosCategorias: {
         "Ciencias Agrícolas y Ambientales": cienciasAgricolas,
@@ -285,6 +292,8 @@ export default {
         this.$emit("loaded")
         if (this.revista.imagen == null) {
           this.revista.imagen = imgJournalDefoult;
+        }else{
+          this.imageToShare = this.revista.imagen.replace('http', 'https')
         }
         axios
           .get(process.env.ROOT_API + "Rubicacions/" + this.id)

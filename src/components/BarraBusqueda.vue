@@ -13,7 +13,10 @@
           @selected="wordSelected"
           >
         </autocomplete>
-       
+       <div class="mt-1">
+          <input v-model="searchWithActiveConvocatory" type="checkbox" name="searchCheck" id="searchCheck">
+          <label for="searchCheck">CFP Activas</label>
+        </div>
       </div>
      
      
@@ -27,13 +30,24 @@ import Autocomplete from "vuejs-auto-complete";
 export default {
   name: "barra-busqueda",
   props: ["isFilter"],
-
+  components: {
+    Autocomplete
+  },
   data() {
     return {
       revistas: {},
       categorias: [],
-      parametro: " "
+      parametro: " ",
+      searchWithActiveConvocatory: false,
     };
+  },
+  mounted(){
+    this.searchWithActiveConvocatory = this.$store.getters.searchWithActiveConvocatory
+  },
+  watch: {
+    searchWithActiveConvocatory(){
+      this.$store.commit('setSearchWithActiveConvocatory', this.searchWithActiveConvocatory)
+    }
   },
   methods: {
     buscarPalabra(input) {
@@ -69,9 +83,6 @@ export default {
         this.revistas = response.data;
       });
     }
-  },
-  components: {
-    Autocomplete
   }
 };
 </script>

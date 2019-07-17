@@ -105,4 +105,15 @@ img{
   background: transparent !important;
   border: none !important;
 }
+.container-popup{
+  background-color: #000000b5;
+  z-index: 2;
+}
+.content-popup{
+  background-color: #fff;
+  width: 70vw;
+  height: 60vh;
+  margin: 20vh 15vw 20vh 15vw;
+  overflow-y: scroll;
+}
 </style>

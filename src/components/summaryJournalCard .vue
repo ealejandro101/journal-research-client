@@ -1,9 +1,9 @@
 <template>
 <div>
-    <b-container class="containerSummaryCard" @click="openJournal()">
+    <b-container v-if="!isMiniature" class="containerSummaryCard" @click="openJournal()">
         <b-row>
             <b-card class="cardSummaryJournal">                      
-                <b-row v-if="!isMiniature">
+                <b-row>
                     <b-col sm="12" md="4" lg="3" class="d-flex justify-content-center">
                         <div class="divSummaryImg divImg">
                             <b-img class ="imagenCard"  center  :src="urlImg" /> 
@@ -27,21 +27,26 @@
                         </p>
                     </b-col>             
                 </b-row>
-                <b-row v-else style="height: 35vh;">
-                    <p  class="card-text text-left">
+            </b-card>        
+        </b-row>
+    </b-container>
+    <b-container v-else class="containerSummaryCardMiniature" @click="openJournal()">
+        <b-row>
+            <b-card class="cardSummaryJournal">
+                <b-row style="height: 35vh">
+                    <p class="card-text text-left title-summary-miniature">
                       <strong v-text="titulo"></strong>
-                      <b-button v-if="hasAnnouncement" class="no-bnt" v-b-popover.hover="'Fecha de cierre='+announcementFinalDate" title="">
+                      <b-button v-if="hasAnnouncement" class="no-bnt button-summary-miniature" v-b-popover.hover="'Fecha de cierre='+announcementFinalDate" title="">
                         <i class="fas fa-bullhorn" :class="{'text-success': stateAux == 3, 'text-danger': stateAux == 1, 'text-info': stateAux == 2}"></i>
                       </b-button>
                     </p>
                     <div class="col-12 d-flex justify-content-center">
-                        <div class="divSummaryImg divImg">
-                            <b-img class ="imagenCard"  center  :src="urlImg" />
+                        <div class="divImg">
+                            <b-img class="imagenCard divSummaryImgMiniature"  center  :src="urlImg" />
                         </div>
                     </div>
                     <div class="col-12">
-                        <p  class="card-text text-left">
-                          <strong v-text="titulo"></strong>
+                        <p class="card-text text-left">
                           <b-badge pill variant="primary"> Ver más </b-badge>
                         </p>
                     </div>
@@ -199,5 +204,29 @@ export default {
 .divSummaryImg,
 .divSummaryImg img {
   max-height: 35vh;
+}
+.title-summary-miniature{
+  width: 100%;
+  display: flex;
+}
+.title-summary-miniature strong{
+  width: 80%;
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+.button-summary-miniature{
+  margin: 0px;
+  padding: 0px;
+  height: fit-content;
+  width: 20%;
+}
+.divSummaryImgMiniature{
+  max-height: calc(35vh - 60px);
+  width: auto;
+  max-width: 100%;
+}
+.containerSummaryCardMiniature{
+  width: 15em;
 }
 </style>

@@ -9,6 +9,8 @@
                     type="checkbox" 
                     id="input-convocatoria" 
                     class="w-25 align-self-center" 
+                    v-model="activeConvocatory"
+                    @change="selectOption(activeConvocatory)"
                     /> 
                     <label for="input-convocatoria" class="w-75 text-left pr-2 my-0">CFP Activa</label>
                 </div>
@@ -21,39 +23,27 @@
                 <div :class="filter.style">
                     <ul class="ulOptions">
                         <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
-                            <input 
+                            <template v-if="indexOption <= 10 || filter.openLargeFilter">
+                                <input 
                                 type="checkbox" 
                                 :id="`input-${indexFilter}-${indexOption}`" 
                                 :value="option.value"
                                 v-model="filter.response" 
                                 class="w-25 align-self-center" 
                                 @change="selectOption(filter.response)"
-                            /> 
-                            <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
+                                /> 
+                                <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
+                            </template>
                         </li>
-                        <li v-if="filter.isLarge">
-                            <p class="text-left pl-3">Ver mas...</p>
+                        <li v-if="filter.isLarge && !filter.openLargeFilter">
+                            <p class="text-left pl-3 cursor-pointer" @click="showLargeFilter(indexFilter)">Ver mas...</p>
+                        </li>
+                        <li v-if="filter.isLarge && filter.openLargeFilter">
+                            <p class="text-left pl-3 cursor-pointer" @click="unshownLargeFilter(indexFilter)">Ver menos</p>
                         </li>
                     </ul>
                 </div>
                 <hr class="m-0">
-            </div>
-        </div>
-        <div v-if="showLargeFilter" class="container-popup">
-            <div class="content-popup">
-                <ul class="ulOptions">
-                    <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
-                        <input 
-                            type="checkbox" 
-                            :id="`input-${indexFilter}-${indexOption}`" 
-                            :value="option.value"
-                            v-model="filter.response" 
-                            class="w-25 align-self-center" 
-                            @change="selectOption(filter.response)"
-                        /> 
-                        <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -73,6 +63,8 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
         name: "filtros-busqueda",
         data() {
             return {
+                providerService: null,
+                activeConvocatory: false,
                 filtersWithOptions: [
                     {
                         name: 'APC',
@@ -89,32 +81,65 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                             }
                         ],
                         key: null,
-                        relationModelFilter: 'infoAdicional', 
                         attributeModelFilter: 'apc',
-                        isLarge: false
+                        isLarge: false,
+                        model: 'radicional'
                     }
                 ],
-                enumFilters: undefined,
-                showLargeFilter: false
+                enumFilters: undefined
             };
         },
         mounted (){
-            let providerService = new ProviderService(process.env.ROOT_API)
-            this.enumFilters = providerService.getEnumModelFilters()
+            let currentFilter = this.$store.getters.currentFilter
+            this.providerService = new ProviderService(process.env.ROOT_API)
+            this.enumFilters = this.providerService.getEnumModelFilters()
+            //Aqui se obtienen los filtros actuales (curretFilter) para los filtros que no se comportan igual que los filtros de seleccion multiple (tambien APC aqui :v)
+            let currentApcFilter = currentFilter.find(function(element) {
+                return element.model == 'radicional' && element.attribute == 'apc';
+            });
+            if (currentApcFilter != undefined) {
+                //0 porque es el primero en este punto
+                this.filtersWithOptions[0].response = currentApcFilter.response
+            }
+            let currentConvocatoryFilter = currentFilter.find(function(element) {
+                return element.model == 'convocatoria';
+            });
+            if (currentConvocatoryFilter != undefined) {
+                if (currentConvocatoryFilter.customQuery.length > 0) {
+                    this.activeConvocatory = true
+                }
+            }
+            //Aqui se obtienen todos los datos necesarios para pintar los filtros de seleccion multiple
             for (const key in this.enumFilters) {
-                providerService.getModelCount(this.enumFilters[key].reference).then(response => {
+                this.providerService.getModelCount(this.enumFilters[key].reference).then(response => {
+                    let _self = this
+                    let current = currentFilter.find(function(element) {
+                        return element.model == _self.enumFilters[key].model && element.attribute == _self.enumFilters[key].attributeModelFilter;
+                    });
+                    if (current === undefined) {
+                        current = {}
+                        current.response = []
+                    }
                     let newFilter = {
                         key: key,
                         name: this.enumFilters[key].title,
                         style: 'filterHidden',
                         options: [],
-                        response: []
+                        response: current.response,
+                        model: this.enumFilters[key].model,
+                        reference: this.enumFilters[key].reference,
+                        attributeModelFilter: this.enumFilters[key].attributeModelFilter,
+                        attributeOfText: this.enumFilters[key].attributeOfText,
+                        attributeOfValue: this.enumFilters[key].attributeOfValue
                     }
                     newFilter.isLarge = response.data.count > 10
+                    if (newFilter.isLarge) {
+                        newFilter.openLargeFilter = false
+                    }
                     let filter = {
                         order: `${this.enumFilters[key].attributeOfText} ASC`
                     }
-                    providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, filter).then(response => {
+                    this.providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, filter).then(response => {
                         for (const iterator of response.data) {
                             newFilter.options.push({
                                 text: iterator[this.enumFilters[key].attributeOfText],
@@ -131,73 +156,39 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                 filter.style = filter.style === 'filterVisible' ? 'filterHidden' : 'filterVisible';
             },
             selectOption (option){
-                let filter = {}
+                let filter = []
                 for (const iterator of this.filtersWithOptions) {
-                    if(iterator.response.length > 0){// Si se utilizo el filtro
-                        let arrayConditions = []
-                        let attributeFilter = undefined
-                        let modelFilter = undefined
-                        if(iterator.key === null){
-                            attributeFilter = iterator.attributeModelFilter
-                            modelFilter = iterator.relationModelFilter
-                        }else{
-                            attributeFilter = this.enumFilters[iterator.key].attributeModelFilter
-                            modelFilter = this.enumFilters[iterator.key].relationModelFilter
-                        }
-                        for (const iteratorCondition of iterator.response) {
-                            let condition = {}
-                            if (Array.isArray(attributeFilter)) {
-                                for (const atrFilt of attributeFilter) {
-                                    condition = {}
-                                    condition[atrFilt] = iteratorCondition
-                                    arrayConditions.push(condition)
-                                }
-                            }else{
-                                condition[attributeFilter] = iteratorCondition
-                                arrayConditions.push(condition)
-                            }
-                        }
-                        if(modelFilter === null){//Si el modelo es la misma revista no se debe incluir nada
-                            if (filter.where === undefined || filter.where.or === undefined) {
-                                filter.where = {}
-                                filter.where.or = arrayConditions
-                            } else {
-                                filter.where.or.push(arrayConditions)
-                            }
-                        }else{//En este caso si
-                            if (filter.include === undefined) {
-                                filter.include = []
-                            }
-                            let thereRelation = false
-                            for (const iteratorIncludes of filter.include) {
-                                if (iteratorIncludes.relation === modelFilter) {
-                                    thereRelation = true
-                                    iteratorIncludes.scope.where.and.push({
-                                        or: arrayConditions
-                                    })
-                                    break
-                                }
-                            }
-                            if(!thereRelation){
-                                filter.include.push({
-                                    "relation": modelFilter,
-                                    "scope": {
-                                        "where": {
-                                            "and": [
-                                                {
-                                                    "or": arrayConditions
-                                                }
-                                            ]
-                                        }
-                                    }
-                                })
-                            }
-                        }
-                    }
+                    filter.push({
+                        model: iterator.model,
+                        response: iterator.response,
+                        attribute: iterator.attributeModelFilter
+                    })
                 }
+                if (this.activeConvocatory) {
+                    filter.push(this.$store.getters.activeConvocatoryFilter)
+                }
+                this.$store.commit('setCurrentFilter', filter)
                 this.$emit('applyFilters', filter)
+            },
+            showLargeFilter(index){
+                let options = []
+                this.filtersWithOptions[index].openLargeFilter = true
+                this.providerService.getModel(this.filtersWithOptions[index].reference, null).then(response => {
+                    for (const iterator of response.data) {
+                        options.push({
+                            text: iterator[this.filtersWithOptions[index].attributeOfText],
+                            value: iterator[this.filtersWithOptions[index].attributeOfValue]
+                        })
+                    }
+                    this.filtersWithOptions[index].options = options
+                })
+            },
+            unshownLargeFilter(index){
+                this.filtersWithOptions[index].openLargeFilter = false
             }
         },
+        watch:{
+        }
     }
 </script>
 
@@ -226,5 +217,13 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 .ulOptions{
     list-style: none;
     padding: 0px;
+}
+.divLargeFilter{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
 }
 </style>

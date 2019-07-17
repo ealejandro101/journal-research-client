@@ -97,20 +97,24 @@ export default {
       styleTopFilter: "3em",
       heightFilter: undefined,
       isQueryCompleted: false,
-      loadingSRC: undefined
+      loadingSRC: undefined,
+      isUsedFilterComponent: false
     };
   },
   created (){
     this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
   },
   mounted() {
-    this.changeParams();
+    this.changeParams(); //la lista de revistas se obtiene gracias al evento que ocurre en "FiltrosBusqueda.vue"
     this.styleTopFilter = this.$refs.headerHTML.offsetHeight + 16 + 'px'
     this.heightFilter  = window.innerHeight - (this.$refs.headerHTML.offsetHeight + 16) + 'px !important'
     this.loadingSRC = loadingGif
   },
   watch: {
     "$route.params.search": function() {
+      this.changeParams();
+    },
+    "$store.state.searchWithActiveConvocatory": function(){
       this.changeParams();
     }
   },
@@ -150,10 +154,20 @@ export default {
       }
     },
     getJournalsSearch: function(parametro, query) {
+      let filter = []
+      let isActiveConvocatory = this.$store.getters.searchWithActiveConvocatory
+      if (isActiveConvocatory) {
+        filter.push(this.$store.getters.activeConvocatoryFilter)
+      }
       if (parametro == "") {
-        this.getJournals(query);
+        this.applyFilters(filter);
         return;
       }
+      this.$store.commit('setStr', parametro)
+      Array.prototype.push.apply(filter, this.$store.getters.searchFilter);
+      this.applyFilters(filter);
+      /*
+
       query.where = {
         or: [
           { descripcion: { regexp: "/" + parametro + "/i" } },
@@ -170,7 +184,7 @@ export default {
           this.revistas = response.data;
           this.isQueryCompleted = true
           this.configureImg()
-        });
+        });*/
     },
     getJournalsCategory (categoryId, query) {
       this.revistas=[];
@@ -254,11 +268,21 @@ export default {
         });
       }
     },
-    applyFilters (filter){
+    applyFiltersOLD (filter){
       let providerService = new ProviderService(process.env.ROOT_API)
       this.revistas=[];
       this.isQueryCompleted = false
       filter.order = 'titulo ASC'
+      providerService.getJournalsFiltered(filter).then(response => {
+        this.revistas = response.data.revistas
+        this.isQueryCompleted = true
+        this.configureImg()
+      })
+    },
+    applyFilters (filter){
+      let providerService = new ProviderService(process.env.ROOT_API)
+      this.revistas=[];
+      this.isQueryCompleted = false
       providerService.getJournalsFiltered(filter).then(response => {
         this.revistas = response.data.revistas
         this.isQueryCompleted = true

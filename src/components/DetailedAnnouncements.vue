@@ -33,7 +33,7 @@
                     <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.correo !== null && convocatoria.radicional.correo !== undefined && convocatoria.radicional.correo !== 0">
                       <li class="d-flex mb-2 justify-content-start">
                         <i class="fas fa-at mr-2"></i>
-                        {{convocatoria.radicional.correo}}
+                        <a target="_blanck" :href="'mailto:'+convocatoria.radicional.correo">{{convocatoria.radicional.correo}}</a>
                       </li>
                     </template>
                   </ul>
@@ -71,10 +71,13 @@
                       </li>
                     </template>
                   </ul>
-                  <div>
-                    <p class="text-left">Compartir en redes sociales</p>
+                  <div v-if="convocatoria.titulo !== undefined && convocatoria.imagen !== undefined">
                     <AddThis publicId="ra-5cf56caaa6e91bcc"/>
-                    <div class="addthis_inline_share_toolbox_r5ri d-flex"></div>
+                    <div 
+                      class="addthis_inline_share_toolbox_r5ri d-flex"
+                      :data-title="convocatoria.titulo + ' en Journals Research'"
+                      :data-media="convocatoria.imagen.replace('http', 'https')">
+                    </div>
                   </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-4 d-flex justify-content-center mb-4 order-0 order-md-1">
