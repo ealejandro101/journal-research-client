@@ -7,29 +7,10 @@
       <div class="row w-100 mt-0 mb-0">
         <div id="divFiltros" class="col-12 col-sm-3 col-md-3 col-lg-2 col-xl-2">
           <div ref="filterRef" style="overflow-y: auto" class="position-sticky" v-bind:style="{top: styleTopFilter, height: heightFilter}">
-            <filtros-busqueda @applyFilters="applyFilters"></filtros-busqueda>
+            <filtros-busqueda @applyFilters="applyNewFilter"></filtros-busqueda>
           </div>
         </div> 
         <div id="divRevistas" class="backgroundImg2 body-card-revistas col-12 col-sm-9 col-md-9 col-lg-10 col-xl-10">
-          <div class="numeration container">
-            <div class="row">
-              <div class="col-12 pt-3">
-                <nav>
-                  <ul class="pagination justify-content-center" style="flex-wrap: wrap">
-                    <li class="page-item disabled">
-                      <p class="page-link"><i class="fas fa-caret-left"></i></p>
-                    </li>
-                    <li class="page-item cursor-pointer" v-for="char in '123456789'" :key="char">
-                      <p class="page-link" @click="getJournalsByPagination(char)">{{char}}</p>
-                    </li>
-                    <li class="page-item">
-                      <p class="page-link"><i class="fas fa-caret-right"></i></p>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-          </div>
           <div class="alphabet container">
             <div class="row">
               <div class="col-12 pt-3">
@@ -37,6 +18,25 @@
                   <ul class="pagination justify-content-center" style="flex-wrap: wrap">
                     <li class="page-item cursor-pointer" v-for="char in 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'" :key="char">
                       <p class="page-link" @click="getJournalsByChar(char)">{{char}}</p>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="numeration container">
+            <div class="row">
+              <div class="col-12 pt-3">
+                <nav>
+                  <ul class="pagination justify-content-center" style="flex-wrap: wrap">
+                    <li class="page-item" :class="{disabled: currentPage == 1}">
+                      <p class="page-link cursor-pointer" @click="getJournalsByPagination(currentPage - 1)"><i class="fas fa-caret-left"></i></p>
+                    </li>
+                    <li class="page-item">
+                      <p class="page-link">{{currentPage}}</p>
+                    </li>
+                    <li class="page-item" :class="{disabled: revistas.length == 0 || revistas.length < currentPageSize}">
+                      <p class="page-link cursor-pointer" @click="getJournalsByPagination(currentPage + 1)"><i class="fas fa-caret-right"></i></p>
                     </li>
                   </ul>
                 </nav>
@@ -65,6 +65,25 @@
                 <div style="width: 10em">
                   <img :src="loadingSRC" alt="Cargando...">
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="numeration container">
+            <div class="row">
+              <div class="col-12 pt-3">
+                <nav>
+                  <ul class="pagination justify-content-center" style="flex-wrap: wrap">
+                    <li class="page-item" :class="{disabled: currentPage == 1}">
+                      <p class="page-link cursor-pointer" @click="getJournalsByPagination(currentPage - 1)"><i class="fas fa-caret-left"></i></p>
+                    </li>
+                    <li class="page-item">
+                      <p class="page-link">{{currentPage}}</p>
+                    </li>
+                    <li class="page-item" :class="{disabled: revistas.length == 0 || revistas.length < currentPageSize}">
+                      <p class="page-link cursor-pointer" @click="getJournalsByPagination(currentPage + 1)"><i class="fas fa-caret-right"></i></p>
+                    </li>
+                  </ul>
+                </nav>
               </div>
             </div>
           </div>
@@ -113,13 +132,18 @@ export default {
       heightFilter: undefined,
       isQueryCompleted: false,
       loadingSRC: undefined,
-      isUsedFilterComponent: false
+      isUsedFilterComponent: false,
+      currentPage: 1,
+      currentPageSize: 15
     };
   },
   created (){
     this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+    this.currentPageSize =  this.$store.getters.limitJournals
+    
   },
   mounted() {
+    window.scrollTo(0, 0);
     this.changeParams(); //la lista de revistas se obtiene gracias al evento que ocurre en "FiltrosBusqueda.vue"
     this.styleTopFilter = this.$refs.headerHTML.offsetHeight + 16 + 'px'
     this.heightFilter  = window.innerHeight - (this.$refs.headerHTML.offsetHeight + 16) + 'px !important'
@@ -171,6 +195,7 @@ export default {
     getJournalsSearch: function(parametro, query) {
       let filter = []
       let isActiveConvocatory = this.$store.getters.searchWithActiveConvocatory
+      this.currentPage = 1
       if (isActiveConvocatory) {
         filter.push(this.$store.getters.activeConvocatoryFilter)
       }
@@ -191,13 +216,14 @@ export default {
         filters: filter,
         extra: {
           page: 1,
-          order: 'revista.titulo ASC',
-          limit: this.$store.getters.getLimitJournals
+          limit: this.$store.getters.getLimitJournals,
+          order: `CASE WHEN INSTR(revista.titulo, '${parametro}') > 0 THEN INSTR(revista.titulo, '${parametro}') WHEN INSTR(revista.titulo, '${parametro}') = 0 THEN 100 END ASC`
         }
       });
     },
     getJournalsCategory (categoryId, query) {
       let enumFilters = this.$store.getters.getEnumModelFilters
+      this.currentPage = 1
       this.applyFilters({
         filters: [{
           model: enumFilters.category.model,
@@ -212,6 +238,7 @@ export default {
       });
     },
     getJournalsWord (wordId, query) {
+      this.currentPage = 1
       this.applyFilters({
         filters: [{
           model: 'palabrasclave',
@@ -226,6 +253,7 @@ export default {
       });
     },
     getJournalsCity (cityId, query) {
+      this.currentPage = 1
       this.applyFilters({
         filters: [{
           model: 'rubicacion',
@@ -240,6 +268,7 @@ export default {
       });
     },
     getJournalsInstitution (institution, query) {
+      this.currentPage = 1
       this.applyFilters({
         filters: [{
           model: 'rcontacto',
@@ -254,18 +283,26 @@ export default {
       });
     },
     getJournalsByChar(character){
-      this.applyFilters({
-        filters: [{
+      let filter = this.$store.getters.lastFilterUsed
+      let indexOldFilterByChar = filter.findIndex(function(value){
+        return value.customQuery && value.customQuery[0] && value.customQuery[0].label == 'character'
+      })
+      filter.splice(indexOldFilterByChar, 1)
+      filter.push({
           model: 'revista',
           response: [],
           customQuery: [
               {
                   value: `'${character}%'`,
                   operator: 'LIKE',
-                  attribute: 'titulo'
+                  attribute: 'titulo',
+                  label: 'character'
               }
           ],
-        }],
+        })
+      this.currentPage = 1
+      this.applyFilters({
+        filters: filter,
         extra: {
           page: 1,
           order: 'revista.titulo ASC',
@@ -274,16 +311,19 @@ export default {
       });
     },
     getJournalsByPagination(page){
+      this.currentPage = page > 0?page:1
       this.applyFilters({
         filters: this.$store.getters.lastFilterUsed,
         extra: {
-          page,
+          page: this.currentPage,
           order: 'revista.titulo ASC',
           limit: this.$store.getters.getLimitJournals
         }
       });
+      window.scrollTo(0, 0);
     },
     getJournals (query) {
+      this.currentPage = 1
       this.applyFilters({
         filters: this.$store.getters.currentFilter,
         extra: {
@@ -314,6 +354,10 @@ export default {
         this.isQueryCompleted = true
         this.configureImg()
       })
+    },
+    applyNewFilter(filter){
+      this.currentPage = 1
+      this.applyFilters(filter)
     },
     applyFilters (filter){
       let providerService = new ProviderService(process.env.ROOT_API)

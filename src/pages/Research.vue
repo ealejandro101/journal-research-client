@@ -185,6 +185,7 @@ export default {
       JSON.stringify(jsonHeaderOptions.landingPageHeader)
     );
     window.scrollTo(0, 0);
+    this.$store.commit('resetCurrentFilter')
   },
   mounted() {
     this.categories.forEach(element => {

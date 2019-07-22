@@ -175,7 +175,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         limit: this.$store.getters.getLimitJournals
                     }
                 }
-                this.$store.commit('setCurrentFilter', filterComplete)
+                this.$store.commit('setCurrentFilter', filter)
                 this.$store.commit('setLastFilterUsed', filter)
                 this.$emit('applyFilters', filterComplete)
             },

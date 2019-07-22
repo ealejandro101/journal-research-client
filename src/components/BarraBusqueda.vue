@@ -7,7 +7,7 @@
           :source="EndpointPrediccion"
           results-property="revistas"
           :results-display="formattedDisplay"
-          placeholder="Título - Descripción"
+          placeholder="Título - Descripción - Palabra clave"
           name="parametro"
           @nothingSelected="buscarPalabra"
           @selected="wordSelected"

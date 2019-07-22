@@ -19,7 +19,35 @@
               </div>
             </div>
           </div>
-          
+          <div class="container-fluid">
+              <div class="row mb-5">
+                <b-col v-if="categorias.length > 0" align-self="start">
+                    <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
+                          <b-badge @click="pushViewJournalCategory(categoria.id)" href="#" variant="light">
+                          <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
+                          {{categoria.nombre}}
+                          
+                        </b-badge>
+                    </div>
+                </b-col>
+                <b-col v-if="rindexaciones.length > 0" align-self="start">
+                    <div v-for="(indexacion, i) in rindexaciones" :key="i" class="float-left ml-1 mr-1">
+                      <b-badge variant="primary">
+                        <a v-if="indexacion.url != ''" :href="indexacion.url" class="text-light" target="_blank" v-text="indexacion.name"></a>
+                        <a v-else class="text-light" v-text="indexacion.name"></a>
+                      </b-badge>
+                    </div>
+                    <div v-if="revista['licenciaImg'] !== undefined">
+                      <!--Propiedades de img-->
+                      <div>
+                        <div style="max-width: 5em; margin-left: 1em;" class="float-left">
+                          <img :src="revista['licenciaImg']" :alt="revista['licenciaImg']">
+                        </div>
+                      </div>
+                    </div>
+                </b-col>
+              </div>
+            </div>
           <p class="card-text text-justify clasDescription" v-text="revista.descripcion"></p>
         </b-col>
       </b-row>
@@ -88,17 +116,6 @@
                 </div>                    
               </b-col>
             </template>
-            <template v-for="prop in propiedadesName5">
-              <b-col :key="prop.key" sm="6" md="6" lg="6" v-if="revista[prop.key] !== undefined">
-                <!--Propiedades de img-->
-                <div>
-                  <div style="max-width: 5em; margin-left: 1em;" class="float-left">
-                    <img :src="revista[prop.key]" :alt="revista[prop.key]">
-                  </div>
-                </div>
-              </b-col>
-            </template>
-            
           </b-row>
         </b-col>
         <div v-show="indexScopus !== ''" :class="show" class="col-8 col-sm-4 col-md-4 col-lg-3 d-flex align-self-center">
@@ -112,31 +129,12 @@
         </div>
       </b-row>
       <b-row align-self="start">
-        <b-col v-if="categorias.length > 0" align-self="start">
-          <p class="text-left font-weight-bold">Categorías</p>
-            <div v-for="categoria in categorias " :key="categoria.nombre" class="float-left ml-1 mr-1">                
-                  <b-badge @click="pushViewJournalCategory(categoria.id)" href="#" variant="light">
-                  <b-img rounded="circle" class="iconos" :src="iconosCategorias[categoria.nombre]" />
-                  {{categoria.nombre}}
-                  
-                </b-badge>
-            </div>
-        </b-col>
         <b-col v-if="palabrasClavesRevista.length > 0" align-self="start">
           <p class="text-left font-weight-bold">Palabras Claves</p>
             <div v-for="word in palabrasClavesRevista" :key="word.id" class="float-left ml-1 mr-1" @click="pushViewJournalWord(word.palabraClaveId)">         
                 <b-badge  href="#" variant="primary">
                       {{palabrasClaves[word.palabraClaveId-1].palabraClave}} 
                 </b-badge>
-            </div>
-        </b-col>
-        <b-col v-if="rindexaciones.length > 0" align-self="start">
-          <p class="text-left font-weight-bold">Indexaciones</p>
-            <div v-for="(indexacion, i) in rindexaciones" :key="i" class="float-left ml-1 mr-1">
-              <b-badge variant="primary">
-                <a v-if="indexacion.url != ''" :href="indexacion.url" class="text-light" target="_blank" v-text="indexacion.name"></a>
-                <a v-else class="text-light" v-text="indexacion.name"></a>
-              </b-badge>
             </div>
         </b-col>
       </b-row>
@@ -157,7 +155,6 @@ import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 import AddThis from '@/components/AddThis.vue'
-
 export default {
   props: {
     id: String
@@ -388,7 +385,6 @@ export default {
                                                 }).catch(error =>{
                                                   console.log(error);
                                                 })
-
                                               }
                                               
                                             });

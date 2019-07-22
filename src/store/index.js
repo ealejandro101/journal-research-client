@@ -24,7 +24,11 @@ const store = new Vuex.Store({
         },
         setLastFilterUsed(state, value){
             state.lastFilterUsed = value
+        },
+        resetCurrentFilter(state){
+            state.currentFilter = []
         }
+        
     },
     getters: {
         currentFilter (state){
@@ -55,36 +59,50 @@ const store = new Vuex.Store({
             }
         },
         searchFilter (state){
+            let customQuery = [
+                {
+                    value: `'%${state.str}%'`,
+                    operator: 'LIKE',
+                    attribute: 'descripcion',
+                    model: 'revista',
+                    isOr: true
+                },
+                {
+                    value: `'%${state.str}%'`,
+                    operator: 'LIKE',
+                    attribute: 'titulo',
+                    model: 'revista',
+                    isOr: true
+                },
+                {
+                    value: `'%${state.str}%'`,
+                    operator: 'LIKE',
+                    attribute: 'titulo_corto',
+                    model: 'revista',
+                    isOr: true
+                },
+                {
+                    value: `'%${state.str}%'`,
+                    operator: 'LIKE',
+                    attribute: 'subtitulo',
+                    model: 'revista',
+                    isOr: true
+                }
+            ]
+            for (const iterator of state.str.split(" ")) {
+                customQuery.push({
+                    value: `'%${iterator}%'`,
+                    operator: 'LIKE',
+                    attribute: 'palabra_clave',
+                    model: 'palabraclave',
+                    isOr: true
+                })
+            }
             let filter = [
                 {
-                    model: 'revista',
+                    model: 'palabrasclave',
                     response: [],
-                    customQuery: [
-                        {
-                            value: `'%${state.str}%'`,
-                            operator: 'LIKE',
-                            attribute: 'descripcion',
-                            isOr: true
-                        },
-                        {
-                            value: `'%${state.str}%'`,
-                            operator: 'LIKE',
-                            attribute: 'titulo',
-                            isOr: true
-                        },
-                        {
-                            value: `'%${state.str}%'`,
-                            operator: 'LIKE',
-                            attribute: 'titulo_corto',
-                            isOr: true
-                        },
-                        {
-                            value: `'%${state.str}%'`,
-                            operator: 'LIKE',
-                            attribute: 'subtitulo',
-                            isOr: true
-                        },
-                    ],
+                    customQuery: customQuery
                     
                 }
             ]
@@ -116,6 +134,9 @@ const store = new Vuex.Store({
         },
         lastFilterUsed(state){
             return state.lastFilterUsed
+        },
+        limitJournals(state){
+            return state.limitJournals
         }
     }
 })

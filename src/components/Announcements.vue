@@ -33,7 +33,7 @@
         <p>No hay convocatorias disponibles</p>
       </div>
       <div v-if="announcements.length != 0" class="col-12">
-        <a href="">Ver más</a>
+        <a class="cursor-pointer text-primary" @click="verMas">Ver más</a>
       </div>
     </div>
   </div>
@@ -93,6 +93,12 @@ export default {
   methods: {
     onClickAnnouncements(announcement) {
       this.$emit("announcements:click", announcement);
+    },
+    verMas(){
+      this.$store.commit('setCurrentFilter', [this.$store.getters.activeConvocatoryFilter])
+      this.$router.push({
+        path: "/ListaRevistas/"
+      });
     }
   },
   filters: {
