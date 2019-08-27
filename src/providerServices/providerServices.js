@@ -139,8 +139,6 @@ export default class ProviderService {
         })
     }
 
-    
-
     login(email, password) {
         return new Promise((resolve, reject) => {
             axios.post(this.rootAPI + '../custom/Editor/login', { email, password },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
@@ -152,6 +150,19 @@ export default class ProviderService {
                         error
                     })
                 }
+                reject({
+                    msg: codes.CODES.DEFAULT.MSG,
+                    error
+                })
+            })
+        })
+    }
+
+    logout() {
+        return new Promise((resolve, reject) => {
+            axios.get(this.rootAPI + '../custom/Editor/logout', { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+                resolve(response.data)
+            }).catch(error => {
                 reject({
                     msg: codes.CODES.DEFAULT.MSG,
                     error

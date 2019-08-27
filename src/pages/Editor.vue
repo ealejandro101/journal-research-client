@@ -7,12 +7,12 @@
       <div class="col-12 p-0 d-flex justify-content-center">
         <div class="container-fluid">
           <div class="row">
-            <div class="col d-flex m-4 p-5 bg-light rounded">
-              <div class="userImage mt-5 mx-5">
-                <img :src="userImg" alt="User image" />
-              </div>
-              <div>
-                <form @submit.prevent="">
+            <div class="col m-4 p-5 bg-light rounded">
+              <form @submit.prevent="" class="d-flex">
+                <div class="userImage mt-5 mx-4">
+                  <img :src="userImg" alt="User image" />
+                </div>
+                <div>
                   <p class="texto font-weight-bold">Perfil</p>
                   <div class="d-flex flex-wrap">
                     <div class="form-group">
@@ -78,11 +78,14 @@
                       <input type="text" class="form-control" v-model="editor.googlescholar" id="googlescholar" placeholder="Ingrese su googlescholar">
                     </div>
                   </div>
-                  <button @click="updateEditor" class="btn btn-success mt-5">Actualizar información</button>
-                  <div v-if="errors.length > 0">
-                    <error-notification :errors="errors"></error-notification>
-                  </div>
-                </form>
+                </div>
+              </form>
+              <div>
+                <button @click="updateEditor" class="btn btn-success mt-5">Actualizar información</button>
+                <button @click="closeSession" class="btn btn-warning mt-5"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+                <div v-if="errors.length > 0">
+                  <error-notification :errors="errors"></error-notification>
+                </div>
               </div>
             </div>
           </div>
@@ -192,6 +195,11 @@ export default {
   },
   created() {
     let _self = this;
+    if (this.$store.getters.editorId === undefined) {
+      this.$router.push({
+        path: '/Login'
+      })
+    }
     this.$store.commit("setCurrentPage", "editor-page");
     EventBus.$on("userLogged", function() {
       //Se activa en el constructor de @/providerservices/providerservices.js
@@ -274,6 +282,17 @@ export default {
       this.$router.push({
         path: '/FormularioNuevaRevista'
       })
+    },
+    closeSession(){
+      this.$store.getters.providerService.logout().then(res => {
+        this.$store.commit("logout")
+        this.$router.push({
+          path: '/'
+        })
+      }).catch(err => {
+        alert('No se ha cerrado la sesión correctamente')
+      })
+
     }
   }
 };
@@ -281,7 +300,12 @@ export default {
 
 <style scoped>
 .userImage {
+  min-width: 4em;
   max-width: 7em;
+  height: auto;
+}
+.userImage img{
+  width: 100%;
   height: auto;
 }
 .form-group{

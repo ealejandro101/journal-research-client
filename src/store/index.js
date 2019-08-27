@@ -41,6 +41,10 @@ const store = new Vuex.Store({
         },
         setEditorId(state, value){
             state.editorId = value
+        },
+        logout(state){
+            state.providerService.setAccessToken(undefined)
+            state.editorId = undefined
         }
     },
     getters: {
