@@ -11,6 +11,9 @@
               <div class="row mb-1">
                 <div class="col-12 text-left mt-4 font-weight-bold">
                   <p v-text="convocatoria.titulo"></p>
+                  <div class="mb-3 d-flex justify-content-left">
+                    <suscription-button :isSubscribed="isSubscribed" :text="'Suscribirse a la revista'" @unsubscribe="$emit('unsubscribe')" @subscribe="$emit('subscribe')"></suscription-button>
+                  </div>
                 </div>
                 <div class="col-12">
                   <p class="text-secondary text-left">Fecha de inicio: {{ convocatoria.fechaInicio | datesFilter }}</p>
@@ -124,11 +127,12 @@
 <script>
 import ProviderService from "@/providerServices/providerServices.js";
 import AddThis from '@/components/AddThis.vue'
+import SuscriptionButton from '@/components/SuscriptionButton.vue'
 
 export default {
-  props: ["idConvocatoria"],
+  props: ["idConvocatoria", "isSubscribed"],
   components: {
-    AddThis
+    AddThis, SuscriptionButton
   },
   data() {
     return {

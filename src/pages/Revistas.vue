@@ -1,7 +1,7 @@
 <template>
   <div class="containerPage d-flex flex-column">
     <div id="headerResearch" class="headerS flex-grow-0" ref="headerHTML">
-      <header-research :inputOptions="optionsHeader"></header-research>
+      <header-research></header-research>
     </div>
     <div class="container-fluid flex-grow-1 d-flex justify-content-center p-0">
       <div class="row w-100 mt-0 mb-0">
@@ -109,11 +109,11 @@ import LogoResearch from "@/components/LogoResearch";
 import FiltrosBusqueda from "@/components/FiltrosBusqueda";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import FooterResearch from '@/components/FooterResearch';
-import ProviderService from '@/providerServices/providerServices';
-import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import jsonHeaderOptions from "@/utilities/headerOptions.js"
 import loadingGif from "@/assets/gifs/loading.gif"
 
 export default {
+  name: 'revistas',
   props: {},
   components: {
     summaryJournalCard,
@@ -127,7 +127,6 @@ export default {
     return {
       revistas: [],
       idActualJournal: "'1'",
-      optionsHeader:  undefined,
       styleTopFilter: "3em",
       heightFilter: undefined,
       isQueryCompleted: false,
@@ -138,7 +137,7 @@ export default {
     };
   },
   created (){
-    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+    this.$store.commit('setCurrentPage', 'revistas')
     this.currentPageSize =  this.$store.getters.limitJournals
     
   },
@@ -345,7 +344,7 @@ export default {
       }
     },
     applyFiltersOLD (filter){
-      let providerService = new ProviderService(process.env.ROOT_API)
+      let providerService = this.$store.getters.providerService
       this.revistas=[];
       this.isQueryCompleted = false
       filter.order = 'titulo ASC'
@@ -360,7 +359,7 @@ export default {
       this.applyFilters(filter)
     },
     applyFilters (filter){
-      let providerService = new ProviderService(process.env.ROOT_API)
+      let providerService = this.$store.getters.providerService
       this.revistas=[];
       this.$store.commit('setLastFilterUsed', filter.filters)
       this.isQueryCompleted = false

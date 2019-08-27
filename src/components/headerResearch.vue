@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 noPadding">
                     <b-collapse is-nav id="nav_collapse" class="flex-row-reverse">
-                        <header-inicial :inputOptions="options" :isInicial="false"></header-inicial>
+                        <header-inicial :isInicial="false"></header-inicial>
                     </b-collapse>
                 </div>
             </div>
@@ -25,19 +25,16 @@
 import BarraBusqueda from '@/components/BarraBusqueda'
 import LogoResearch from '@/components/LogoResearch'
 import HeaderInicial from '@/components/HeaderInicial'
+
 export default {
     name: 'header-research',
-    props: ["inputOptions"],
+    props: [],
     components:{BarraBusqueda, LogoResearch, HeaderInicial},
     data() {
         return {
-            options: []
         };
     },
     created (){
-        if(this.inputOptions !== undefined && this.inputOptions !== null){
-            this.options = this.inputOptions
-        }
     }
 };
 </script>

@@ -73,7 +73,10 @@ img{
   list-style: none;
 }
 .cursor-pointer{
-  cursor: pointer;
+  cursor: pointer !important;
+}
+.cursor-not-allowed{
+  cursor: not-allowed !important;
 }
 .top-0{
   top: 0px;
@@ -83,6 +86,9 @@ img{
 }
 .right-0{
   right: 0;
+}
+.left-0{
+  left: 0;
 }
 .text-overflow-ellipsis{
   text-overflow: ellipsis;
@@ -115,5 +121,11 @@ img{
   height: 60vh;
   margin: 20vh 15vw 20vh 15vw;
   overflow-y: scroll;
+}
+.rounded-1em{
+  border-radius: 1em
+}
+.max-width-35em{
+  max-width: 35em;
 }
 </style>

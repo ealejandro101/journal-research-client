@@ -2,7 +2,7 @@
   <div class="research noPadding" v-scroll="handleScroll">
     <div class="section mainSection grid seccionEstadisticas">
       <div class="header">
-        <header-research :inputOptions="optionsHeader"></header-research>
+        <header-research></header-research>
       </div>
       <div class="align-top mainBackground">
         <div class="position-absolute right-0 noPadding">
@@ -10,7 +10,6 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-12 headerInicial">
               <header-inicial
                 :isInicial="true"
-                :inputOptions="optionsHeader"
                 class="d-flex justify-content-end"
               ></header-inicial>
             </div>
@@ -46,14 +45,14 @@
         <div class="container-fluid noPadding">
           <div class="row justify-content-center">
             <div class="col-9 col-md-6 col-lg-5 col-xl-4 researchProcess">
-              <h5>Para qué sirve ResearcH</h5>
+              <h5>Para qué sirve Dardo</h5>
               <div class="img imgProceosResearch">
                 <img src="@/assets/proceso.png" alt>
               </div>
             </div>
             <div class="col-7 col-md-5 col-xl-4 d-flex align-items-center">
               <div class="justify-content-center">
-                <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas ResearcH</h5>
+                <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas Dardo</h5>
                 <p class="cifra">
                   <span>Más de {{totalJournals}}</span>
                   <br>
@@ -107,7 +106,8 @@ import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
 import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
-import jsonHeaderOptions from "@/utilities/headerOptions.json";
+import jsonHeaderOptions from "@/utilities/headerOptions.js";
+import { EventBus } from '@/event-bus.js';
 
 export default {
   name: "research",
@@ -176,14 +176,12 @@ export default {
       ],
       totalJournals: 0,
       totalCountries: 0,
-      optionsHeader: undefined,
       modelConv: "radio1"
     };
   },
   created() {
-    this.optionsHeader = JSON.parse(
-      JSON.stringify(jsonHeaderOptions.landingPageHeader)
-    );
+    let _self = this
+    this.$store.commit('setCurrentPage', 'research')
     window.scrollTo(0, 0);
     this.$store.commit('resetCurrentFilter')
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="containerPage">
     <div id="headerResearch" class="headerS">
-      <header-research :inputOptions="optionsHeader"></header-research>
+      <header-research></header-research>
     </div>
     <div class="container-fluid mt-3 backgroundImg3">
       <div class="row">
@@ -38,13 +38,22 @@
           <DetailedJournalCard 
             v-if="idJournal !== ''" 
             :id="idJournal" @refreshCategory="refreshJournals"
-            @loaded="loaded">
+            :isSubscribed="isSubscribed"
+            @loaded="loaded"
+            @unsubscribe="unsubscribe"
+            @subscribe="subscribe">
           </DetailedJournalCard>
           <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
         </div>
         <template v-for="(item, index) in convocatorias">
           <div :key="index" v-if="currentSection == index + 2 || initialAnnouncement == item.id" class="col">
-            <DetailedAnnouncements @loaded="loaded" :idConvocatoria="item.id"></DetailedAnnouncements>
+            <DetailedAnnouncements 
+              @loaded="loaded" 
+              @subscribe="subscribe"
+              :isSubscribed="isSubscribed"
+              @unsubscribe="unsubscribe"
+              :idConvocatoria="item.id">
+            </DetailedAnnouncements>
           </div>
         </template>
         
@@ -85,11 +94,12 @@ import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
 import loadingGifImport from '@/assets/gifs/loading.gif'
-import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import jsonHeaderOptions from "@/utilities/headerOptions.js"
 import ProviderService from "@/providerServices/providerServices.js";
 import FooterResearch from "@/components/FooterResearch";
 
 export default {
+  name: 'revista',
   props: {},
   data() {
     return {
@@ -98,18 +108,17 @@ export default {
       loadingGif: undefined,
       isLoading: false,
       doesNotExist: false,
-      optionsHeader: undefined,
       currentSection: 1,
       convocatorias: [],
-      providerService: new ProviderService(process.env.ROOT_API),
       idConvocatoria: undefined,
-      initialAnnouncement: undefined
+      initialAnnouncement: undefined,
+      isSubscribed: false
     };
   },
   created(){
+    this.$store.commit('setCurrentPage', 'revista')
     this.loadingGif = loadingGifImport
     this.isLoading = true
-    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
     window.scrollTo(0, 0);
   },
   mounted() {
@@ -124,6 +133,24 @@ export default {
     }
   },
   methods: {
+    subscribe(){
+      this.$store.getters.providerService.subscribeEditorJournal(this.idJournal).then((data) => {
+        this.isSubscribed = true
+        alert("Se ha suscrito con éxito en la revista.")
+      }).catch((err) => {
+        console.log(err);
+        alert("Ha ocurrido un error, intente mas tarde.")
+      })
+    },
+    unsubscribe(){
+      this.$store.getters.providerService.unsubscribeEditorJournal(this.idJournal).then((data) => {
+        this.isSubscribed = false
+        alert("Ha removido su suscripción con éxito.")
+      }).catch((err) => {
+        console.log(err);
+        alert("Ha ocurrido un error, intente mas tarde.")
+      })
+    },
     back(){
       this.$router.push({
         path: '/ListaRevistas'
@@ -132,7 +159,16 @@ export default {
     restartPage(){
       let _self = this
       this.changeParams(function(err, data){
-        _self.providerService
+        if (_self.$store.getters.editorId !== undefined) {
+          _self.$store.getters.providerService.getModel(`Editors/${_self.$store.getters.editorId}/revistasSuscritas/${_self.idJournal}`).then(response => {
+            _self.isSubscribed = true
+          }).catch(err => {
+            _self.isSubscribed = false
+          })
+        }
+        
+
+        _self.$store.getters.providerService
           .getModel("Convocatoria", {
             where: {
               revistaId: _self.idJournal,

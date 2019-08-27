@@ -18,18 +18,22 @@
 </template>
 
 <script>
+import { EventBus } from '@/event-bus.js';
 export default {
     name: 'header-inicial',
-    props: ["isInicial", "inputOptions"],
+    props: ["isInicial"],
     data() {
         return {
-            options: []
+            options: [],
+            inputOptions: undefined
         };
     },
     created () {
-        if(this.inputOptions !== undefined && this.inputOptions !== null){
-            this.options = this.inputOptions
-        }
+        let _self = this
+        _self.options = _self.$store.getters.header
+        EventBus.$on('userLogged', function(){//Se activa en el constructor de @/providerservices/providerservices.js
+            _self.options = _self.$store.getters.header
+        })
     }
 };
 </script>

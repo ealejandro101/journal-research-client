@@ -4,6 +4,9 @@
       <b-row>      
         <b-col sm="12" md="12" lg="12">
           <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
+          <div class="mb-3 d-flex justify-content-left">
+            <suscription-button :isSubscribed="isSubscribed" :text="'Suscribirse a la revista'" @unsubscribe="$emit('unsubscribe')" @subscribe="$emit('subscribe')"></suscription-button>
+          </div>
           <div class="float-left mr-4">
             <div class="divSummaryImg">
               <b-img   class="imagenCard" fluid center :src="revista.imagen" />
@@ -155,9 +158,15 @@ import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
 import AddThis from '@/components/AddThis.vue'
+import SuscriptionButton from '@/components/SuscriptionButton.vue'
+
 export default {
   props: {
-    id: String
+    id: String,
+    isSubscribed: Boolean
+  },
+  components: {
+    itemDescription, AddThis, SuscriptionButton
   },
   data() {
     return {
@@ -417,9 +426,6 @@ export default {
     isVoid(param){
       return param === null || param === undefined?true:false
     }
-  },
-  components: {
-    itemDescription, AddThis
   }
 };
 </script>

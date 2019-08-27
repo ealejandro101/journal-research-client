@@ -7,6 +7,8 @@ import FormularioNuevaRevista from "@/pages/FormularioNuevaRevista";
 import Login from "@/pages/Login";
 import Registro from "@/pages/Registro";
 import Revista from "@/pages/Revista"
+import Editor from "@/pages/Editor"
+
 Vue.use(Router);
 
 export default new Router({
@@ -50,6 +52,11 @@ export default new Router({
       path: "/Registro",
       name: "Registro",
       component: Registro
+    },
+    {
+      path: "/Editor",
+      name: "Editor",
+      component: Editor
     }
   ]
 });

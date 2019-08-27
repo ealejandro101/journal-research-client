@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import ProviderService from '@/providerServices/providerServices';
+import headerOptions from '@/utilities/headerOptions.js'
 
 Vue.use(Vuex)
 
@@ -9,10 +11,16 @@ const store = new Vuex.Store({
         searchWithActiveConvocatory: false,
         str: '',
         limitJournals: 15,
-        lastFilterUsed: []
+        lastFilterUsed: [],
+        providerService: new ProviderService(process.env.ROOT_API),
+        currentPage: undefined,
+        editorId: undefined
 
     },
     mutations:{
+        setCurrentPage(state, currentPage){
+            state.currentPage = currentPage
+        },
         setCurrentFilter(state, newFilter){
             state.currentFilter = newFilter
         },
@@ -27,10 +35,18 @@ const store = new Vuex.Store({
         },
         resetCurrentFilter(state){
             state.currentFilter = []
+        },
+        setAccessToken(state, value){
+            state.providerService.setAccessToken(value)
+        },
+        setEditorId(state, value){
+            state.editorId = value
         }
-        
     },
     getters: {
+        providerService (state){
+            return state.providerService
+        },
         currentFilter (state){
             return state.currentFilter
         },
@@ -137,6 +153,33 @@ const store = new Vuex.Store({
         },
         limitJournals(state){
             return state.limitJournals
+        },
+        header(state){
+            let header
+            if (state.currentPage == "research") {
+                header = [
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }else{
+                header = [
+                    headerOptions.lobby,
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }
+            if (state.providerService.getAccessToken() !== undefined) {
+                header.push(headerOptions.editor)
+            }else{
+                header.push(headerOptions.login)
+                header.push(headerOptions.register)
+            }
+            return header
+        },
+        editorId(state){
+            return state.editorId
         }
     }
 })

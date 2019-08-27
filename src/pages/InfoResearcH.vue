@@ -1,16 +1,16 @@
 <template>
     <div>
-        <header-research :inputOptions="optionsHeader"></header-research>
+        <header-research></header-research>
         <div class="container content">
             <div class="row d-flex justify-content-center">
                 <div class="col-12 textInfo">
-                    <h4 class="mb-5">Sobre ResearcH – CFP</h4>
+                    <h4 class="mb-5">Sobre Dardo – CFP</h4>
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/SNIMBGKfiRY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     <p class="mt-5">
                         Es un sistema de revistas científicas de acceso abierto que tiene como objetivo la difusión de
                         las publicaciones seriadas y brindar a los investigadores información precisa y confiable sobre
                         dónde pueden enviar sus manuscritos. A través de la divulgación de llamados a publicar o Call
-                        for Papers (CFP) en el sitio web y en las redes sociales, ResearcH quiere establecer
+                        for Papers (CFP) en el sitio web y en las redes sociales, Dardo quiere establecer
                         comunicaciones eficaces y oportunas entre editores e investigadores que permitan la
                         publicación ágil y mejorar la calidad de las revistas científicas. 
                     </p>
@@ -31,9 +31,9 @@
                         contacto para comunicarse directamente con los editores de las revistas de su interés y
                         solicitar información concreta sobre el proceso editorial.
                     </p>
-                    <h5>¿Qué revistas son aceptadas en ResearcH?</h5>
+                    <h5>¿Qué revistas son aceptadas en Dardo?</h5>
                     <p>
-                        ResearcH cuenta con una colección de revistas científicas de todas las áreas: ciencias agrícolas
+                        Dardo cuenta con una colección de revistas científicas de todas las áreas: ciencias agrícolas
                         y ambientales, ciencias de la salud, ciencias sociales y aplicadas, ciencias biológicas, ingeniería,
                         ciencias exactas y de la Tierra, humanidades, lingüística, letras y arte. Está abierta a la
                         publicación de información de revistas científicas de todo el mundo, siempre y cuando
@@ -51,7 +51,7 @@
                     </ul>
                     <h5>Postular una revista</h5>
                     <p>Los editores deben suscribir un acuerdo con Journals &amp; Authors para que su revista pueda ser
-                        publicada en ResearcH-CFP. Este acuerdo buscará también difundir en el sitio web
+                        publicada en Dardo-CFP. Este acuerdo buscará también difundir en el sitio web
                         <a href="http://www.jasolutions.com.co" target="_blanck">www.jasolutions.com.co</a> y en nuestras cuentas oficiales de redes sociales información de la
                         revista relacionada con convocatorias de recepción de artículos (Call for Papers), guía para
                         autores, alcances, política editorial e información sobre integrantes del comité editorial.</p>
@@ -65,7 +65,7 @@
                         autores y editores de las revistas.  Cualquier usuario puede informar al correo
                         electrónico <a href="mailto:info@jasolutions.com.co" target="_top">info@jasolutions.com.co</a> sobre información inexacta, errónea, falsa, que atente
                         contra la dignidad humana, viole derechos de autor o que promueva malas prácticas
-                        editoriales. ResearcH no promueve ni publica anuncios de CFP de revistas depredadoras que
+                        editoriales. Dardo no promueve ni publica anuncios de CFP de revistas depredadoras que
                         buscan engañar a los autores o investigadores.</p>
                     <h5>Procedimiento para postulación de revistas y publicación de CFP</h5>
                     <p>Una vez el editor llene el <a href="/#/FormularioNuevaRevista" target="_blanck">formulario</a> completamente y lo envíe, un comité conformado
@@ -95,18 +95,17 @@
 <script>
 import HeaderResearch from '@/components/HeaderResearch';
 import FooterResearch from '@/components/FooterResearch';
-import jsonHeaderOptions from "@/utilities/headerOptions.json"
+import jsonHeaderOptions from "@/utilities/headerOptions.js"
 
 export default {
   name: "info-research",
   components: {HeaderResearch, FooterResearch},
   data() {
       return {
-        optionsHeader: undefined
       };
   },
   created (){
-    this.optionsHeader = JSON.parse(JSON.stringify(jsonHeaderOptions.otherPageHeader))
+    this.$store.commit('setCurrentPage', 'info-research')
     window.scrollTo(0, 0);
   },
 };
