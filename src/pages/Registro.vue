@@ -14,10 +14,6 @@
                 <input type="text" class="form-control" v-model="name" id="nombre" placeholder="Ingrese su nombre">
               </div>
               <div class="form-group">
-                <label for="edad" class="float-left">Edad:</label>
-                <input type="number" class="form-control" v-model="edad" id="edad" placeholder="Ingrese su edad" min="0" max="120">
-              </div>
-              <div class="form-group">
                 <label for="profesion" class="float-left">Profesión:</label>
                 <input type="text" class="form-control" v-model="profesion" id="profesion" placeholder="Ingrese su profesion">
               </div>
@@ -36,7 +32,7 @@
                 <input type="text" class="form-control" v-model="orcid" id="orcid" placeholder="Ingrese su orcid">
               </div>
               <div class="form-group">
-                <label for="googlescholar" class="float-left">Googlescholar:</label>
+                <label for="googlescholar" class="float-left">Google Scholar:</label>
                 <input type="text" class="form-control" v-model="googlescholar" id="googlescholar" placeholder="Ingrese su googlescholar">
               </div>
               <div class="form-group">
@@ -48,7 +44,7 @@
                 <input type="password" class="form-control" v-model="password" id="password" placeholder="Ingrese su contraseña">
               </div>
               <div class="form-group">
-                <label for="repassword" class="float-left">Repetir la ontraseña:</label>
+                <label for="repassword" class="float-left">Repetir la contraseña:</label>
                 <input type="password" class="form-control" v-model="repassword" id="repassword" placeholder="Ingrese su contraseña">
               </div>
               <!--<div class="form-group">
@@ -77,6 +73,7 @@ import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import ErrorNotification from "@/components/ErrorNotification"
 import validator from "@/utilities/validators.js"
 import models from "@/utilities/models.js"
+import { EventBus } from '@/event-bus.js';
 
 export default {
   name: "register-page",
@@ -106,6 +103,17 @@ export default {
     };
   },
   created() {
+    let _self = this
+    EventBus.$on('userLogged', function(){//Se activa en el constructor de @/providerservices/providerservices.js
+      _self.$router.push({
+        path: '/Editor'
+      })
+    })
+    if (this.$store.getters.editorId !== undefined) {
+      this.$router.push({
+        path: '/Editor'
+      })
+    }
     window.scrollTo(0, 0);
     this.$store.commit('setCurrentPage', 'register-page')
   },

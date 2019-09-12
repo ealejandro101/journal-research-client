@@ -10,15 +10,19 @@ export default class ProviderService {
         this.rootAPI = rootAPI
         this.accessToken = undefined
         let _self = this
-        axios.get(this.rootAPI + '../custom/Editor/isLogged',  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(function(res){
+        axios.get(this.rootAPI + '../custom/Editor/isLogged',  { withCredentials: true }).then(function(res){
             _self.setAccessToken(res.data.accessToken)
             store.commit('setEditorId', res.data.identifier)
         })
     }
 
     setAccessToken(token){
+        let aux = store.getters.editorId === undefined
         this.accessToken = token
-        EventBus.$emit('userLogged')
+        if (aux) {
+            EventBus.$emit('userLogged')
+        }
+        
     }
 
     getAccessToken(){
@@ -95,6 +99,8 @@ export default class ProviderService {
                 })
                 return
             }
+            console.log(store.getters.editorId);
+            
             axios.post(this.rootAPI + 'SuscripcionEditorCategoria', { id: "", editorId: store.getters.editorId, categoriaId: categoryId },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response)
             }).catch(error => {
@@ -128,7 +134,7 @@ export default class ProviderService {
 
     getEditorFullObject(){
         return new Promise((resolve, reject) => {
-            axios.get(this.rootAPI + '../custom/Editor/getFullObject',  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+            axios.get(this.rootAPI + '../custom/Editor/getFullObject',  { withCredentials: true }).then(response => {
                 resolve(response.data)
             }).catch(error => {
                 reject({
@@ -144,9 +150,10 @@ export default class ProviderService {
             axios.post(this.rootAPI + '../custom/Editor/login', { email, password },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response.data)
             }).catch(error => {
-                if (error.response.data.error.code == codes.CODES.LOGIN_FAILED.CODE) {
+                console.log(error.response)
+                if (codes.CODES[error.response.data.error.code] !== undefined && codes.CODES[error.response.data.error.code] !== null) {
                     reject({
-                        msg: codes.CODES.LOGIN_FAILED.MSG,
+                        msg: codes.CODES[error.response.data.error.code].MSG,
                         error
                     })
                 }

@@ -174,12 +174,51 @@ const store = new Vuex.Store({
                     headerOptions.journals
                 ]
             }
-            if (state.providerService.getAccessToken() !== undefined) {
+            if (state.editorId !== undefined) {
                 header.push(headerOptions.editor)
             }else{
                 header.push(headerOptions.login)
                 header.push(headerOptions.register)
             }
+            return header
+        },
+        headerLogged(state){
+            let header
+            if (state.currentPage == "research") {
+                header = [
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }else{
+                header = [
+                    headerOptions.lobby,
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }
+            header.push(headerOptions.editor)
+            return header
+        },
+        headerUnlogged(state){
+            let header
+            if (state.currentPage == "research") {
+                header = [
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }else{
+                header = [
+                    headerOptions.lobby,
+                    headerOptions.infoResearch,
+                    headerOptions.newJournal,
+                    headerOptions.journals
+                ]
+            }
+            header.push(headerOptions.login)
+            header.push(headerOptions.register)
             return header
         },
         editorId(state){

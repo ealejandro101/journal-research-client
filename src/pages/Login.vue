@@ -43,6 +43,7 @@
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
+import { EventBus } from '@/event-bus.js';
 
 export default {
   name: "login-page",
@@ -59,6 +60,17 @@ export default {
     };
   },
   created() {
+    let _self = this
+    EventBus.$on('userLogged', function(){//Se activa en el constructor de @/providerservices/providerservices.js
+      _self.$router.push({
+        path: '/Editor'
+      })
+    })
+    if (this.$store.getters.editorId !== undefined) {
+      this.$router.push({
+        path: '/Editor'
+      })
+    }
     this.$store.commit('setCurrentPage', 'login-page')
     this.isActiveButton = true
   },
