@@ -126,12 +126,6 @@ export default {
           path: '/Login'
         })
       }).catch(function(err){
-        if (err.response.data.error.message == "Must include verifyOptions.from when calling user.verify()") {
-          alert('Se ha registrado correctamente')
-          _self.$router.push({
-            path: '/Login'
-          })
-        }
         alert(err.response.data.error.message)
       })
     },
