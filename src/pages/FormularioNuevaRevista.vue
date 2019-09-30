@@ -17,14 +17,14 @@
                 >Dardo es una red de revistas científicas de acceso abierto (Open Access) que tiene como objetivo la difusión de las publicaciones seriadas y brindar a los investigadores información precisa sobre dónde pueden enviar sus manuscritos. A través de la publicación de llamados a publicar (Call for papers) en el sitio web y en las redes sociales, Dardo quiere establecer comunicaciones eficaces entre editores e investigadores que permitan la publicación ágil y mejorar la calidad de las revistas científicas. Ver más información</p>
               </div>
               <br />
-              <!--<div class="containerIframe">
-                <iframe src="https://docs.google.com/forms/d/1OSJu-gvgYjs-_n6HqnGErUKPu8L1Uyglj-s1GI89js0/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe>
-              </div>-->
             </div>
           </div>
           <div v-if="!optionsForm.isLogged" class="row">
             <div class="col">
-              <p>Para postular una revista debes de <router-link to="/Registro">registrarte</router-link> en nuestra plataforma.</p>
+              <!--<p>Para postular una revista debes de <router-link to="/Registro">registrarte</router-link> en nuestra plataforma.</p>-->
+              <div class="containerIframe">
+                <iframe src="https://docs.google.com/forms/d/1OSJu-gvgYjs-_n6HqnGErUKPu8L1Uyglj-s1GI89js0/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              </div>
             </div>
           </div>
           <div v-else class="row">
