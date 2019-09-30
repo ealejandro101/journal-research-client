@@ -1,7 +1,80 @@
-const model = {
-    editor: {
-        academicLevel: ['Pregrado/Universitario','Especialización','Especialidad medica','MBA','Maestría/Magister','Doctorado','Pos-doctorado/Estancia pos-doctoral','Otro']
-    }
+/*const model = {
+  revista: {
+    "estaActiva": null,
+    "descripcion": null,
+    "doi": null,
+    "eissn": null,
+    "fechaCreacion": null,
+    "fechaIngreso": null,
+    "id": "",
+    "imagen": null,
+    "issn": null,
+    "licenciaId": null,
+    "subtitulo": null,
+    "titulo": null,
+    "tituloCorto": null
+  },
+  radicional: {
+    "id": "",
+    "apc": null,
+    "codigoEtica": null,
+    "correo": null,
+    "disciplinaId": null,
+    "disciplinaId1": null,
+    "disciplinaId2": null,
+    "disciplinaId3": null,
+    "equipoEditorial": null,
+    "estiloCitacionId": null,
+    "facebook": null,
+    "googlescholar": null,
+    "guiaAutores": null,
+    "instagram": null,
+    "oai": null,
+    "periodicidadId": null,
+    "periodicidadOtro": null,
+    "politicaAutoarchivoId": null,
+    "preprint": null,
+    "tipoRevisionParesId": null,
+    "twitter": null,
+    "url": null,
+    "videopresentacion": null
+  },
+  rcontactos: {
+    "id": "",
+    "editor": null,
+    "editorGooglescholar": null,
+    "editorOrcid": null,
+    "facultad": null,
+    "institucion": null
+  },
+  ridiomas: {
+    "id": "",
+    "idiomaId": null,
+    "revistaId": null
+  },
+  rindexaciones: {
+    "id": "",
+    "indexacionesId": null,
+    "revistaId": null,
+    "parametro": null
+  },
+  rubicacion: {
+    "ciudadId": null,
+    "direccion": null,
+    "id": "",
+    "telefono": null,
+    "zipcode": null
+  },
+  revistascategorias: {
+    "id": "",
+    "categoriaId": null,
+    "revistaId": null
+  },
+  rpalabraclave: {
+    "palabraClaveId": null,
+    "revistaId": null
+  }
 }
-
+*/
+const model = { "revista": { "estaActiva": null, "descripcion": null, "doi": null, "eissn": null, "fechaCreacion": "444", "fechaIngreso": null, "id": "", "imagen": null, "issn": null, "licenciaId": 4, "subtitulo": null, "titulo": "asd", "tituloCorto": null }, "radicional": { "id": "", "apc": "1", "codigoEtica": "Código de ética*", "correo": "Correo electrónico*", "disciplinaId": 4, "disciplinaId1": null, "disciplinaId2": null, "disciplinaId3": null, "equipoEditorial": "Equipo editorial*", "estiloCitacionId": 3, "facebook": null, "googlescholar": null, "guiaAutores": "Guía para autores*", "instagram": null, "oai": "OAI-PMH*", "periodicidadId": 2, "periodicidadOtro": null, "politicaAutoarchivoId": 2, "preprint": "0", "tipoRevisionParesId": 3, "twitter": null, "url": "URL de la revista *", "videopresentacion": null }, "rcontactos": { "id": "", "editor": "Editor ", "editorGooglescholar": null, "editorOrcid": null, "facultad": null, "institucion": "Institución" }, "ridiomas": { "id": "", "idiomaId": null, "revistaId": null, "idiomas": [] }, "rindexaciones": { "id": "", "indexacionesId": null, "revistaId": null, "parametro": null, "indexaciones": [] }, "rubicacion": { "ciudadId": 6433, "direccion": null, "id": "", "telefono": null, "zipcode": null }, "revistascategorias": { "id": "", "categoriaId": null, "revistaId": null, "categories": [] }, "rpalabraclave": { "palabraClaveId": null, "revistaId": null, "palabrasclave": "" } }
 export default model

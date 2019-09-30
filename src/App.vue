@@ -104,7 +104,6 @@ img{
   background-size: contain;
   background-repeat: repeat-y;
   background-position-x: right;
-  height: 100vh;
   background-position-y: top;
 }
 .no-bnt{

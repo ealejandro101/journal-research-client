@@ -1,7 +1,4 @@
 import axios from "axios";
-import { EventBus } from '@/event-bus.js';
-import store from '@/store'
-
 let codes = require('./responseCodes.js')
 
 export default class ProviderService {
@@ -9,20 +6,40 @@ export default class ProviderService {
     constructor(rootAPI) {
         this.rootAPI = rootAPI
         this.accessToken = undefined
-        let _self = this
-        axios.get(this.rootAPI + '../custom/Editor/isLogged',  { withCredentials: true }).then(function(res){
-            _self.setAccessToken(res.data.accessToken)
-            store.commit('setEditorId', res.data.identifier)
+        this.editorId = undefined
+        this.tokenTimeToLive = localStorage.getItem('tokenTimeToLive')
+        this.tokenCreated = localStorage.getItem('tokenCreated')
+        this.accessToken = localStorage.getItem('token')
+        this.editorId = localStorage.getItem('editorId')
+        //si no esta logueado
+        if (this.accessToken === undefined || this.accessToken == null || this.editorId == null || this.editorId == null) {
+            this.logoutLocalStorage()
+            return
+        }
+        //verificar el estado del token
+        let currentDate = new Date()
+        let tokenDate = new Date(this.tokenCreated)
+        tokenDate.setSeconds(tokenDate.getSeconds() + this.tokenTimeToLive);
+        if (currentDate.getTime() >= tokenDate) {
+            this.logoutLocalStorage()
+            location.reload();
+        }
+        //Verificar el estado de login en el servidor
+        this.getModel(`Editors/${this.editorId}/accessTokens`).then(response => {
+            axios.interceptors.request.use(config => {
+                config.headers.Authorization =  this.accessToken;
+                return config;
+            });
+        }).catch(error => {
+            //Token no valido
+            this.logoutLocalStorage()
+            location.reload();
         })
+        
     }
 
     setAccessToken(token){
-        let aux = store.getters.editorId === undefined
         this.accessToken = token
-        if (aux) {
-            EventBus.$emit('userLogged')
-        }
-        
     }
 
     getAccessToken(){
@@ -72,14 +89,14 @@ export default class ProviderService {
 
     subscribeEditorJournal(journalId){
         return new Promise((resolve, reject) => {
-            if (store.getters.editorId === undefined) {
+            if (this.editorId === undefined) {
                 reject({
                     msg: codes.CODES.DEFAULT.MSG,
                     error
                 })
                 return
             }
-            axios.post(this.rootAPI + 'SuscripcionEditorRevista', { id: "", editorId: store.getters.editorId, revistaId: journalId }, { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+            axios.post(this.rootAPI + 'SuscripcionEditorRevista', { id: "", editorId: this.editorId, revistaId: journalId }, { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject({
@@ -92,16 +109,14 @@ export default class ProviderService {
 
     subscribeEditorCategory(categoryId){
         return new Promise((resolve, reject) => {
-            if (store.getters.editorId === undefined) {
+            if (this.editorId === undefined) {
                 reject({
                     msg: codes.CODES.DEFAULT.MSG,
                     error
                 })
                 return
             }
-            console.log(store.getters.editorId);
-            
-            axios.post(this.rootAPI + 'SuscripcionEditorCategoria', { id: "", editorId: store.getters.editorId, categoriaId: categoryId },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+            axios.post(this.rootAPI + 'SuscripcionEditorCategoria', { id: "", editorId: this.editorId.editorId, categoriaId: categoryId },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject({
@@ -114,14 +129,14 @@ export default class ProviderService {
 
     unsubscribeEditorJournal(journalId){
         return new Promise((resolve, reject) => {
-            if (store.getters.editorId === undefined) {
+            if (this.editorId.editorId === undefined) {
                 reject({
                     msg: codes.CODES.DEFAULT.MSG,
                     error
                 })
                 return
             }
-            axios.delete(this.rootAPI + `/Editors/${store.getters.editorId}/revistasSuscritas/rel/${journalId}`, { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+            axios.delete(this.rootAPI + `/Editors/${this.editorId.editorId}/revistasSuscritas/rel/${journalId}`, { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject({
@@ -148,6 +163,12 @@ export default class ProviderService {
     login(email, password) {
         return new Promise((resolve, reject) => {
             axios.post(this.rootAPI + '../custom/Editor/login', { email, password },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+                console.log(response);
+                alert("ss")
+                localStorage.setItem('token', response.data.id);
+                localStorage.setItem('editorId', response.data.userId)
+                localStorage.setItem('tokenTimeToLive', response.data.ttl)
+                localStorage.setItem('tokenCreated',  response.data.created)
                 resolve(response.data)
             }).catch(error => {
                 console.log(error.response)
@@ -165,11 +186,20 @@ export default class ProviderService {
         })
     }
 
+    logoutLocalStorage(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('editorId');
+        localStorage.removeItem('tokenTimeToLive')
+        localStorage.removeItem('tokenCreated')
+    }
+
     logout() {
         return new Promise((resolve, reject) => {
             axios.get(this.rootAPI + '../custom/Editor/logout', { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+                this.logoutLocalStorage()
                 resolve(response.data)
             }).catch(error => {
+                this.logoutLocalStorage()
                 reject({
                     msg: codes.CODES.DEFAULT.MSG,
                     error

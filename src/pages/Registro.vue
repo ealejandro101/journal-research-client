@@ -72,7 +72,7 @@ import FooterResearch from "@/components/FooterResearch";
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import ErrorNotification from "@/components/ErrorNotification"
 import validator from "@/utilities/validators.js"
-import models from "@/utilities/models.js"
+import models from "@/utilities/inputOptions.js"
 import { EventBus } from '@/event-bus.js';
 
 export default {
@@ -89,7 +89,6 @@ export default {
       email: '',
       password: '',
       repassword: '',
-      edad: '',
       nivelAcademico: '',
       orcid: '',
       universidad: '',
@@ -103,18 +102,6 @@ export default {
     };
   },
   created() {
-    let _self = this
-    EventBus.$on('userLogged', function(){//Se activa en el constructor de @/providerservices/providerservices.js
-      _self.$router.push({
-        path: '/Editor'
-      })
-    })
-    if (this.$store.getters.editorId !== undefined) {
-      this.$router.push({
-        path: '/Editor'
-      })
-    }
-    window.scrollTo(0, 0);
     this.$store.commit('setCurrentPage', 'register-page')
   },
   methods: {
@@ -129,7 +116,6 @@ export default {
         profesion: this.profesion,
         email: this.email,
         password: this.password,
-        edad: this.edad,
         nivelAcademico: this.nivelAcademico,
         orcid: this.orcid,
         universidad: this.universidad,
@@ -150,9 +136,6 @@ export default {
       }
       if (!validator.isText(this.profesion)) {
         errors.push('Para la profesion solo se permiten caracteres alfabéticos')
-      }
-      if (!validator.isNumber(this.edad)) {
-        errors.push('Debe de ingresar una edad valida')
       }
       if (!validator.isEmail(this.email)) {
         errors.push('Debe de ingresar un correo valido')

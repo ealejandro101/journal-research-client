@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import models from "@/utilities/models.js"
+import models from "@/utilities/inputOptions.js"
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
 import SuscriptionButton from "@/components/SuscriptionButton.vue";
@@ -194,18 +194,8 @@ export default {
     };
   },
   created() {
-    let _self = this;
-    if (this.$store.getters.editorId === undefined) {
-      this.$router.push({
-        path: '/Login'
-      })
-    }
     this.$store.commit("setCurrentPage", "editor-page");
-    EventBus.$on("userLogged", function() {
-      //Se activa en el constructor de @/providerservices/providerservices.js
-      _self.userIsLogged();
-    });
-    _self.userIsLogged();
+    this.userIsLogged();
   },
   methods: {
     userIsLogged() {

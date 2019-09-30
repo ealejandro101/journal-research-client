@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import ProviderService from '@/providerServices/providerServices';
 import headerOptions from '@/utilities/headerOptions.js'
+import models from '@/utilities/models.js'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,7 @@ const store = new Vuex.Store({
         lastFilterUsed: [],
         providerService: new ProviderService(process.env.ROOT_API),
         currentPage: undefined,
-        editorId: undefined
+        editorId: localStorage.getItem('editorId')
 
     },
     mutations:{
@@ -48,6 +49,12 @@ const store = new Vuex.Store({
         }
     },
     getters: {
+        editorId(state){
+            return state.editorId
+        },
+        models(){
+            return models
+        },
         providerService (state){
             return state.providerService
         },
@@ -64,13 +71,13 @@ const store = new Vuex.Store({
                 response: [],
                 customQuery: [
                     {
-                        value: `'${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}'`,
+                        value: `'${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}'`,
                         operator: '>=',
                         attribute: 'fecha_final',
                         isOr: false
                     },
                     {
-                        value: `'${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}'`,
+                        value: `'${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}'`,
                         operator: '<=',
                         attribute: 'fecha_inicio'
                     },
@@ -174,7 +181,7 @@ const store = new Vuex.Store({
                     headerOptions.journals
                 ]
             }
-            if (state.editorId !== undefined) {
+            if (state.editorId !== undefined && state.editorId !== null) {
                 header.push(headerOptions.editor)
             }else{
                 header.push(headerOptions.login)
@@ -220,9 +227,6 @@ const store = new Vuex.Store({
             header.push(headerOptions.login)
             header.push(headerOptions.register)
             return header
-        },
-        editorId(state){
-            return state.editorId
         }
     }
 })

@@ -60,17 +60,6 @@ export default {
     };
   },
   created() {
-    let _self = this
-    EventBus.$on('userLogged', function(){//Se activa en el constructor de @/providerservices/providerservices.js
-      _self.$router.push({
-        path: '/Editor'
-      })
-    })
-    if (this.$store.getters.editorId !== undefined) {
-      this.$router.push({
-        path: '/Editor'
-      })
-    }
     this.$store.commit('setCurrentPage', 'login-page')
     this.isActiveButton = true
   },
@@ -83,11 +72,7 @@ export default {
       this.errors = []
       let s = this.$store.getters.providerService.login(this.email, this.password)
       this.$store.getters.providerService.login(this.email, this.password).then((data) => {
-        this.$store.commit('setAccessToken', data.accessToken)
-        this.$store.commit('setEditorId', data.editorId)
-        this.$router.push({
-          path: '/'
-        })
+        location.reload();
       }).catch((error) => {
         this.password = ''
         this.errors = [error.msg]
