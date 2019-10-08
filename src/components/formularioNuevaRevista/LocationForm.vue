@@ -6,7 +6,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="pais" class="text-left d-block">País *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!optionsForm.countryId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <select
           @change="cambiarEstados"
           class="float-left"
@@ -25,7 +27,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="estado" class="text-left d-block">Estado *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!optionsForm.stateId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <select
           @change="cambiarciudades"
           class="float-left"
@@ -44,7 +48,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="ciudadId" class="text-left d-block">Ciudad*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!rubicacion.ciudadId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <select
           class="float-left"
           v-model="rubicacion.ciudadId"
@@ -151,7 +157,8 @@ export default {
         .then(res => {
           this.optionsForm.states = res.data;
           this.optionsForm.cities = [];
-          this.optionsForm.stateId = 0;
+          this.optionsForm.stateId = null;
+          this.optionsForm.cityId = null;
         })
         .catch(function(err) {
           console.log(err);
@@ -166,7 +173,7 @@ export default {
         .getModel(`Estados/${this.optionsForm.stateId}/ciudades`)
         .then(res => {
           this.optionsForm.cities = res.data;
-          this.optionsForm.cityId = 0;
+          this.optionsForm.cityId = null;
         })
         .catch(function(err) {
           console.log(err);

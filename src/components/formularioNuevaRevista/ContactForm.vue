@@ -6,7 +6,9 @@
       </div>
       <div class="form-group d-flex flex-column text-center">
         <label for="editor" class="text-left d-block">Editor *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!rcontactos.editor" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="editor"
           v-model="rcontactos.editor"
@@ -18,7 +20,9 @@
       </div>
       <div class="form-group d-flex flex-column text-center">
         <label for="url" class="text-left d-block">URL de la revista *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.url" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="url"
           v-model="radicional.url"
@@ -30,7 +34,9 @@
       </div>
       <div class="form-group d-flex flex-column text-center">
         <label for="correo" class="text-left d-block">Correo electrónico*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.correo" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="correo"
           v-model="radicional.correo"
@@ -76,7 +82,9 @@
 
       <div class="form-group d-flex flex-column text-center">
         <label for="institucion" class="text-left d-block">Institución*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!rcontactos.institucion" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="institucion"
           v-model="rcontactos.institucion"

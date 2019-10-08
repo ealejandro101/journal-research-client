@@ -192,6 +192,14 @@ export default {
         this.optionsForm.saveIsUsed = false
         return
       }
+      for (const iterator of this.models.rindexaciones.indexaciones) {
+        if (!this.models.rindexaciones[`parameter-${iterator}`]) {
+          alert('Ha ocurrido un error al itentar postular su revista.')
+          this.optionsForm.errors.push('Debe de llenar los enlaces de las indexaciones.')
+          this.optionsForm.saveIsUsed = false
+          return
+        }
+      }
       let editorId = this.$store.getters.editorId
       let route = `Editors/${editorId}/postFullJournal`
       this.$store.getters.providerService.postModel(route, { models: this.models }).then(response => {

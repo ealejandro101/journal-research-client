@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid noPadding headerResearchContainer">
-        <b-navbar toggleable="md" type="dark" variant="info">
+        <b-navbar class="pb-0" toggleable="md" type="dark" variant="info">
             <div class="row d-flex align-items-center" style="width: 100%">
                 <div class="col-0 col-sm-3 col-md-2 col-lg-2 noPadding">
                     <logo-research></logo-research>
@@ -43,7 +43,6 @@ export default {
 .headerResearchContainer{
     border-bottom: solid 1px;
     border-color: #bfbdbd;
-    min-height: 5em;
     background-color: #fff;
 }
 ul{

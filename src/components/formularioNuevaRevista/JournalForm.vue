@@ -6,7 +6,9 @@
       </div>
       <div class="form-group d-flex flex-column text-center">
         <label for="titulo" class="text-left d-block">Titulo*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!revista.titulo" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="titulo"
           v-model="revista.titulo"
@@ -85,7 +87,9 @@
 
       <div class="form-group d-flex flex-column">
         <label for="fechaCreacion" class="text-left d-block">Año de creación de la revista*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!revista.fechaCreacion" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="fechaCreacion"
           v-model="revista.fechaCreacion"
@@ -93,12 +97,15 @@
           required="required"
           type="number"
           class="form-control max-width-35em"
+          min="0"
         />
       </div>
 
       <div class="form-group d-flex flex-column">
         <label for="periodicidadId" class="text-left d-block">Ingrese la periodicidad de su revista*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.periodicidadId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div
             class="d-flex inputOption"
@@ -129,6 +136,21 @@
           v-model="radicional.periodicidadOtro"
           type="text"
           class="form-control max-width-35em"
+        />
+      </div>
+
+      <div class="form-group d-flex flex-column">
+        <label
+          for="periodicidadOtro"
+          class="text-left d-block"
+        >Tiempo promedio de publicación (evaluación) semanas</label>
+        <input
+          id="tiempoPromedioPublicacion"
+          v-model="radicional.tiempoPromedioPublicacion"
+          type="number"
+          class="form-control max-width-35em"
+          placeholder="Ingrese el tiempo en semanas"
+          min="0"
         />
       </div>
 

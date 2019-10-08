@@ -6,7 +6,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="politicaAutoarchivoId" class="text-left d-block">Política de Autoarchivo*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.politicaAutoarchivoId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div class="d-flex inputOption" v-for="(policy, index) in optionsForm.politics" :key="policy.id">
             <input
@@ -24,7 +26,9 @@
 
       <div class="form-group d-flow-root">
         <label for="oai" class="text-left d-block">OAI-PMH*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.oai" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="oai"
           v-model="radicional.oai"
@@ -37,7 +41,9 @@
 
       <div class="form-group d-flow-root">
         <label for="estiloCitacionId" class="text-left d-block">Estilo de citación*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.estiloCitacionId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div
             class="d-flex inputOption"
@@ -58,7 +64,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="codigoEtica" class="text-left d-block">Código de ética*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.codigoEtica" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="codigoEtica"
           v-model="radicional.codigoEtica"
@@ -71,7 +79,9 @@
 
       <div class="form-group d-flow-root">
         <label for="guiaAutores" class="text-left d-block">Guía para autores*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.guiaAutores" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="guiaAutores"
           v-model="radicional.guiaAutores"
@@ -84,7 +94,9 @@
 
       <div class="form-group d-flow-root">
         <label for="tipoRevisionParesId" class="text-left d-block">Tipo de revisión por pares *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.tipoRevisionParesId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div class="d-flex inputOption" v-for="(type, index) in optionsForm.typeReviewPeer" :key="type.id">
             <input
@@ -102,7 +114,9 @@
 
       <div class="form-group d-flow-root">
         <label for="equipoEditorial" class="text-left d-block">Equipo editorial*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.equipoEditorial" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="equipoEditorial"
           v-model="radicional.equipoEditorial"
@@ -114,7 +128,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="apc" class="text-left d-block">APC</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.apc" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <select
           class="float-left"
           id="apc"
@@ -128,7 +144,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="preprint" class="text-left d-block">Su revista acepta PrePrint?</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!radicional.preprint" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <select
           class="float-left"
           id="preprint"

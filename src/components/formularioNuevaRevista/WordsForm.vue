@@ -8,7 +8,9 @@
         for="disciplinaId"
         class="text-left d-block"
       >Escoja la primera disciplina de su revista*</label>
-      <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+      <div v-if="!radicional.disciplinaId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
       <select
         v-model="radicional.disciplinaId"
         class="float-left"

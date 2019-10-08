@@ -9,7 +9,9 @@
           for="categoriaId"
           class="text-left d-block"
         >Seleccione la(s) catergoria(s) a las cuales pertenece su revista*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="revistascategorias.categories.length == 0" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div
             class="d-flex inputOption"
@@ -30,7 +32,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="indexacionesId" class="text-left d-block">Indexaciones *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="rindexaciones.indexaciones.length == 0" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div
             class="d-flex align-items-center inputOption"
@@ -53,6 +57,11 @@
               type="text"
               placeholder="link/url"
             />
+            <span 
+              v-if="isActive(rindexaciones.indexaciones, indexing.id) != undefined && !rindexaciones[`parameter-${indexing.id}`]" 
+              class="isNecessary text-left small text-danger">
+              Es necesario llenar este campo
+            </span>
           </div>
         </div>
       </div>
@@ -61,7 +70,9 @@
           for="idiomaId"
           class="text-left d-block"
         >Seleccione el (los) idioma (s) en los cuales publica la revista*</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="ridiomas.idiomas.length == 0" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div
             class="d-flex inputOption"
@@ -82,7 +93,9 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="licenciaId" class="text-left d-block">Licencia Creative Commons *</label>
-        <div class="isNecessary text-left small" style="color: red;">Es necesario llenar este campo</div>
+        <div v-if="!revista.licenciaId" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <div class="pl-4">
           <div v-for="(license, index) in optionsForm.licenses" :key="license.id" class="d-flex inputOption" >
             <input
@@ -182,10 +195,19 @@ export default {
         console.log(err);
       });
   },
-  watch: {},
+  computed: {
+  },
+  watch: {
+  },
   methods: {
     save() {
       this.$emit('save')
+    },
+    isActive(array, item){
+      let res = array.find(function(element) {
+        return element == item;
+      });
+      return res
     }
   }
 };

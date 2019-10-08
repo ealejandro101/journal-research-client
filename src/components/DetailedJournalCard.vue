@@ -17,7 +17,7 @@
               />
               <div 
                 class="addthis_inline_share_toolbox_r5ri d-flex" 
-                :data-title="revista.titulo + ' en Journals Research'"
+                :data-title="revista.titulo + ' en Dardo'"
                 :data-media="imageToShare">
               </div>
             </div>
@@ -86,6 +86,7 @@
                       {{ revista[prop.key].toString() }} &nbsp
                       <span>
                         <router-link v-if="prop.key === 'ciudad'" :to="`/ListaRevistas/${prop.key}=${idCity}`"><i class="fas fa-sort-amount-down"></i></router-link>
+                        <router-link v-else-if="prop.key === 'pais'" :to="`/ListaRevistas/${prop.key}=${idCountry}`"><i class="fas fa-sort-amount-down"></i></router-link>
                         <router-link v-else :to="`/ListaRevistas/${prop.key}=${encodeURIComponent(revista[prop.key].toString())}`"><i class="fas fa-sort-amount-down"></i></router-link>
                       </span>
                     </p>
@@ -180,6 +181,7 @@ export default {
       rUbicacion: {},
       indexScopus: '',
       idCity: "",
+      idCountry: "",
       urlVideo:"",
       video:false,
       show: "",
@@ -234,7 +236,6 @@ export default {
         { nombre: "DOI", key:"doi" },
         { nombre: "Teléfono", key:"telefono" },
         { nombre: "Dirección", key:"direccion" },
-        { nombre: "País", key:"pais" },
         { nombre: "", key:"correo" },
         { nombre: "Política de auto archivo", key:"politicaAutoarchivo" }
       ],
@@ -254,6 +255,7 @@ export default {
       ],
       propiedadesName6: [//Propiedades con filtro de busqueda de texto
         { nombre: "Institución", key:"institucion" },
+        { nombre: "País", key:"pais" },
         { nombre: "Ciudad", key:"ciudad" }
       ]
     };
@@ -283,6 +285,7 @@ export default {
       this.rAdicional = {}
       this.rUbicacion = {}
       this.idCity = ""
+      this.idCountry = ""
       this.indexScopus = ""
       this.urlVideo=""
       this.video=false;
@@ -316,6 +319,7 @@ export default {
                   .get(process.env.ROOT_API + "Estados/" + stateLocationId)
                   .then(response => {
                     let contryLocationId = response.data.country_id
+                    this.idCountry = contryLocationId;
                     axios
                       .get(process.env.ROOT_API + "Pais/" + contryLocationId)
                       .then(response => {

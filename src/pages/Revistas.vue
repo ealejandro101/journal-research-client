@@ -185,6 +185,9 @@ export default {
           case "ciudad":
             this.getJournalsCity(postfix, query);
             break;
+          case "pais":
+            this.getJournalsCountry(postfix, query);
+            break;
           default:
             this.getJournals(query);
             break;
@@ -249,6 +252,21 @@ export default {
           order: 'revista.titulo ASC',
           limit: this.$store.getters.getLimitJournals
         }
+      });
+    },
+    getJournalsCountry (countryId, query) {
+      this.currentPage = 1
+      this.applyFilters({
+        filters: [{
+          model: "estado", 
+          response: [countryId], 
+          attribute: "country_id"
+        }],
+        extra: {
+          page: 1,
+          order: 'revista.titulo ASC',
+          limit: this.$store.getters.getLimitJournals
+          }
       });
     },
     getJournalsCity (cityId, query) {

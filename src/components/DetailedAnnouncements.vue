@@ -78,7 +78,7 @@
                     <AddThis publicId="ra-5cf56caaa6e91bcc"/>
                     <div 
                       class="addthis_inline_share_toolbox_r5ri d-flex"
-                      :data-title="convocatoria.titulo + ' en Journals Research'"
+                      :data-title="convocatoria.titulo + ' en Dardo'"
                       :data-media="convocatoria.imagen.replace('http', 'https')">
                     </div>
                   </div>

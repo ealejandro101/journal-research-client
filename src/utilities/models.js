@@ -23,6 +23,7 @@ const model = {
     "disciplinaId1": null,
     "disciplinaId2": null,
     "disciplinaId3": null,
+    "tiempoPromedioPublicacion": null,
     "equipoEditorial": null,
     "estiloCitacionId": null,
     "facebook": null,
@@ -50,13 +51,15 @@ const model = {
   ridiomas: {
     "id": "",
     "idiomaId": null,
-    "revistaId": null
+    "revistaId": null,
+    "idiomas": []
   },
   rindexaciones: {
     "id": "",
     "indexacionesId": null,
     "revistaId": null,
-    "parametro": null
+    "parametro": null,
+    "indexaciones": []
   },
   rubicacion: {
     "ciudadId": null,
@@ -68,7 +71,8 @@ const model = {
   revistascategorias: {
     "id": "",
     "categoriaId": null,
-    "revistaId": null
+    "revistaId": null,
+    "categories": []
   },
   rpalabraclave: {
     "palabraClaveId": null,
