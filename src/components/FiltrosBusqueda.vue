@@ -3,8 +3,8 @@
         <h6><strong>Filtros de búsqueda</strong></h6>
         <div>
             <div>
-                <hr>
-                <div class="d-flex align-items-center">
+                <hr class="m-0">
+                <div class="d-flex align-items-center py-2">
                     <input 
                     type="checkbox" 
                     id="input-convocatoria" 
@@ -14,16 +14,16 @@
                     /> 
                     <label for="input-convocatoria" class="w-75 text-left pr-2 my-0">CFP Activa</label>
                 </div>
-                <hr>
+                <hr class="m-0">
             </div>
             <div v-for="(filter, indexFilter) in filtersWithOptions" :key="indexFilter">
-                <div @click="showFilter(filter)" class="cursor-pointer pt-3 pb-3">
+                <div @click="showFilter(filter)" class="cursor-pointer py-2">
                     <p v-text="filter.name" class="m-0"></p>
                 </div>
                 <div :class="filter.style">
                     <ul class="ulOptions">
                         <li v-for="(option, indexOption) in filter.options" :key="indexOption" class="d-flex">
-                            <template v-if="indexOption <= 10 || filter.openLargeFilter">
+                            <template v-if="indexOption < 10">
                                 <input 
                                 type="checkbox" 
                                 :id="`input-${indexFilter}-${indexOption}`" 
@@ -35,17 +35,37 @@
                                 <label :for="`input-${indexFilter}-${indexOption}`" v-text="option.text" class="w-75 text-left pr-2"></label>
                             </template>
                         </li>
-                        <li v-if="filter.isLarge && !filter.openLargeFilter">
-                            <p class="text-left pl-3 cursor-pointer" @click="showLargeFilter(indexFilter)">Ver mas...</p>
-                        </li>
-                        <li v-if="filter.isLarge && filter.openLargeFilter">
-                            <p class="text-left pl-3 cursor-pointer" @click="unshownLargeFilter(indexFilter)">Ver menos</p>
+                        <li>
+                            <b-button 
+                                v-b-modal.modalOpenFilter 
+                                @click="showLargeFilter(indexFilter)"
+                                variant="none">Ver mas...</b-button>
                         </li>
                     </ul>
                 </div>
                 <hr class="m-0">
             </div>
         </div>
+        <b-modal id="modalOpenFilter" title="Filtro">
+            <div class="container-fluid">
+                <ul class="ulOptions row">
+                    <li v-for="(option, indexOption) in filtersWithOptions[indexOpenFilter].options" :key="indexOption" class="col-12 col-md-6 col-xl-4 d-flex align-items-center">
+                        <div class="d-flex w-100">
+                            <input 
+                            type="checkbox" 
+                            :id="`input-modal-${indexOption}`" 
+                            :value="option.value"
+                            v-model="filtersWithOptions[indexOpenFilter].response" 
+                            class="w-25 align-self-center" 
+                            @change="selectOption(filtersWithOptions[indexOpenFilter].response)"
+                            /> 
+                            <label :for="`input-modal-${indexOption}`" v-text="option.text" class="w-75 text-left"></label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </b-modal>
     </div>
 </template>
 
@@ -65,6 +85,7 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
             return {
                 providerService: null,
                 activeConvocatory: false,
+                indexOpenFilter: 0,
                 filtersWithOptions: [
                     {
                         name: 'APC',
@@ -137,7 +158,13 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                         newFilter.openLargeFilter = false
                     }
                     let filter = {
-                        order: `${this.enumFilters[key].attributeOfText} ASC`
+                        order: `${this.enumFilters[key].attributeOfText} ASC`,
+                        where: {}
+                    }
+                    if (key == 'country') {
+                        filter.where = {
+                            hayrevista: 1
+                        }
                     }
                     this.providerService.getModelWithPagination(this.enumFilters[key].reference, undefined, 10, filter).then(response => {
                         for (const iterator of response.data) {
@@ -181,8 +208,16 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
             },
             showLargeFilter(index){
                 let options = []
+                this.indexOpenFilter = index
+                let filter = {
+                    order: `${this.filtersWithOptions[index].attributeOfText} ASC`,
+                    where: {}
+                }
+                if (this.filtersWithOptions[index].reference == 'Pais') {
+                    filter.where.hayrevista = 1
+                }
                 this.filtersWithOptions[index].openLargeFilter = true
-                this.providerService.getModel(this.filtersWithOptions[index].reference, null).then(response => {
+                this.providerService.getModel(this.filtersWithOptions[index].reference, filter).then(response => {
                     for (const iterator of response.data) {
                         options.push({
                             text: iterator[this.filtersWithOptions[index].attributeOfText],
@@ -191,9 +226,6 @@ import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
                     }
                     this.filtersWithOptions[index].options = options
                 })
-            },
-            unshownLargeFilter(index){
-                this.filtersWithOptions[index].openLargeFilter = false
             }
         },
         watch:{

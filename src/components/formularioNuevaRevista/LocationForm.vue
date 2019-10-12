@@ -6,13 +6,13 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="pais" class="text-left d-block">País *</label>
-        <div v-if="!optionsForm.countryId" class="isNecessary text-left small" style="color: red;">
+        <div v-if="!rubicacion.paisId" class="isNecessary text-left small" style="color: red;">
           Es necesario llenar este campo
         </div>
         <select
           @change="cambiarEstados"
           class="float-left"
-          v-model="optionsForm.countryId"
+          v-model="rubicacion.paisId"
           id="pais"
           required="required"
           style="margin: 0 100vw 0.6em 0em;"
@@ -120,7 +120,6 @@ export default {
     return {
       optionsForm: {
         countries: [],
-        countryId: '',
         states: [],
         stateId: '',
         cities: [],
@@ -148,12 +147,12 @@ export default {
       this.$emit('save')
     },
     cambiarEstados() {
-      if (this.optionsForm.countryId == undefined || this.optionsForm.countryId == null) {
+      if (this.rubicacion.paisId == undefined || this.rubicacion.paisId == null) {
         return
       }
       this.$store.commit("setCurrentPage", "nueva-revista");
       this.$store.getters.providerService
-        .getModel(`Pais/${this.optionsForm.countryId}/estados`)
+        .getModel(`Pais/${this.rubicacion.paisId}/estados`)
         .then(res => {
           this.optionsForm.states = res.data;
           this.optionsForm.cities = [];

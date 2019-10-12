@@ -220,7 +220,8 @@ export default {
         pais: "fas fa-globe-asia",
         politicaAutoarchivo: "fas fa-archive",
         tipoRevisionPares: "fas fa-check-square",
-        estiloCitacion: "fas fa-feather-alt"
+        estiloCitacion: "fas fa-feather-alt",
+        tiempoPromedioPublicacion: "fas fa-clock"
       },
       propiedadesName1: [
         { nombre: "Titulo Corto", key: "tituloCorto" },
@@ -228,6 +229,7 @@ export default {
         { nombre: "ISSN", key:"issn" },
         { nombre: "EISSN", key:"eissn" },
         { nombre: "Periodicidad", key: "periodicidad" },
+        { nombre: "Tiempo promedio de publicación (evaluación)", key: "tiempoPromedioPublicacion" },
         { nombre: "Incluida desde", key: "fechaIngreso" },
         { nombre: "Tipo de revisión por pares", key: "tipoRevisionPares" },
         { nombre: "Estilo de citación", key: "estiloCitacion" }

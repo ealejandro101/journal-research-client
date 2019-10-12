@@ -37,6 +37,7 @@
         id="disciplinaId1"
         style="margin: 0 100vw 0.6em 0em;"
       >
+        <option :value="null">----------------</option>
         <option
           v-for="field in optionsForm.fields"
           :key="field.id"
@@ -56,6 +57,7 @@
         id="disciplinaId2"
         style="margin: 0 100vw 0.6em 0em;"
       >
+        <option :value="null">----------------</option>
         <option
           v-for="field in optionsForm.fields"
           :key="field.id"
@@ -75,6 +77,7 @@
         id="disciplinaId3"
         style="margin: 0 100vw 0.6em 0em;"
       >
+        <option :value="null">----------------</option>
         <option
           v-for="field in optionsForm.fields"
           :key="field.id"

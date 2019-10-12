@@ -192,6 +192,12 @@ export default {
         this.optionsForm.saveIsUsed = false
         return
       }
+      if (!this.models.revista.issn && !this.models.revista.eissn) {
+        alert('Ha ocurrido un error al itentar postular su revista.')
+        this.optionsForm.errors.push('Debe de llenar al menos uno de los siguientes campos: ISSN, EISSN')
+        this.optionsForm.saveIsUsed = false
+        return
+      }
       for (const iterator of this.models.rindexaciones.indexaciones) {
         if (!this.models.rindexaciones[`parameter-${iterator}`]) {
           alert('Ha ocurrido un error al itentar postular su revista.')

@@ -54,9 +54,9 @@
               <div class="justify-content-center">
                 <h5 class="col-md-0 col-lg-0 col-xl-0">Estadísticas Dardo</h5>
                 <p class="cifra">
-                  <span>Más de {{totalJournals}}</span>
+                  <span>Más de {{ totalJournals }}</span>
                   <br>
-                  revistas en más de {{totalCountries}} países
+                  revistas en más de {{ totalCountries }} países
                 </p>
                 <br>
                 <div class="img">
@@ -214,12 +214,6 @@ export default {
           JSON.stringify(queryPaises)
       )
       .then(response => {
-        console.log(
-          process.env.ROOT_API +
-            "Pais/count/?where=" +
-            JSON.stringify(queryPaises)
-        );
-
         this.totalCountries = response.data.count;
       });
   },

@@ -66,7 +66,8 @@ const model = {
     "direccion": null,
     "id": "",
     "telefono": null,
-    "zipcode": null
+    "zipcode": null,
+    "paisId": null
   },
   revistascategorias: {
     "id": "",

@@ -147,7 +147,7 @@ const store = new Vuex.Store({
             return Object.freeze({
                 'periodicity': { model: 'radicional', reference: 'Periodicidads', title: 'Periodicidad', attributeOfText: 'periodicidad', attributeOfValue: 'id', attributeModelFilter: 'periodicidad_id' },
                 'licence': { model: 'revista', reference: 'Licencia', title: 'Licencia', attributeOfText: 'licencia', attributeOfValue: 'id', attributeModelFilter: 'licencia_id' },
-                'autoarchivePolicy': { model: 'radicional', reference: 'Politicaautoarchivos', title: 'Política de auto archivo', attributeOfText: 'politicaAutoarchivo', attributeOfValue: 'id', attributeModelFilter: 'politica_autoarchivo_id' },
+                'autoarchivePolicy': { model: 'radicional', reference: 'Politicaautoarchivos', title: 'Política de autoarchivo', attributeOfText: 'politicaAutoarchivo', attributeOfValue: 'id', attributeModelFilter: 'politica_autoarchivo_id' },
                 'citationStyle': { model: 'radicional', reference: 'Estilocitacions', title: 'Estilo citación', attributeOfText: 'estiloCitacion', attributeOfValue: 'id', attributeModelFilter: 'estilo_citacion_id' },
                 'indexations': { model: 'rindexaciones', reference: 'Indexaciones', title: 'Indexación', attributeOfText: 'indexaciones', attributeOfValue: 'id', attributeModelFilter: 'indexaciones_id' },
                 'languages': { model: 'ridiomas', reference: 'Idiomas', title: 'Idioma', attributeOfText: 'idioma', attributeOfValue: 'id', attributeModelFilter: 'idioma_id' },

@@ -43,6 +43,9 @@
 
       <div class="form-group d-flex flex-column">
         <label for="issn" class="text-left d-block">ISSN</label>
+        <div v-if="!revista.issn && !revista.eissn" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="issn"
           v-model="revista.issn"
@@ -53,6 +56,9 @@
       </div>
 
       <div class="form-group d-flex flex-column">
+        <div v-if="!revista.issn && !revista.eissn" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <input
           id="eissn"
           v-model="revista.eissn"
@@ -75,6 +81,9 @@
 
       <div class="form-group d-flex flex-column">
         <label for="descripcion" class="text-left d-block">Descripción de la revista</label>
+        <div v-if="!revista.descripcion" class="isNecessary text-left small" style="color: red;">
+          Es necesario llenar este campo
+        </div>
         <textarea
           id="descripcion"
           v-model="revista.descripcion"
