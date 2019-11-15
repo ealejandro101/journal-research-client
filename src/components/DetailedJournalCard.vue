@@ -51,7 +51,7 @@
                 </b-col>
               </div>
             </div>
-          <p class="card-text text-justify clasDescription" v-text="revista.descripcion"></p>
+          <p class="card-text text-justify clasDescription" v-html="revista.descripcion"></p>
         </b-col>
       </b-row>
       <b-row>

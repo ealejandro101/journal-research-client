@@ -29,66 +29,18 @@
           </div>
           <div v-else class="row">
             <div class="col-12">
-              <b-card>
-                <b-tabs v-model="tabIndex" small card>
-                  <b-tab title="Revista">
-                    <div class="container-fluid">
-                      <div class="row justify-content-center">
-                        <div class="col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
-                          <journal-form @save="save" :revista="models.revista" :radicional="models.radicional"></journal-form>
-                        </div>
-                      </div>
-                    </div>
-                  </b-tab>
-                  <b-tab title="Contacto">
-                    <div class="container-fluid">
-                      <div class="row justify-content-center">
-                        <div class="col-12 col-sm-11 col-md-10 col-lg-8 col-xl-7">
-                          <contact-form @save="save" :rcontactos="models.rcontactos" :radicional="models.radicional"></contact-form>
-                        </div>
-                      </div>
-                    </div>
-                  </b-tab>
-                  <b-tab title="Categorias de la revista">
-                    <div class="d-flex justify-content-center">
-                      <div class="w-75 p-3 align-items-center">
-                        <category-form @save="save" 
-                          :revista="models.revista"
-                          :rindexaciones="models.rindexaciones"
-                          :ridiomas="models.ridiomas"
-                          :revistascategorias="models.revistascategorias"
-                          ></category-form>
-                      </div>
-                    </div>
-                  </b-tab>
-                  <b-tab title="Ubicación">
-                    <div class="d-flex justify-content-center">
-                      <div class="w-75 p-3 align-items-center">
-                        <location-form @save="save" :rubicacion="models.rubicacion"></location-form>
-                      </div>
-                    </div>
-                  </b-tab>
-                  <b-tab title="Adicionales">
-                    <div class="d-flex justify-content-center">
-                      <div class="w-75 p-3 align-items-center">
-                        <additional-form @save="save" :radicional="models.radicional"></additional-form>
-                      </div>
-                    </div>
-                  </b-tab>
-                  <b-tab title="Palabras clave">
-                    <div class="d-flex justify-content-center">
-                      <div class="w-75 p-3 align-items-center">
-                        <words-form @save="save" :rpalabraclave="models.rpalabraclave" :radicional="models.radicional"></words-form>
-                      </div>
-                    </div>
-                  </b-tab>
-                </b-tabs>
-              </b-card>
-            </div>
-            <div class="col-12">
-              <button @click="tabIndex = (tabIndex - 1) % 6" class="btn btn-info">Anterior</button>
-              <button @click="tabIndex = (tabIndex + 1) % 6" class="btn btn-info">Siguiente</button>
-              <button @click="save" class="btn btn-success">Enviar postulación</button>
+              <journal-general-form 
+                @save="save"
+                :mode="'new-journal'"
+                :revista="models.revista" 
+                :radicional="models.radicional" 
+                :rcontactos="models.rcontactos"  
+                :ridiomas="models.ridiomas"  
+                :rindexaciones="models.rindexaciones"  
+                :rubicacion="models.rubicacion"  
+                :revistascategorias="models.revistascategorias"  
+                :rpalabraclave="models.rpalabraclave"  
+              />
             </div>
             <div class="col-12">
               <div v-if="optionsForm.errors.length > 0" class="mt-2">
@@ -112,12 +64,7 @@ import { EventBus } from '@/event-bus.js';
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
-import JournalForm from "@/components/formularioNuevaRevista/JournalForm.vue";
-import ContactForm from "@/components/formularioNuevaRevista/ContactForm.vue";
-import AdditionalForm  from "@/components/formularioNuevaRevista/AdditionalForm.vue";
-import CategoryForm from "@/components/formularioNuevaRevista/CategoryForm.vue";
-import LocationForm from "@/components/formularioNuevaRevista/LocationForm.vue";
-import WordsForm from "@/components/formularioNuevaRevista/WordsForm.vue";
+import JournalGeneralForm from "@/components/formularioNuevaRevista/JournalGeneralForm"
 import ErrorNotification from "@/components/ErrorNotification.vue";
 
 export default {
@@ -125,40 +72,23 @@ export default {
   components: {
     HeaderResearch,
     FooterResearch,
-    JournalForm,
-    ContactForm,
-    AdditionalForm,
-    CategoryForm,
-    LocationForm,
-    WordsForm,
+    JournalGeneralForm,
     ErrorNotification
   },
   data() {
     return {
       tabIndex: 0,
       models: {
-        revista: this.$store.getters.models.revista,
-        radicional: this.$store.getters.models.radicional,
-        rcontactos: this.$store.getters.models.rcontactos,
-        ridiomas: this.$store.getters.models.ridiomas,
-        rindexaciones: this.$store.getters.models.rindexaciones,
-        rubicacion: this.$store.getters.models.rubicacion,
-        revistascategorias: this.$store.getters.models.revistascategorias,
-        rpalabraclave: this.$store.getters.models.rpalabraclave
+        revista: JSON.parse(JSON.stringify(this.$store.getters.models.revista)),
+        radicional: JSON.parse(JSON.stringify(this.$store.getters.models.radicional)),
+        rcontactos: JSON.parse(JSON.stringify(this.$store.getters.models.rcontactos)),
+        ridiomas: JSON.parse(JSON.stringify(this.$store.getters.models.ridiomas)),
+        rindexaciones: JSON.parse(JSON.stringify(this.$store.getters.models.rindexaciones)),
+        rubicacion: JSON.parse(JSON.stringify(this.$store.getters.models.rubicacion)),
+        revistascategorias: JSON.parse(JSON.stringify(this.$store.getters.models.revistascategorias)),
+        rpalabraclave: JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))
       },
       optionsForm: {
-        countries: [],
-        fields: [],
-        states: [],
-        cities: [],
-        periodicities: [],
-        typeReviewPeer: [],
-        optionCategories: [],
-        languages: [],
-        licenses: [],
-        politics: [],
-        citationStyles: [],
-        indexations: [],
         isLogged: false,
         oldPostulations: [],
         errors: [],
@@ -176,40 +106,51 @@ export default {
     this.optionsForm.isLogged = this.$store.getters.editorId !== undefined && this.$store.getters.editorId !== null
   },
   methods: {
-    save(){
+    save(models){
       this.optionsForm.errors = []
       if (this.optionsForm.saveIsUsed) {
         this.optionsForm.saveIsUsed = false
         return
       }
       this.optionsForm.saveIsUsed = true
-      let xcat = this.models.revistascategorias.categories.length
-      let xind = this.models.rindexaciones.indexaciones.length
-      let xidi = this.models.ridiomas.idiomas.length
+      let xcat = models.revistascategorias.categories.length
+      let xind = models.rindexaciones.indexaciones.length
+      let xidi = models.ridiomas.idiomas.length
       if (xcat == 0 || xind == 0 || xidi == 0) {
         alert('Ha ocurrido un error al itentar postular su revista.')
         this.optionsForm.errors.push('Debe de llenar los siguientes campos: categorías, indexaciones e idiomas')
         this.optionsForm.saveIsUsed = false
         return
       }
-      if (!this.models.revista.issn && !this.models.revista.eissn) {
+      if (!models.revista.issn && !models.revista.eissn) {
         alert('Ha ocurrido un error al itentar postular su revista.')
         this.optionsForm.errors.push('Debe de llenar al menos uno de los siguientes campos: ISSN, EISSN')
         this.optionsForm.saveIsUsed = false
         return
       }
-      for (const iterator of this.models.rindexaciones.indexaciones) {
-        if (!this.models.rindexaciones[`parameter-${iterator}`]) {
+      for (const iterator of models.rindexaciones.indexaciones) {
+        if (!models.rindexaciones[`parameter-${iterator}`] && iterator !== 1 && iterator !== 3 && iterator !== 8) {
           alert('Ha ocurrido un error al itentar postular su revista.')
           this.optionsForm.errors.push('Debe de llenar los enlaces de las indexaciones.')
           this.optionsForm.saveIsUsed = false
           return
         }
       }
+      if (models.rcontactos.editorOrcid != null) {
+        models.rcontactos.editorOrcid = 'https://orcid.org/0000-'+models.rcontactos.editorOrcid
+      }
       let editorId = this.$store.getters.editorId
       let route = `Editors/${editorId}/postFullJournal`
       this.$store.getters.providerService.postModel(route, { models: this.models }).then(response => {
         alert('Se ha postulado su revista con éxito.')
+        this.models.revista = JSON.parse(JSON.stringify(this.$store.getters.models.revista))
+        this.models.rcontactos = JSON.parse(JSON.stringify(this.$store.getters.models.rcontactos))
+        this.models.radicional = JSON.parse(JSON.stringify(this.$store.getters.models.radicional))
+        this.models.ridiomas = JSON.parse(JSON.stringify(this.$store.getters.models.ridiomas))
+        this.models.rindexaciones = JSON.parse(JSON.stringify(this.$store.getters.models.rindexaciones))
+        this.models.rubicacion = JSON.parse(JSON.stringify(this.$store.getters.models.rubicacion))
+        this.models.revistascategorias = JSON.parse(JSON.stringify(this.$store.getters.models.revistascategorias))
+        this.models.rpalabraclave = JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))
         this.optionsForm.saveIsUsed = false
       }).catch(error => {
         alert('Ha ocurrido un error al itentar postular su revista.')

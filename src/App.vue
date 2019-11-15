@@ -5,8 +5,13 @@
 </template>
 
 <script>
+
 export default {
-  name: 'app'
+  name: 'app',
+  data() {
+      return {
+      }
+  }
 }
 </script>
 

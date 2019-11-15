@@ -182,7 +182,7 @@ const store = new Vuex.Store({
                 ]
             }
             if (state.editorId !== undefined && state.editorId !== null) {
-                header.push(headerOptions.editor)
+                header.push(headerOptions.perfil)
             }else{
                 header.push(headerOptions.login)
                 header.push(headerOptions.register)
@@ -205,7 +205,7 @@ const store = new Vuex.Store({
                     headerOptions.journals
                 ]
             }
-            header.push(headerOptions.editor)
+            header.push(headerOptions.perfil)
             return header
         },
         headerUnlogged(state){

@@ -14,6 +14,7 @@
             <input
               name="politicaAutoarchivoId"
               :id="`politica-${index}`"
+              :disabled="isDisabled(mode, 'radicional.politicaAutoarchivoId')"
               type="radio"
               v-model="radicional.politicaAutoarchivoId"
               class="form-check-input"
@@ -31,6 +32,7 @@
         </div>
         <input
           id="oai"
+          :disabled="isDisabled(mode, 'radicional.oai')"
           v-model="radicional.oai"
           placeholder="Ingrese la ulr del OAI de la revista"
           required="required"
@@ -53,6 +55,7 @@
             <input
               name="estiloCitacionId"
               :id="`estCita-${index}`"
+              :disabled="isDisabled(mode, 'radicional.estiloCitacionId')"
               v-model="radicional.estiloCitacionId"
               type="radio"
               class="form-check-input"
@@ -70,6 +73,7 @@
         <input
           id="codigoEtica"
           v-model="radicional.codigoEtica"
+          :disabled="isDisabled(mode, 'radicional.codigoEtica')"
           placeholder="Ingrese url donde se encuentra el código de la revista"
           required="required"
           type="text"
@@ -84,6 +88,7 @@
         </div>
         <input
           id="guiaAutores"
+          :disabled="isDisabled(mode, 'radicional.guiaAutores')"
           v-model="radicional.guiaAutores"
           placeholder="Ingrese la url de la guía para autores"
           required="required"
@@ -102,6 +107,7 @@
             <input
               name="tipoRevisionParesId"
               :id="`revision-${index}`"
+              :disabled="isDisabled(mode, 'radicional.tipoRevisionParesId')"
               v-model="radicional.tipoRevisionParesId"
               type="radio"
               class="form-check-input"
@@ -119,6 +125,7 @@
         </div>
         <input
           id="equipoEditorial"
+          :disabled="isDisabled(mode, 'radicional.equipoEditorial')"
           v-model="radicional.equipoEditorial"
           placeholder="Ingrese la url donde se encuentra el equipo editorial de la revista"
           required="required"
@@ -128,12 +135,13 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="apc" class="text-left d-block">APC</label>
-        <div v-if="!radicional.apc" class="isNecessary text-left small" style="color: red;">
+        <div v-if="radicional.apc == null" class="isNecessary text-left small" style="color: red;">
           Es necesario llenar este campo
         </div>
         <select
           class="float-left"
           id="apc"
+          :disabled="isDisabled(mode, 'radicional.apc')"
           v-model="radicional.apc"
           required="required"
           style="margin: 0 100vw 0.6em 0em;"
@@ -144,12 +152,13 @@
       </div>
       <div class="form-group d-flow-root">
         <label for="preprint" class="text-left d-block">Su revista acepta PrePrint?</label>
-        <div v-if="!radicional.preprint" class="isNecessary text-left small" style="color: red;">
+        <div v-if="radicional.preprint == null" class="isNecessary text-left small" style="color: red;">
           Es necesario llenar este campo
         </div>
         <select
           class="float-left"
           id="preprint"
+          :disabled="isDisabled(mode, 'radicional.preprint')"
           v-model="radicional.preprint"
           required="required"
           style="margin: 0 100vw 0.6em 0em;"
@@ -158,46 +167,6 @@
           <option value="0">No</option>
         </select>
       </div>
-      <div class="form-group d-flow-root">
-        <label for="facebook" class="text-left d-block">Facebook</label>
-        <input
-          id="facebook"
-          v-model="radicional.facebook"
-          placeholder="Ingrese la URL del facebook de la revista"
-          type="text"
-          class="form-control max-width-35em"
-        />
-      </div>
-      <div class="form-group d-flow-root">
-        <label for="twitter" class="text-left d-block">Twitter</label>
-        <input
-          id="twitter"
-          v-model="radicional.twitter"
-          placeholder="ngrese la URL del twitter de la revista"
-          type="text"
-          class="form-control max-width-35em"
-        />
-      </div>
-      <div class="form-group d-flow-root">
-        <label for="instagram" class="text-left d-block">Instagram</label>
-        <input
-          id="instagram"
-          v-model="radicional.instagram"
-          placeholder="Ingrese instagram"
-          type="text"
-          class="form-control max-width-35em"
-        />
-      </div>
-      <div class="form-group d-flow-root">
-        <label for="videopresentacion" class="text-left d-block">Video de la revista</label>
-        <input
-          id="videopresentacion"
-          v-model="radicional.videopresentacion"
-          placeholder="Ingresa en enlace (Youtube, Vimeo) del video promocional de su revista (en caso de tenerlo)"
-          type="text"
-          class="form-control max-width-35em"
-        />
-      </div>
     </div>
   <!--</form>-->
 </template>
@@ -205,17 +174,22 @@
 <script>
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import models from "@/utilities/models.js"
+import mixins from "@/utilities/mixins.js"
 
 export default {
   name: "additional-form",
   components: {
     ErrorNotification
   },
+  mixins: [mixins],
   props: {
     radicional: {
       default(){
         return models.radicional
       } 
+    },
+    mode: {
+      default: 'editor'/* editor, new journal, admin */
     }
   },
   data() {

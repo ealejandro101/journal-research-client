@@ -11,6 +11,7 @@
         </div>
         <input
           id="editor"
+          :disabled="isDisabled(mode, 'rcontactos.editor')"
           v-model="rcontactos.editor"
           placeholder="Ingrese el nombre del editor de la revista"
           required="required"
@@ -25,6 +26,7 @@
         </div>
         <input
           id="url"
+          :disabled="isDisabled(mode, 'radicional.url')"
           v-model="radicional.url"
           placeholder="Ingrese url"
           required="required"
@@ -39,6 +41,7 @@
         </div>
         <input
           id="correo"
+          :disabled="isDisabled(mode, 'radicional.correo')"
           v-model="radicional.correo"
           placeholder="Ingrese el email de la revista"
           required="required"
@@ -49,19 +52,25 @@
 
       <div class="form-group d-flex flex-column text-center">
         <label for="editorOrcid" class="text-left d-block">OrcID</label>
-        <input
-          id="editorOrcid"
-          v-model="rcontactos.editorOrcid"
-          placeholder="ingrese el OrcID del editor"
-          type="text"
-          class="form-control max-width-35em"
-        />
+        <div class="d-flex">
+          <span class="d-flex align-items-center">https://orcid.org/0000-</span>
+          <input
+            id="editorOrcid"
+            :disabled="isDisabled(mode, 'rcontactos.editorOrcid')"
+            v-model="rcontactos.editorOrcid"
+            placeholder="ingrese el OrcID del editor"
+            type="text"
+            class="form-control max-width-35em"
+          />
+        </div>
+        
       </div>
 
       <div class="form-group d-flex flex-column text-center">
         <label for="editorGooglescholar" class="text-left d-block">Google Scholar</label>
         <input
           id="editorGooglescholar"
+          :disabled="isDisabled(mode, 'rcontactos.editorGooglescholar')"
           v-model="rcontactos.editorGooglescholar"
           placeholder="ingrese la url del Google Scholar del editor"
           type="text"
@@ -70,9 +79,10 @@
       </div>
 
       <div class="form-group d-flex flex-column text-center">
-        <label for="googlescholar" class="text-left d-block">Google Scholar Revista</label>
+        <label for="googlescholar" class="text-left d-block">Google Sccholar Metrics de la revista</label>
         <input
           id="googlescholar"
+          :disabled="isDisabled(mode, 'radicional.googlescholar')"
           v-model="radicional.googlescholar"
           placeholder="Ingrese el Google Scholar"
           type="text"
@@ -87,6 +97,7 @@
         </div>
         <input
           id="institucion"
+          :disabled="isDisabled(mode, 'rcontactos.institucion')"
           v-model="rcontactos.institucion"
           placeholder="Ingrese el nombre de la Institución a la cual pertenece la revista"
           required="required"
@@ -98,8 +109,53 @@
         <label for="facultad" class="text-left d-block">Facultad</label>
         <input
           id="facultad"
+          :disabled="isDisabled(mode, 'rcontactos.facultad')"
           v-model="rcontactos.facultad"
           placeholder="Ingrese el nombre de la facultad a la cual pertenece la revista"
+          type="text"
+          class="form-control max-width-35em"
+        />
+      </div>
+      <div class="form-group d-flow-root">
+        <label for="facebook" class="text-left d-block">Facebook</label>
+        <input
+          id="facebook"
+          :disabled="isDisabled(mode, 'radicional.facebook')"
+          v-model="radicional.facebook"
+          placeholder="Ingrese la URL del facebook de la revista"
+          type="text"
+          class="form-control max-width-35em"
+        />
+      </div>
+      <div class="form-group d-flow-root">
+        <label for="twitter" class="text-left d-block">Twitter</label>
+        <input
+          id="twitter"
+          :disabled="isDisabled(mode, 'radicional.twitter')"
+          v-model="radicional.twitter"
+          placeholder="ngrese la URL del twitter de la revista"
+          type="text"
+          class="form-control max-width-35em"
+        />
+      </div>
+      <div class="form-group d-flow-root">
+        <label for="instagram" class="text-left d-block">Instagram</label>
+        <input
+          id="instagram"
+          :disabled="isDisabled(mode, 'radicional.instagram')"
+          v-model="radicional.instagram"
+          placeholder="Ingrese instagram"
+          type="text"
+          class="form-control max-width-35em"
+        />
+      </div>
+      <div class="form-group d-flow-root">
+        <label for="videopresentacion" class="text-left d-block">Video de la revista</label>
+        <input
+          id="videopresentacion"
+          :disabled="isDisabled(mode, 'radicional.videopresentacion')"
+          v-model="radicional.videopresentacion"
+          placeholder="Ingresa en enlace (Youtube, Vimeo) del video promocional de su revista (en caso de tenerlo)"
           type="text"
           class="form-control max-width-35em"
         />
@@ -111,12 +167,14 @@
 <script>
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import models from "@/utilities/models.js"
+import mixins from "@/utilities/mixins.js"
 
 export default {
   name: "contact-form",
   components: {
     ErrorNotification
   },
+  mixins: [mixins],
   props: {
     rcontactos: {
       default(){
@@ -127,6 +185,9 @@ export default {
       default(){
         return models.radicional
       } 
+    },
+    mode: {
+      default: 'editor'/* editor, new journal, admin */
     }
   },
   data() {

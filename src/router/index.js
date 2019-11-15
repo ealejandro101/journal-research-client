@@ -7,7 +7,7 @@ import FormularioNuevaRevista from "@/pages/FormularioNuevaRevista";
 import Login from "@/pages/Login";
 import Registro from "@/pages/Registro";
 import Revista from "@/pages/Revista"
-import Editor from "@/pages/Editor"
+import Perfil from "@/pages/Perfil"
 
 Vue.use(Router);
 
@@ -86,9 +86,9 @@ const router = new Router({
       }
     },
     {
-      path: "/Editor",
-      name: "Editor",
-      component: Editor,
+      path: "/Perfil",
+      name: "Perfil",
+      component: Perfil,
       meta: {
         allowedForGuest: false,
         allowedForUser: true

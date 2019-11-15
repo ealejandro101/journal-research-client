@@ -33,7 +33,7 @@ export default class ProviderService {
         }).catch(error => {
             //Token no valido
             this.logoutLocalStorage()
-            location.reload();
+            //location.reload();
         })
         
     }
@@ -163,6 +163,8 @@ export default class ProviderService {
     login(email, password) {
         return new Promise((resolve, reject) => {
             axios.post(this.rootAPI + '../custom/Editor/login', { email, password },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
+                console.log(response);
+                
                 localStorage.setItem('token', response.data.id);
                 localStorage.setItem('editorId', response.data.userId)
                 localStorage.setItem('tokenTimeToLive', response.data.ttl)
@@ -194,6 +196,20 @@ export default class ProviderService {
         return new Promise((resolve, reject) => {
             axios.get(this.rootAPI + '../custom/Editor/logout', { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 this.logoutLocalStorage()
+                resolve(response.data)
+            }).catch(error => {
+                this.logoutLocalStorage()
+                reject({
+                    msg: codes.CODES.DEFAULT.MSG,
+                    error
+                })
+            })
+        })
+    }
+
+    isAdmin() {
+        return new Promise((resolve, reject) => {
+            axios.get(this.rootAPI + '../custom/Roles/isAdmin', { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
                 resolve(response.data)
             }).catch(error => {
                 this.logoutLocalStorage()

@@ -5,5 +5,5 @@ module.exports = {
     login: {"to": "/Login", "text": "Iniciar sesión", "active": true, "isVuePag": true},
     register: {"to": "/Registro", "text": "Registro", "active": true, "isVuePag": true},
     lobby: {"to": "/", "text": "Inicio", "active": true, "isVuePag": true},
-    editor: {"to": "/Editor", "text": "Perfil", "active": true, "isVuePag": true}
+    perfil: {"to": "/Perfil", "text": "Perfil", "active": true, "isVuePag": true}
 }

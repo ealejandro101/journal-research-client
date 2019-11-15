@@ -70,7 +70,6 @@ export default {
       }
       this.isActiveButton = false
       this.errors = []
-      let s = this.$store.getters.providerService.login(this.email, this.password)
       this.$store.getters.providerService.login(this.email, this.password).then((data) => {
         location.reload();
       }).catch((error) => {

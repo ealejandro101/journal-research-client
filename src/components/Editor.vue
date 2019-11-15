@@ -1,9 +1,6 @@
 <template>
-  <div class="container-fluid min-vh-100">
-    <div class="row min-vh-100">
-      <div class="col-12 align-self-start p-0">
-        <header-research></header-research>
-      </div>
+  <div class="container-fluid">
+    <div class="row">
       <div class="col-12 p-0 d-flex justify-content-center">
         <div class="container-fluid">
           <div class="row">
@@ -144,32 +141,28 @@
           </div>
         </div>
       </div>
-      <div class="col-12 align-self-end p-0">
-        <footer-research></footer-research>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import models from "@/utilities/inputOptions.js"
-import HeaderResearch from "@/components/HeaderResearch";
-import FooterResearch from "@/components/FooterResearch";
 import SuscriptionButton from "@/components/SuscriptionButton.vue";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import userSRC from "@/assets/temporal/user.png";
-import { EventBus } from "@/event-bus.js";
+import mixins from "@/utilities/mixins.js"
 
 export default {
-  name: "editor-page",
+  name: "editor",
   components: {
-    HeaderResearch,
-    FooterResearch,
     SuscriptionButton,
     summaryJournalCard
   },
+  mixins: [mixins],
   data() {
     return {
+      general: {
+      },
       editor: {
         categoriasSuscritas: [],
         propietarioRevista: [],
@@ -194,31 +187,27 @@ export default {
     };
   },
   created() {
-    this.$store.commit("setCurrentPage", "editor-page");
-    this.userIsLogged();
+    this.$store.getters.providerService
+      .getEditorFullObject()
+      .then(response => {
+        this.editor = response.editor;
+        for (const iterator of this.editor.categoriasSuscritas) {
+          this.categoriasSelected.push(iterator.id)
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    this.$store.getters.providerService
+      .getModel('Categoria', {})
+      .then(response => {
+        this.categorias = response.data
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   methods: {
-    userIsLogged() {
-      this.$store.getters.providerService
-        .getEditorFullObject()
-        .then(response => {
-          this.editor = response.editor;
-          for (const iterator of this.editor.categoriasSuscritas) {
-            this.categoriasSelected.push(iterator.id)
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-      this.$store.getters.providerService
-        .getModel('Categoria', {})
-        .then(response => {
-          this.categorias = response.data
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    },
     updateEditor(){
       this.errors = []
       if (this.editor.id === undefined) {
@@ -272,17 +261,6 @@ export default {
       this.$router.push({
         path: '/FormularioNuevaRevista'
       })
-    },
-    closeSession(){
-      this.$store.getters.providerService.logout().then(res => {
-        this.$store.commit("logout")
-        this.$router.push({
-          path: '/'
-        })
-      }).catch(err => {
-        alert('No se ha cerrado la sesión correctamente')
-      })
-
     }
   }
 };
