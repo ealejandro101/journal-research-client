@@ -163,8 +163,6 @@ export default class ProviderService {
     login(email, password) {
         return new Promise((resolve, reject) => {
             axios.post(this.rootAPI + '../custom/Editor/login', { email, password },  { headers: { "Authorization": this.accessToken }, withCredentials: true }).then(response => {
-                console.log(response);
-                
                 localStorage.setItem('token', response.data.id);
                 localStorage.setItem('editorId', response.data.userId)
                 localStorage.setItem('tokenTimeToLive', response.data.ttl)

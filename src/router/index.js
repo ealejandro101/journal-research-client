@@ -3,7 +3,7 @@ import Router from "vue-router";
 import Research from "@/pages/Research";
 import Revistas from "@/pages/Revistas";
 import InfoResearcH from "@/pages/InfoResearcH";
-import FormularioNuevaRevista from "@/pages/FormularioNuevaRevista";
+import NewJournal from "@/pages/NewJournal";
 import Login from "@/pages/Login";
 import Registro from "@/pages/Registro";
 import Revista from "@/pages/Revista"
@@ -59,9 +59,9 @@ const router = new Router({
       }
     },
     {
-      path: "/FormularioNuevaRevista",
-      name: "FormularioNuevaRevista",
-      component: FormularioNuevaRevista,
+      path: "/NewJournal",
+      name: "NewJournal",
+      component: NewJournal,
       meta: {
         allowedForGuest: true,
         allowedForUser: true

@@ -64,7 +64,7 @@ import { EventBus } from '@/event-bus.js';
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
-import JournalGeneralForm from "@/components/formularioNuevaRevista/JournalGeneralForm"
+import JournalGeneralForm from "@/components/journalEdition/JournalGeneralForm"
 import ErrorNotification from "@/components/ErrorNotification.vue";
 
 export default {
@@ -157,23 +157,7 @@ export default {
         this.optionsForm.errors.push(error.response.data.error.message)
         this.optionsForm.saveIsUsed = false
       })
-    },
-    /*getOldPostulation(){
-      let editorId = localStorage.getItem('editorId')
-      if (editorId === null || editorId === undefined) {
-        return
-      }
-      this.$store.getters.providerService.getModel(`Editors/${editorId}/propietarioRevista`, {
-        where: {
-          //estaActiva: 0
-        }
-      }).then(res =>{
-        this.optionsForm.oldPostulations = res.data
-      }).catch(err => {
-        alert(err)
-      })
-    },*/
-    
+    }
   }
 };
 </script>
