@@ -85,7 +85,30 @@ let mixin = {
       }).catch(err => {
         alert('No se ha cerrado la sesión correctamente')
       })
+    },
+    processFile (ref, cb) {
+      if (ref.files.length === 0) return
+      this.getBase64(ref.files[0], (err, data) => {
+        if (!err){
+          return cb(data)
+        }
+      })
+    },
+    getBase64(file, cbRes) {
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function() {
+        cbRes(false, reader.result);
+      };
+      reader.onerror = function(error) {
+        cbRes(true, "Error: ", error);
+      };
     }
+
+
+
+
+
   }
 }
 

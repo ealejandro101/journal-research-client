@@ -174,7 +174,8 @@ export default {
               revistaId: _self.idJournal,
               fechaFinal: {
                 gte: Date.now()
-              }
+              },
+              estado: 1
             },
             order: 'fechaFinal DESC',
             fields: {

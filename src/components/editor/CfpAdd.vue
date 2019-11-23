@@ -1,20 +1,22 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 align-self-center">
-        <span>Revista:</span>
-        <select class="mw-100" v-model="currentJournalIndex">
-          <option
-            v-for="(journal, index) in journals"
-            :key="index"
-            :value="journal.id"
-          >{{ journal.titulo }}</option>
-        </select>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <form>
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-7">
+        <form v-on:submit.prevent="addCfp">
+          <div class="form-group d-flex flex-column">
+            <span class="font-weight-bolder text-left">Revista:</span>
+            <div v-if="!cfp.revistaId" class="text-left small" style="color: red;">Es necesario llenar este campo</div>
+            <select required class="mw-100" v-model="cfp.revistaId">
+              <option
+                v-for="(journal, index) in journals"
+                :key="index"
+                :value="journal.id"
+              >{{ journal.titulo }}</option>
+            </select>
+          </div>
+          <div>
+            <span class="font-weight-bolder text-left">Información de la convocatoria</span>
+          </div>
           <div class="form-group d-flex flex-column">
             <label for="titulo" class="text-left d-block">Titulo</label>
             <div v-if="!cfp.titulo" class="text-left small" style="color: red;">Es necesario llenar este campo</div>
@@ -66,7 +68,13 @@
           </div>
           <div class="form-group d-flex flex-column">
             <label for="imagen" class="text-left d-block">Imagen</label>
-            <input type="file" id="imagen" placeholder="Ingrese la imagen" class="form-control" />
+            <input 
+              type="file" 
+              id="imagen" 
+              ref="imagen"
+              @change="changeInputFile('imagen')"
+              placeholder="Ingrese la imagen" 
+              class="form-control" />
           </div>
           <div class="form-group d-flex flex-column">
             <label for="video" class="text-left d-block">Vídeo</label>
@@ -76,7 +84,8 @@
             <label for="documentoPdf" class="text-left d-block">Documento PDF</label>
             <input
               type="file"
-              :ref="cfp.documentoPdf"
+              ref="documentoPdf"
+              @change="changeInputFile('documentoPdf')"
               id="documentoPdf"
               placeholder="Ingrese el documento PDF"
               class="form-control"
@@ -88,7 +97,7 @@
             <input id="ojs" v-model="cfp.link" placeholder="Ingrese el OJS" type="text" class="form-control" />
           </div>
           <!---->
-          <input type="submit" class="btn btn-secondary" />
+          <input type="submit" class="btn btn-success" />
         </form>
       </div>
     </div>
@@ -97,6 +106,7 @@
 
 <script>
 import models from "@/utilities/models.js";
+import mixins from "@/utilities/mixins.js"
 
 export default {
   name: "cfp-add",
@@ -105,10 +115,10 @@ export default {
       default: undefined
     }
   },
+  mixins: [mixins],
   data() {
     return {
-      cfp: models.cfp,
-      currentJournalIndex: null,
+      cfp: JSON.parse(JSON.stringify(models.cfp)),
       journals: []
     };
   },
@@ -118,32 +128,26 @@ export default {
     }
     this.$store.getters.providerService
       .getModel(`Editors/${this.editor.id}/propietarioRevista`, {
-        include: ['infoAdicional','contacto', 'idiomas', 'indexaciones', 'categorias', {
-          relation: 'ubicacion', 
-          scope: { 
-            include: { 
-              relation: 'ciudad',
-              scope: { 
-                include: { 
-                  relation: 'estado',
-                  scope: { 
-                    include: { 
-                      relation: 'pais'
-                    } 
-                  }
-                } 
-              }
-            } 
-          }
-        }]
+        where: {
+          estaActiva: 1
+        } 
       }).then(response => {
         this.journals = response.data
-        this.currentJournalIndex = null
       })
   },
   methods: {
     addCfp(){
-      
+      this.$store.getters.providerService.postModel('Convocatoria/add', {
+        convocatoria: this.cfp
+      }).then(response => {
+        alert("Convocatoria creada con éxito.")
+        this.cfp = JSON.parse(JSON.stringify(models.cfp))
+      })
+    },
+    changeInputFile(variable){
+      this.processFile(this.$refs[variable], (file) => {
+        this.cfp[variable] = file
+      })
     }
   }
 };

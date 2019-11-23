@@ -15,7 +15,7 @@
                 <p class="text-left font-weight-bold m-0">Edición de revistas</p>
               </b-button>
             </b-card-header>
-            <b-collapse id="accordion-edit-journal" visible accordion="my-accordion" role="tabpanel">
+            <b-collapse id="accordion-edit-journal" accordion="my-accordion" role="tabpanel">
               <journal-edition />
             </b-collapse>
           </b-card>
