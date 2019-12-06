@@ -46,6 +46,10 @@ export default class ProviderService {
         return this.accessToken
     }
 
+    getHostApi(){
+        return this.rootAPI
+    }
+
     deleteModel(model){
         return axios.delete(this.rootAPI + model,  { headers: { "Authorization": this.accessToken }, withCredentials: true })
     }

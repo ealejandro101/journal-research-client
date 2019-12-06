@@ -21,10 +21,7 @@
           </div>
           <div v-if="!optionsForm.isLogged" class="row">
             <div class="col">
-              <!--<p>Para postular una revista debes de <router-link to="/Registro">registrarte</router-link> en nuestra plataforma.</p>-->
-              <div class="containerIframe">
-                <iframe src="https://docs.google.com/forms/d/1OSJu-gvgYjs-_n6HqnGErUKPu8L1Uyglj-s1GI89js0/viewform?embedded=true" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0"></iframe>
-              </div>
+              <p>Para postular una revista debes de <router-link to="/Registro">registrarte</router-link> e <router-link to="/Login">iniciar sesión</router-link> en nuestra plataforma.</p>
             </div>
           </div>
           <div v-else class="row">

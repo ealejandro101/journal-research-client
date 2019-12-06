@@ -21,6 +21,7 @@
 import JournalEdition from "@/components/admin/JournalEdition.vue";
 import CfpAdd from "@/components/editor/CfpAdd.vue";
 
+
 export default {
   name: "journal-edition-editor",
   components: {

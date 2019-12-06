@@ -101,12 +101,18 @@
         </form>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <loading-dardo v-if="isLoading"></loading-dardo>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import models from "@/utilities/models.js";
 import mixins from "@/utilities/mixins.js"
+import LoadingDardo from "@/components/generals/LoadingDardo.vue"
 
 export default {
   name: "cfp-add",
@@ -115,11 +121,15 @@ export default {
       default: undefined
     }
   },
+  components: {
+    LoadingDardo
+  },
   mixins: [mixins],
   data() {
     return {
       cfp: JSON.parse(JSON.stringify(models.cfp)),
-      journals: []
+      journals: [],
+      isLoading: false
     };
   },
   created() {
@@ -137,11 +147,15 @@ export default {
   },
   methods: {
     addCfp(){
+      this.isLoading = true
       this.$store.getters.providerService.postModel('Convocatoria/add', {
         convocatoria: this.cfp
       }).then(response => {
+        this.isLoading = false
         alert("Convocatoria creada con éxito.")
         this.cfp = JSON.parse(JSON.stringify(models.cfp))
+      }).catch(() => {
+        this.isLoading = false
       })
     },
     changeInputFile(variable){

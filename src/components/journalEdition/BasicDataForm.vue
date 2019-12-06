@@ -90,7 +90,7 @@
         <div v-if="!revista.descripcion" class="isNecessary text-left small" style="color: red;">
           Es necesario llenar este campo
         </div>
-        <ckeditor :disabled="isDisabled(mode, 'revista.descripcion')" :editor="textArea.editor" v-model="revista.descripcion" :config="textArea.editorConfig"></ckeditor>
+        <vue-editor :disabled="isDisabled(mode, 'revista.descripcion')" v-model="revista.descripcion"></vue-editor>
       </div>
 
       <div class="form-group d-flex flex-column">
@@ -185,12 +185,12 @@
 import mixins from "@/utilities/mixins.js"
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import models from "@/utilities/models.js"
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { VueEditor } from "vue2-editor";
 
 export default {
   name: "basic-data-form",
   components: {
-    ErrorNotification
+    ErrorNotification, VueEditor
   },
   mixins: [mixins],
   props: {
@@ -218,7 +218,6 @@ export default {
         errors: []
       },
       textArea: {
-        editor: ClassicEditor,
         editorConfig: {
             toolbar: [ 'bold', 'italic', 'link', 'numberedList', 'bulletedList' ]
         }

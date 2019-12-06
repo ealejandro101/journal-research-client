@@ -12,12 +12,12 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueCarousel from 'vue-carousel';
-import CKEditor from '@ckeditor/ckeditor5-vue';
+import { VueEditor } from "vue2-editor";
 
 library.add(faCoffee)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.use( CKEditor );
+Vue.use(VueEditor);
 Vue.use(BootstrapVue)
 Vue.use(VueCarousel);
 Vue.config.productionTip = false

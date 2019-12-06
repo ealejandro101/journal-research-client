@@ -59,7 +59,8 @@ export default {
         where: {
           fechaFinal: {
             gt: Date.now()
-          }
+          },
+          estado: 1,
         },
         limit: 10,
         order: 'fechaFinal ASC',

@@ -115,6 +115,11 @@
         </carousel>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <loading-dardo v-if="isLoading"></loading-dardo>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -125,12 +130,14 @@ import inputOptions from "@/utilities/inputOptions.js"
 import mixins from "@/utilities/mixins.js"
 import models from "@/utilities/models.js"
 import userSRC from "@/assets/temporal/user.png";
+import LoadingDardo from "@/components/generals/LoadingDardo.vue"
 
 export default {
   name: "perfil-edition",
   components: {
     SuscriptionButton,
-    summaryJournalCard
+    summaryJournalCard,
+    LoadingDardo
   },
   mixins: [mixins],
   props: {
@@ -150,7 +157,8 @@ export default {
         options: {
           academicLevel: inputOptions.editor.academicLevel
         }
-      }
+      },
+      isLoading: false
     };
   },
   created() {
@@ -171,7 +179,9 @@ export default {
       this.errors = []
       if (this.editor.id === undefined) {
         this.errors = ['Error interno, reinicie la pagina']
+        return
       }
+      this.isLoading = true
       this.$store.getters.providerService.patchModel(`Editors/${this.editor.id}`, {
         name: this.editor.name,
         profesion: this.editor.profesion,
@@ -181,12 +191,15 @@ export default {
         universidad: this.editor.universidad,
         googlescholar: this.editor.googlescholar
       }).then((response) => {
+        this.isLoading = false
         alert('Se ha actualizado el perfil correctamente')
       }).catch((error) => {
+        this.isLoading = false
         alert(error.response.data.error.message)
       })
     },
     updateEditorCategories(){
+      this.isLoading = true
       let subscribedCategories = []
       for (const iterator of this.categoriasSelected) {
         subscribedCategories.push({
@@ -197,11 +210,14 @@ export default {
       }
       this.$store.getters.providerService.deleteModel(`Editors/${this.editor.id}/categoriasSuscritas`).then((response) => {
         this.$store.getters.providerService.postModel(`SuscripcionEditorCategoria`, subscribedCategories).then((response) => {
+          this.isLoading = false
           alert('Se han actualizado las categorías correctamente')
         }).catch((error) => {
+          this.isLoading = false
           alert(error.response.data.error.message)
         })
       }).catch((error) => {
+        this.isLoading = false
         alert(error.response.data.error.message)
       })
     },

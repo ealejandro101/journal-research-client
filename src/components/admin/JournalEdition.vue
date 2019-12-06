@@ -20,12 +20,13 @@
             :value="index"
           >{{ journal.titulo }}</option>
         </select>
+        <span v-if="journals.length == 0">No hay revistas con este filtro.</span>
       </div>
       <div class="col-12 col-sm-6 col-md-4 align-self-center">
         <template v-if="mode == 'admin'">
           <b-button @click="approve" variant="outline-primary">Aprobar</b-button>
           <b-button @click="hide" variant="outline-danger">Ocultar revista</b-button>
-          <b-button variant="danger">Eliminar</b-button>
+          <!--<b-button variant="danger">Eliminar</b-button>-->
         </template>
       </div>
     </div>
@@ -55,6 +56,11 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-12">
+        <loading-dardo v-if="isLoading"></loading-dardo>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -63,11 +69,12 @@ import mixins from "@/utilities/mixins.js"
 import models from "@/utilities/models.js"
 import JournalGeneralForm from "@/components/journalEdition/JournalGeneralForm"
 import ErrorNotification from "@/components/ErrorNotification.vue";
+import LoadingDardo from "@/components/generals/LoadingDardo.vue"
 
 export default {
   name: 'journal-edition',
   components: {
-    JournalGeneralForm, ErrorNotification
+    JournalGeneralForm, ErrorNotification, LoadingDardo
   },
   mixins: [mixins],
   props: {
@@ -97,7 +104,8 @@ export default {
         isLogged: false,
         errors: [],
         saveIsUsed: false
-      }
+      },
+      isLoading: false
     }
   },
   created(){
@@ -127,27 +135,31 @@ export default {
         this.optionsForm.saveIsUsed = false
         return
       }
+      this.isLoading = true
       this.optionsForm.saveIsUsed = true
       let xcat = models.revistascategorias.categories.length
       let xind = models.rindexaciones.indexaciones.length
       let xidi = models.ridiomas.idiomas.length
       if (xcat == 0 || xind == 0 || xidi == 0) {
-        alert('Ha ocurrido un error al itentar postular su revista.')
         this.optionsForm.errors.push('Debe de llenar los siguientes campos: categorías, indexaciones e idiomas')
         this.optionsForm.saveIsUsed = false
+        this.isLoading = false
+        alert('Ha ocurrido un error al itentar postular su revista.')
         return
       }
       if (!models.revista.issn && !models.revista.eissn) {
-        alert('Ha ocurrido un error al itentar postular su revista.')
         this.optionsForm.errors.push('Debe de llenar al menos uno de los siguientes campos: ISSN, EISSN')
         this.optionsForm.saveIsUsed = false
+        alert('Ha ocurrido un error al itentar postular su revista.')
+        this.isLoading = false
         return
       }
       for (const iterator of models.rindexaciones.indexaciones) {
         if (!models.rindexaciones[`parameter-${iterator}`] && iterator !== 1 && iterator !== 3 && iterator !== 8) {
-          alert('Ha ocurrido un error al itentar postular su revista.')
           this.optionsForm.errors.push('Debe de llenar los enlaces de las indexaciones.')
           this.optionsForm.saveIsUsed = false
+          alert('Ha ocurrido un error al itentar postular su revista.')
+          this.isLoading = false
           return
         }
       }
@@ -157,10 +169,12 @@ export default {
       let editorId = this.$store.getters.editorId
       let route = `Revista/${models.revista.id}/updateFullJournal`
       this.$store.getters.providerService.postModel(route, { models: models }).then(response => {
+        this.isLoading = false
         alert('Se ha actualizado su revista con éxito.')
         this.optionsForm.saveIsUsed = false
       }).catch(error => {
         console.log(error);
+        this.isLoading = false
         alert('Ha ocurrido un error al itentar actualizar su revista.')
         this.optionsForm.errors.push(error.response.data.error.message)
         this.optionsForm.saveIsUsed = false
@@ -175,8 +189,8 @@ export default {
       }
       if (this.journals[this.currentJournalIndex] === undefined || this.currentJournalIndex == null) {
         this.currentJournalIndex = 0
-        if (this.journals[this.currentJournalIndex] === undefined || this.currentJournalIndex == null) {
-          return alert('Error, intente mas tarde por favor.')
+        if (this.journals.length == 0) {
+          this.currentJournalIndex = -1
         }
       }
       let journal = {}

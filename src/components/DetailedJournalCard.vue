@@ -386,7 +386,7 @@ export default {
                                               for (let index = 0; index <  respRIndex.data.length; index++) {
                                                 axios.get(process.env.ROOT_API+'Indexaciones/'+respRIndex.data[index].indexacionesId).then(response=>{
                                                     let indexacion = response.data;
-                                                    if(indexacion.indexaciones == "Scopus"){
+                                                    if(indexacion.indexaciones == "SJR"){
                                                       this.indexScopus = respRIndex.data[index].parametro
                                                       this.show = ""
                                                       document.getElementById("indexScopus").innerHTML = this.indexScopus
