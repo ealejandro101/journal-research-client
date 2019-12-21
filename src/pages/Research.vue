@@ -187,23 +187,22 @@ export default {
   },
   mounted() {
     this.categories.forEach(element => {
-      axios
-        .get(process.env.ROOT_API + `Categoria/${element.id}/revistas/count`)
-        .then(response => {
-          element.count = response.data.count;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    });
-    axios
-      .get(process.env.ROOT_API + "Revista/count")
-      .then(response => {
-        this.totalJournals = response.data.count;
-      })
-      .catch(error => {
+      this.$store.getters.providerService.getModelCount(`Categoria/${element.id}/revistas`, {
+        estaActiva: 1
+      }).then(response => {
+        element.count = response.data.count
+      }).catch(error => {
         console.log(error);
       });
+    });
+    //Revistas totales
+    this.$store.getters.providerService.getModelCount('Revista', {
+      estaActiva: 1
+    }).then(response => {
+      this.totalJournals = response.data.count
+    }).catch(error => {
+      console.log(error);
+    });
 
     //Metodo para contar la cantidad de paises
     let queryPaises = { hayrevista: 1 };

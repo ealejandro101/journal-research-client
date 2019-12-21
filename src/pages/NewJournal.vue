@@ -44,6 +44,9 @@
                 <error-notification :errors="optionsForm.errors"></error-notification>
               </div>
             </div>
+            <div v-if="optionsForm.saveIsUsed" class="col-12">
+              <loading-dardo />
+            </div>
           </div>
         </div>
       </div>
@@ -61,6 +64,7 @@ import { EventBus } from '@/event-bus.js';
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
+import LoadingDardo from "@/components/generals/LoadingDardo"
 import JournalGeneralForm from "@/components/journalEdition/JournalGeneralForm"
 import ErrorNotification from "@/components/ErrorNotification.vue";
 
@@ -70,7 +74,8 @@ export default {
     HeaderResearch,
     FooterResearch,
     JournalGeneralForm,
-    ErrorNotification
+    ErrorNotification,
+    LoadingDardo
   },
   data() {
     return {
@@ -138,16 +143,16 @@ export default {
       }
       let editorId = this.$store.getters.editorId
       let route = `Editors/${editorId}/postFullJournal`
-      this.$store.getters.providerService.postModel(route, { models: this.models }).then(response => {
+      this.$store.getters.providerService.postModel(route, { models: models }).then(response => {
         alert('Se ha postulado su revista con éxito.')
-        this.models.revista = JSON.parse(JSON.stringify(this.$store.getters.models.revista))
+        /*this.models.revista = JSON.parse(JSON.stringify(this.$store.getters.models.revista))
         this.models.rcontactos = JSON.parse(JSON.stringify(this.$store.getters.models.rcontactos))
         this.models.radicional = JSON.parse(JSON.stringify(this.$store.getters.models.radicional))
         this.models.ridiomas = JSON.parse(JSON.stringify(this.$store.getters.models.ridiomas))
         this.models.rindexaciones = JSON.parse(JSON.stringify(this.$store.getters.models.rindexaciones))
         this.models.rubicacion = JSON.parse(JSON.stringify(this.$store.getters.models.rubicacion))
         this.models.revistascategorias = JSON.parse(JSON.stringify(this.$store.getters.models.revistascategorias))
-        this.models.rpalabraclave = JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))
+        this.models.rpalabraclave = JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))*/
         this.optionsForm.saveIsUsed = false
       }).catch(error => {
         alert('Ha ocurrido un error al itentar postular su revista.')

@@ -68,7 +68,7 @@ export default class ProviderService {
     }
 
     getModelCount(model, query) {
-        let filter = query === null || query === undefined ? "" : `?filter=${JSON.stringify(query)}`
+        let filter = query === null || query === undefined ? "" : `?where=${JSON.stringify(query)}`
         return axios.get(this.rootAPI + model + '/count' + filter,  { headers: { "Authorization": this.accessToken }, withCredentials: true })
     }
 

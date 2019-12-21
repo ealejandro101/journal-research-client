@@ -59,6 +59,9 @@
           </form>
         </div>
       </div>
+      <div v-if="isLoading" class="col-12">
+        <loading-dardo />
+      </div>
       <div class="col-12 align-self-end p-0">
         <footer-research></footer-research>
       </div>
@@ -69,6 +72,7 @@
 <script>
 import HeaderResearch from "@/components/HeaderResearch";
 import FooterResearch from "@/components/FooterResearch";
+import LoadingDardo from "@/components/generals/LoadingDardo"
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 import ErrorNotification from "@/components/ErrorNotification"
 import validator from "@/utilities/validators.js"
@@ -80,7 +84,8 @@ export default {
   components: {
     HeaderResearch,
     FooterResearch,
-    ErrorNotification
+    ErrorNotification,
+    LoadingDardo
   },
   data() {
     return {
@@ -98,7 +103,8 @@ export default {
         options: {
           academicLevel: models.editor.academicLevel
         }
-      }
+      },
+     isLoading: false 
     };
   },
   created() {
@@ -111,6 +117,7 @@ export default {
       if (this.errors.length > 0) {
         return
       }
+      this.isLoading = true
       this.$store.getters.providerService.postModel('Editors', {
         name: this.name,
         profesion: this.profesion,
@@ -120,12 +127,14 @@ export default {
         orcid: this.orcid,
         universidad: this.universidad,
         googlescholar: this.googlescholar
-      }).then(function(res){
+      }).then(res => {
+        this.isLoading = false
         alert('Se ha registrado correctamente')
         _self.$router.push({
           path: '/Login'
         })
-      }).catch(function(err){
+      }).catch(err => {
+        this.isLoading = false
         alert(err.response.data.error.message)
       })
     },
