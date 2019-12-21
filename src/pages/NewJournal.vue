@@ -145,14 +145,14 @@ export default {
       let route = `Editors/${editorId}/postFullJournal`
       this.$store.getters.providerService.postModel(route, { models: models }).then(response => {
         alert('Se ha postulado su revista con éxito.')
-        /*this.models.revista = JSON.parse(JSON.stringify(this.$store.getters.models.revista))
+        this.models.revista = JSON.parse(JSON.stringify(this.$store.getters.models.revista))
         this.models.rcontactos = JSON.parse(JSON.stringify(this.$store.getters.models.rcontactos))
         this.models.radicional = JSON.parse(JSON.stringify(this.$store.getters.models.radicional))
         this.models.ridiomas = JSON.parse(JSON.stringify(this.$store.getters.models.ridiomas))
         this.models.rindexaciones = JSON.parse(JSON.stringify(this.$store.getters.models.rindexaciones))
         this.models.rubicacion = JSON.parse(JSON.stringify(this.$store.getters.models.rubicacion))
         this.models.revistascategorias = JSON.parse(JSON.stringify(this.$store.getters.models.revistascategorias))
-        this.models.rpalabraclave = JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))*/
+        this.models.rpalabraclave = JSON.parse(JSON.stringify(this.$store.getters.models.rpalabraclave))
         this.optionsForm.saveIsUsed = false
       }).catch(error => {
         alert('Ha ocurrido un error al itentar postular su revista.')
