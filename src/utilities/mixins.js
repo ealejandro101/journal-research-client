@@ -39,7 +39,8 @@ let mixin = {
           "tipoRevisionParesId": ['admin', 'editor', 'new-journal'],
           "twitter": ['admin', 'new-journal'],
           "url": ['admin', 'new-journal'],
-          "videopresentacion": ['admin', 'new-journal']
+          "videopresentacion": ['admin', 'new-journal'],
+          "crossref": ['admin', 'new-journal']
         },
         rcontactos: {
           "editor": ['admin', 'editor', 'new-journal'],

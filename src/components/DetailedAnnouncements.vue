@@ -36,7 +36,14 @@
                     <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.correo !== null && convocatoria.radicional.correo !== undefined && convocatoria.radicional.correo !== 0">
                       <li class="d-flex mb-2 justify-content-start">
                         <i class="fas fa-at mr-2"></i>
-                        <a target="_blanck" :href="'mailto:'+convocatoria.radicional.correo">{{convocatoria.radicional.correo}}</a>
+                        <a 
+                          @click="addInteraction('clicksCorreo')" 
+                          @click.middle="addInteraction('clicksCorreo')" 
+                          target="_blanck" 
+                          :href="'mailto:'+convocatoria.radicional.correo"
+                        >
+                          {{convocatoria.radicional.correo}}
+                        </a>
                       </li>
                     </template>
                   </ul>
@@ -47,14 +54,26 @@
                     <template v-if="convocatoria.documentoPdf !== null && convocatoria.documentoPdf !== undefined && convocatoria.documentoPdf.length !== 0">
                       <li class="d-flex justify-content-start mb-2 align-items-center">
                         <span class="mr-1">Documento PDF:</span>
-                        <a class="text-white float-left" :href="convocatoria.documentoPdf" target="_blank" download>
+                        <a 
+                          @click="addInteraction('descargasPdf')" 
+                          @click.middle="addInteraction('descargasPdf')" 
+                          class="text-white float-left" 
+                          :href="convocatoria.documentoPdf" 
+                          target="_blank" 
+                          download>
                           <button class="btn btn-info mr-3" title="Descargar pdf"><i class="fas fa-download"></i></button>
                         </a>
                       </li>
                     </template>
                     <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.guiaAutores !== null && convocatoria.radicional.guiaAutores !== undefined && convocatoria.radicional.guiaAutores !== 0">
                       <li class="d-flex mb-2 justify-content-start">
-                        <a class="float-left" :href="convocatoria.radicional.guiaAutores" target="_blank">
+                        <a 
+                          @click="addInteraction('clicksGuiaAutores')" 
+                          @click.middle="addInteraction('clicksGuiaAutores')" 
+                          class="float-left" 
+                          :href="convocatoria.radicional.guiaAutores" 
+                          target="_blank"
+                        >
                           <i class="fab fa-autoprefixer"></i>
                           Guía autores
                         </a>
@@ -62,7 +81,13 @@
                     </template>
                     <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.url !== null && convocatoria.radicional.url !== undefined && convocatoria.radicional.url !== 0">
                       <li class="d-flex mb-2 justify-content-start">
-                        <a class="float-left" :href="convocatoria.radicional.url" target="_blank">
+                        <a 
+                          @click="addInteraction('clicksSitioweb')" 
+                          @click.middle="addInteraction('clicksSitioweb')" 
+                          class="float-left" 
+                          :href="convocatoria.radicional.url" 
+                          target="_blank"
+                        >
                           <i class="fas fa-globe mr-2"></i>
                           Sitio web
                         </a>
@@ -70,7 +95,15 @@
                     </template>
                     <template v-if="convocatoria.link !== null && convocatoria.link !== undefined && convocatoria.link.length !== 0">
                       <li class="d-flex justify-content-start">
-                        <a class="float-left" :href="convocatoria.link" target="_blank">Ver más</a>
+                        <a
+                          @click="addInteraction('clicksConvocatoria')" 
+                          @click.middle="addInteraction('clicksConvocatoria')" 
+                          class="float-left" 
+                          :href="convocatoria.link" 
+                          target="_blank"
+                        >
+                          Ver más
+                        </a>
                       </li>
                     </template>
                   </ul>
@@ -141,9 +174,8 @@ export default {
     };
   },
   created() {
-    let providerService = new ProviderService(process.env.ROOT_API);
     let _self = this
-    providerService
+    this.$store.getters.providerService
       .getModel("Convocatoria", {
         where: {
           id: _self.idConvocatoria,
@@ -163,6 +195,7 @@ export default {
         if (_self.convocatoria.documentoPdf !== null && _self.convocatoria.documentoPdf !== undefined && _self.convocatoria.documentoPdf.length !== 0) {
           _self.convocatoria.documentoPdf = this.host+'../'+_self.convocatoria.documentoPdf.replace('convocatoriaId', _self.convocatoria.id)
         }
+        _self.addInteraction('nroVisitas')
         _self.$emit('loaded')
       });
   },
@@ -170,7 +203,12 @@ export default {
   },
   watch: {
   },
-  methods: {},
+  methods: {
+    addInteraction(interaction){
+      //Generador de datos para las estadisticas
+      this.$store.getters.providerService.addAnnouncementInteraction(this.convocatoria.id, interaction)
+    }
+  },
   filters: {
     datesFilter(value) {
       if (value === undefined) {

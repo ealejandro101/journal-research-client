@@ -3,7 +3,10 @@
     <b-card class="d-flex" style="background-color: transparent;">
       <b-row>      
         <b-col sm="12" md="12" lg="12">
-          <p class="card-text text-left"><strong v-text="revista.titulo"></strong></p>
+          <p class="card-text text-left">
+            <strong v-text="revista.titulo"></strong>
+            <!--<i class="fas fa-eye"></i> {{nroVisitas}}-->
+          </p>
           <div class="mb-3 d-flex justify-content-left">
             <suscription-button :isSubscribed="isSubscribed" :text="'Suscribirse a la revista'" @unsubscribe="$emit('unsubscribe')" @subscribe="$emit('subscribe')"></suscription-button>
           </div>
@@ -35,7 +38,7 @@
                 </b-col>
                 <b-col v-if="rindexaciones.length > 0" align-self="start">
                     <div v-for="(indexacion, i) in rindexaciones" :key="i" class="float-left ml-1 mr-1">
-                      <b-badge variant="primary">
+                      <b-badge variant="primary" @click="addInteraction('clicksIndexaciones')" @click.middle="addInteraction('clicksIndexaciones')">
                         <a v-if="indexacion.url != ''" :href="indexacion.url" class="text-light" target="_blank" v-text="indexacion.name"></a>
                         <a v-else class="text-light" v-text="indexacion.name"></a>
                       </b-badge>
@@ -97,10 +100,10 @@
             <template v-for="propa in propiedadesName2">
               <b-col :key="propa.key" sm="6" md="6" lg="6" v-if="!isVoid(revista[propa.key])">    
                 <div v-if="propa.key == 'doi' && revista[propa.key] != null ">                
-                    <itemDescription :click=true :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
+                    <itemDescription @addInteractionKey="addInteractionKey" :attributeStatistical="propa.key" :click="true" :url="urlDOI+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
                 </div>
                 <div v-else-if="propa.key == 'correo' && revista[propa.key] != null ">
-                    <itemDescription :click=true :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
+                    <itemDescription @addInteractionKey="addInteractionKey" :attributeStatistical="propa.key" :click="true" :url="'mailto:'+revista[propa.key]" :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()"> </itemDescription>
                 </div>
                 <div v-else>
                   <itemDescription  :icono="propiedades[propa.key]" :label="propa.nombre" :texto="revista[propa.key].toString()">
@@ -111,12 +114,12 @@
             <template v-for="propa in propiedadesName3">
               <b-col  :key="propa.key" sm="6" md="6" lg="6" v-if="!isVoid(revista[propa.key])">    
                 <div v-if="propa.key != 'url'">
-                  <a :href="revista[propa.key]" target="_blanck">                  
-                    <itemDescription   :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
+                  <a @click="addInteractionKey(propa.key)" @click.middle="addInteractionKey(propa.key)" :href="revista[propa.key]" target="_blanck">                  
+                    <itemDescription :icono="propiedades[propa.key]" :label="propa.nombre" > </itemDescription>
                   </a>
                 </div>
                 <div v-if="propa.key == 'url'">
-                    <itemDescription  :click=true  :url='revista.url' icono="fas fa-globe" texto="sitio web"  > </itemDescription>
+                    <itemDescription @addInteractionKey="addInteractionKey" :attributeStatistical="propa.key" :click="true"  :url='revista.url' icono="fas fa-globe" texto="sitio web"  > </itemDescription>
                 </div>                    
               </b-col>
             </template>
@@ -148,8 +151,13 @@
 
 <script>
 import axios from "axios";
-import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
+
+import AddThis from '@/components/AddThis.vue'
+import SuscriptionButton from '@/components/SuscriptionButton.vue'
 import itemDescription from "@/components/itemDescription";
+import Articles from "@/components/journalView/Articles.vue"
+
+import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
 import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";
 import cienciasBiologicas from "@/assets/ciencias-biologicas-200x167.png";
@@ -158,8 +166,7 @@ import cienciasSociales from "@/assets/ciencias-sociales-200x167.png";
 import humanidades from "@/assets/humanidades-200x167.png";
 import cienciasExactas from "@/assets/ciencias-exactas-y-de-la-Tierra-200x167.png";
 import linguisticaLiteraturaArtes from "@/assets/linguistica200x167.png";
-import AddThis from '@/components/AddThis.vue'
-import SuscriptionButton from '@/components/SuscriptionButton.vue'
+
 
 export default {
   props: {
@@ -167,10 +174,11 @@ export default {
     isSubscribed: Boolean
   },
   components: {
-    itemDescription, AddThis, SuscriptionButton
+    itemDescription, AddThis, SuscriptionButton, Articles
   },
   data() {
     return {
+      nroVisitas: '0',
       revista: {},
       categorias: [],
       rindexaciones: [],
@@ -293,7 +301,7 @@ export default {
       this.video=false;
       this.show = "displayNone"
       document.getElementById("indexScopus").innerHTML = ""
-      
+
       axios.get(process.env.ROOT_API + "Revista/" + this.id).then(response => {
         this.revista = response.data;
         let auxDate = response.data.fechaIngreso.split("-");
@@ -431,6 +439,22 @@ export default {
     },
     isVoid(param){
       return param === null || param === undefined?true:false
+    },
+    addInteraction(interaction){
+      //Generador de datos para las estadisticas
+      this.$store.getters.providerService.addJournalInteraction(this.id, interaction)
+    },
+    addInteractionKey(key){
+      let attributes = {
+        doi: 'clicksDoi', 
+        correo: 'clicksCorreo', 
+        url: 'clicksSitioweb', 
+        guiaAutores: 'clicksGuiaAutores', 
+        facebook: 'clicksRedes', 
+        instagram: 'clicksRedes', 
+        twitter: 'clicksRedes'
+      }
+      this.addInteraction(attributes[key])
     }
   }
 };

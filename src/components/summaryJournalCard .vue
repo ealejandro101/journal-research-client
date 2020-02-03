@@ -18,7 +18,7 @@
                         </p>
                         <p  class="card-text text-left"><strong v-text="codigosQseMostraran"></strong></p>
                         <p class="card-text text-justify cardDescription">
-                          {{valor}} 
+                          <span v-html="valor"></span>
                           <a href="#" class="card-link">
                               <b-badge pill variant="primary">
                                   Ver más

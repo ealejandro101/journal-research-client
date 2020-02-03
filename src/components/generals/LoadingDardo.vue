@@ -1,7 +1,7 @@
 <template>
-  <div class="containerLoading">
-    <div class="divLoading">
-      <img :src="resources.gifs.loading" alt="Cargando" />
+  <div :class="{containerLoading: !isMineature}">
+    <div class="divLoading" :class="{divMineature: isMineature}">
+      <img class="w-100 h-auto" :src="resources.gifs.loading" alt="Cargando" />
     </div>
   </div>
 </template>
@@ -11,6 +11,12 @@ import loadingSrc from "@/assets/gifs/loading.gif";
 
 export default {
   name: "loading-dardo",
+  props: {
+    isMineature: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       resources: {
@@ -42,6 +48,10 @@ img {
 }
 .divLoading{
   max-width: 40em;
-  height: fit-content;
+  height: auto;
+}
+.divMineature{
+  max-width: 20em;
+  height: auto;
 }
 </style>

@@ -177,6 +177,17 @@
           class="form-control max-width-35em"
         />
       </div>
+      <div class="form-group d-flex flex-column">
+        <label for="crossref" class="text-left d-block">Crossref</label>
+        <input
+          id="crossref"
+          :disabled="isDisabled(mode, 'radicional.crossref')"
+          v-model="radicional.crossref"
+          placeholder="Ingrese la URL crossref"
+          type="text"
+          class="form-control max-width-35em"
+        />
+      </div>
     </div>
   <!--/form-->
 </template>

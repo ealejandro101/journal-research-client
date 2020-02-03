@@ -42,7 +42,7 @@ export default {
     methods: {
         userIsLogged(){
             this.buttonText = this.text
-            if (this.$store.getters.editorId !== undefined) {
+            if (this.$store.getters.editorId !== undefined && this.$store.getters.editorId !== null) {
                 this.isUserLogged = true
                 if (this.isSubscribed) {
                     this.buttonText = 'Remover suscripción'

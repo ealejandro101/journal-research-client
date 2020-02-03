@@ -20,15 +20,19 @@
             <li @click="changeCurrentSection(1)" class="nav-item">
               <p :class="{active: currentSection == 1 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Revista</p>
             </li>
-            <li v-for="(item, index) in convocatorias" :key="index" @click="changeCurrentSection(index + 2)" class="nav-item">
-              <p :class="{active: currentSection == index + 2 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">
+            <li v-if="hasCrossref" @click="changeCurrentSection(2)" class="nav-item">
+              <p :class="{active: currentSection == 2 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Cited by</p>
+            </li>
+            <li v-for="(item, index) in convocatorias" :key="index" @click="changeCurrentSection(index + 3)" class="nav-item">
+              <p :class="{active: currentSection == index + 3 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">
                 {{ 'Call for Papers ' + (index + 1) }}
               </p>
             </li>
+            
           </ul>
         </div>
       </div>
-      <div class="row">
+      <div class="row pageContent">
         <div v-if="isLoading" class="col-12 d-flex justify-content-center">
           <div style="max-width: 7em">
             <img :src="loadingGif" alt="Cargando ...">
@@ -45,8 +49,11 @@
           </DetailedJournalCard>
           <div v-if="doesNotExist"> No se encontraron revistas con el ISSN/EISSN dado</div>
         </div>
+        <div v-show="currentSection === 2 && initialAnnouncement === undefined" class="col">
+          <Articles v-if="idJournal && hasCrossref" :journalId="idJournal" />
+        </div>
         <template v-for="(item, index) in convocatorias">
-          <div :key="index" v-if="currentSection == index + 2 || initialAnnouncement == item.id" class="col">
+          <div :key="index" v-if="currentSection == index + 3 || initialAnnouncement == item.id" class="col">
             <DetailedAnnouncements 
               @loaded="loaded" 
               @subscribe="subscribe"
@@ -84,23 +91,41 @@
   </div>
 </template>
 <script>
+import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
+import loadingGifImport from '@/assets/gifs/loading.gif'
+
 import axios from "axios";
+import ProviderService from "@/providerServices/providerServices.js";
+import jsonHeaderOptions from "@/utilities/headerOptions.js"
+
 import DetailedJournalCard from "@/components/DetailedJournalCard";
 import DetailedAnnouncements from "@/components/DetailedAnnouncements";
+import Articles from "@/components/journalView/Articles.vue"
 import HeaderResearch from "@/components/HeaderResearch";
 import BarraBusqueda from "@/components/BarraBusqueda";
 import LogoResearch from "@/components/LogoResearch";
-import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import summaryJournalCard from "@/components/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
-import loadingGifImport from '@/assets/gifs/loading.gif'
-import jsonHeaderOptions from "@/utilities/headerOptions.js"
-import ProviderService from "@/providerServices/providerServices.js";
 import FooterResearch from "@/components/FooterResearch";
+
+
+
 
 export default {
   name: 'revista',
   props: {},
+  components: {
+    DetailedJournalCard,
+    HeaderResearch,
+    BarraBusqueda,
+    LogoResearch,
+    summaryJournalCard,
+    Carousel,
+    Slide,
+    DetailedAnnouncements,
+    FooterResearch,
+    Articles
+  },
   data() {
     return {
       revistas: [],
@@ -112,7 +137,8 @@ export default {
       convocatorias: [],
       idConvocatoria: undefined,
       initialAnnouncement: undefined,
-      isSubscribed: false
+      isSubscribed: false,
+      hasCrossref: false
     };
   },
   created(){
@@ -159,15 +185,20 @@ export default {
     restartPage(){
       let _self = this
       this.changeParams(function(err, data){
-        if (_self.$store.getters.editorId !== undefined) {
+        //Generador de datos para las estadisticas
+        _self.$store.getters.providerService.addJournalInteraction(_self.idJournal, 'nroVisitas')
+
+        if (_self.$store.getters.editorId !== undefined && _self.$store.getters.editorId !== null) {
+          //Si el usuario esta conectado
           _self.$store.getters.providerService.getModel(`Editors/${_self.$store.getters.editorId}/revistasSuscritas/${_self.idJournal}`).then(response => {
             _self.isSubscribed = true
           }).catch(err => {
             _self.isSubscribed = false
           })
         }
-        
-
+        _self.$store.getters.providerService.getModel(`Revista/${_self.idJournal}/hasCrossref`).then(response => {
+          _self.hasCrossref = response.data.state
+        })
         _self.$store.getters.providerService
           .getModel("Convocatoria", {
             where: {
@@ -292,17 +323,6 @@ export default {
       this.currentSection =  index
       this.initialAnnouncement = undefined
     }
-  },
-  components: {
-    DetailedJournalCard,
-    HeaderResearch,
-    BarraBusqueda,
-    LogoResearch,
-    summaryJournalCard,
-    Carousel,
-    Slide,
-    DetailedAnnouncements,
-    FooterResearch
   }
 };
 </script>
@@ -370,6 +390,8 @@ export default {
 .nav-tabs .nav-link.active, .nav-tabs .nav-link:hover{
   background-color: #efefef;
 }
-
+.pageContent{
+  min-height: 5em;
+}
 
 </style>

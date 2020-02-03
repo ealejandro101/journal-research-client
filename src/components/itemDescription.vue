@@ -5,7 +5,8 @@
         <i :class="icono"></i>
         {{label}}
       </strong>
-      <a target="_blanck" :href="url">{{texto}}</a>
+      <a v-if="attributeStatistical" @click="addInteractionKey" @click.middle="addInteractionKey" target="_blanck" :href="url">{{texto}}</a>
+      <a v-else target="_blanck" :href="url">{{texto}}</a>
     </p>
   </div>
   <div v-else>
@@ -26,7 +27,19 @@ export default {
     label: String,
     texto: String,
     click: Boolean,
-    url: String
+    url: String,
+    attributeStatistical: String
+  },
+  data(){
+    return {
+      
+    }
+  },
+  methods: {
+    addInteractionKey(){
+      //Generador de datos para las estadisticas
+      this.$emit('addInteractionKey', this.attributeStatistical)
+    }
   }
 };
 </script>
