@@ -70,11 +70,11 @@
 </template>
 
 <script>
-import HeaderResearch from "@/components/HeaderResearch";
-import FooterResearch from "@/components/FooterResearch";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import FooterResearch from "@/components/generals/FooterResearch";
 import LoadingDardo from "@/components/generals/LoadingDardo"
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
-import ErrorNotification from "@/components/ErrorNotification"
+import ErrorNotification from "@/components/generals/ErrorNotification"
 import validator from "@/utilities/validators.js"
 import models from "@/utilities/inputOptions.js"
 import { EventBus } from '@/event-bus.js';

@@ -29,16 +29,16 @@
               <cfp-approval></cfp-approval>
             </b-collapse>
           </b-card>
-          <!--<b-card no-body class="mb-1">
+          <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
-              <b-button block v-b-toggle.accordion-edit-journal variant="light">
+              <b-button block v-b-toggle.accordion-statistics variant="light">
                 <p class="text-left font-weight-bold m-0">Estadisticas</p>
               </b-button>
             </b-card-header>
-            <b-collapse id="accordion-edit-journal" accordion="my-accordion" role="tabpanel">
-              
+            <b-collapse id="accordion-statistics" accordion="my-accordion" role="tabpanel">
+              <Statistics />
             </b-collapse>
-          </b-card>-->
+          </b-card>
         </div>
       </div>
     </div>
@@ -48,24 +48,17 @@
 <script>
 import JournalEdition from "@/components/admin/JournalEdition.vue";
 import CfpApproval from "@/components/admin/CfpApproval.vue";
+import Statistics from "@/components/admin/statistics/Statistics.vue"
 import mixins from "@/utilities/mixins.js"
 
 export default {
   name: "admin",
   components: {
     CfpApproval,
-    JournalEdition
+    JournalEdition,
+    Statistics
   },
-  mixins: [mixins],
-  data(){
-    return {
-    }
-  },
-  created(){
-  },
-  methods: {
-    
-  }
+  mixins: [mixins]
 };
 </script>
 

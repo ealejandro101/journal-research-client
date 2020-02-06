@@ -132,4 +132,34 @@ img{
 .max-width-35em{
   max-width: 35em;
 }
+.font-size-1-rem{
+  font-size: 1rem  !important;
+}
+.font-size-larger{
+  font-size: larger;
+}
+.font-size-large{
+  font-size: large;
+}
+.font-size-medium{
+  font-size: medium;
+}
+.font-size-small{
+  font-size: small;
+}
+.font-size-smaller{
+  font-size: smaller;
+}
+.font-size-x-large{
+  font-size: larger;
+}
+.font-size-x-small{
+  font-size: x-small;
+}
+.font-size-xx-large{
+  font-size: xx-large;
+}
+.font-size-xx-small{
+  font-size: xx-small;
+}
 </style>

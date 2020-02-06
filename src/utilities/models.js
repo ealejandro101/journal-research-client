@@ -62,7 +62,8 @@ const model = {
     'tipoRevisionParesId': null,
     'twitter': null,
     'url': null,
-    'videopresentacion': null
+    'videopresentacion': null,
+    'crossref': null
   },
   rcontactos: {
     'id': '',

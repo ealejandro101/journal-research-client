@@ -101,14 +101,14 @@
 </template>
 <script>
 import axios from "axios";
-import summaryJournalCard from "@/components/summaryJournalCard ";
-import DetailedJournalCard from "@/components/DetailedJournalCard";
-import HeaderResearch from "@/components/HeaderResearch";
-import BarraBusqueda from "@/components/BarraBusqueda";
-import LogoResearch from "@/components/LogoResearch";
-import FiltrosBusqueda from "@/components/FiltrosBusqueda";
+import summaryJournalCard from "@/components/journals/view/summaryJournalCard ";
+import DetailedJournalCard from "@/components/journals/view/DetailedJournalCard";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import BarraBusqueda from "@/components/journals/search/BarraBusqueda";
+import LogoResearch from "@/components/generals/LogoResearch";
+import FiltrosBusqueda from "@/components/journals/search/FiltrosBusqueda";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
-import FooterResearch from '@/components/FooterResearch';
+import FooterResearch from '@/components/generals/FooterResearch';
 import jsonHeaderOptions from "@/utilities/headerOptions.js"
 import loadingGif from "@/assets/gifs/loading.gif"
 

@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import ProviderService from "../providerServices/providerServices.js";
 import imgAux from "@/assets/journalImgDefault.jpeg";
 export default {
   name: "announcements",
@@ -53,7 +52,7 @@ export default {
   props: [],
   created() {
     let _self = this;
-    let providerServices = new ProviderService(process.env.ROOT_API);
+    let providerServices = this.$store.getters.providerService
     providerServices
       .getModel("Convocatoria", {
         where: {

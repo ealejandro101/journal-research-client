@@ -98,15 +98,15 @@ import axios from "axios";
 import ProviderService from "@/providerServices/providerServices.js";
 import jsonHeaderOptions from "@/utilities/headerOptions.js"
 
-import DetailedJournalCard from "@/components/DetailedJournalCard";
-import DetailedAnnouncements from "@/components/DetailedAnnouncements";
-import Articles from "@/components/journalView/Articles.vue"
-import HeaderResearch from "@/components/HeaderResearch";
-import BarraBusqueda from "@/components/BarraBusqueda";
-import LogoResearch from "@/components/LogoResearch";
-import summaryJournalCard from "@/components/summaryJournalCard ";
+import DetailedJournalCard from "@/components/journals/view/DetailedJournalCard";
+import DetailedAnnouncements from "@/components/announcements/DetailedAnnouncements";
+import Articles from "@/components/journals/view/Articles.vue"
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import BarraBusqueda from "@/components/journals/search/BarraBusqueda";
+import LogoResearch from "@/components/generals/LogoResearch";
+import summaryJournalCard from "@/components/journals/view/summaryJournalCard ";
 import { Carousel, Slide } from 'vue-carousel';
-import FooterResearch from "@/components/FooterResearch";
+import FooterResearch from "@/components/generals/FooterResearch";
 
 
 

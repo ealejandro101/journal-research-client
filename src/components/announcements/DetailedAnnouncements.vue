@@ -159,8 +159,8 @@
 
 <script>
 import ProviderService from "@/providerServices/providerServices.js";
-import AddThis from '@/components/AddThis.vue'
-import SuscriptionButton from '@/components/SuscriptionButton.vue'
+import AddThis from '@/components/journals/view/AddThis.vue'
+import SuscriptionButton from '@/components/journals/view/SuscriptionButton.vue'
 
 export default {
   props: ["idConvocatoria", "isSubscribed"],

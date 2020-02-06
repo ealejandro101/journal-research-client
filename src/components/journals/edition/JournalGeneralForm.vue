@@ -84,11 +84,11 @@
 </template>
 
 <script>
-import BasicDataForm from "@/components/journalEdition/BasicDataForm.vue";
-import ContactForm from "@/components/journalEdition/ContactForm.vue";
-import AdditionalForm  from "@/components/journalEdition/AdditionalForm.vue";
-import CategoryForm from "@/components/journalEdition/CategoryForm.vue";
-import LocationForm from "@/components/journalEdition/LocationForm.vue";
+import BasicDataForm from "@/components/journals/edition/BasicDataForm.vue";
+import ContactForm from "@/components/journals/edition/ContactForm.vue";
+import AdditionalForm  from "@/components/journals/edition/AdditionalForm.vue";
+import CategoryForm from "@/components/journals/edition/CategoryForm.vue";
+import LocationForm from "@/components/journals/edition/LocationForm.vue";
 import models from '@/utilities/models.js'
 
 export default {

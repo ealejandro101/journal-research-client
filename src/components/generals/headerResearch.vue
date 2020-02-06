@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid noPadding headerResearchContainer">
-        <b-navbar toggleable="md" type="dark" variant="info">
+        <b-navbar class="pb-0" toggleable="md" type="dark" variant="info">
             <div class="row d-flex align-items-center" style="width: 100%">
                 <div class="col-0 col-sm-3 col-md-2 col-lg-2 noPadding">
                     <logo-research></logo-research>
@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 noPadding">
                     <b-collapse is-nav id="nav_collapse" class="flex-row-reverse">
-                        <header-inicial :opciones="opciones" :isInicial="false"></header-inicial>
+                        <header-inicial :isInicial="false"></header-inicial>
                     </b-collapse>
                 </div>
             </div>
@@ -22,23 +22,20 @@
 </template>
 
 <script>
-import BarraBusqueda from '@/components/BarraBusqueda'
-import LogoResearch from '@/components/LogoResearch'
-import HeaderInicial from '@/components/HeaderInicial'
+import BarraBusqueda from '@/components/journals/search/BarraBusqueda'
+import LogoResearch from '@/components/generals/LogoResearch'
+import HeaderInicial from '@/components/pages/research/HeaderInicial'
+
 export default {
     name: 'header-research',
     props: [],
+    components:{BarraBusqueda, LogoResearch, HeaderInicial},
     data() {
         return {
-            opciones: [
-                {to: '/InfoResearcH', text: 'Que es ResearcH', active: true, isVuePag: false, link: 'http://journals-research.com/about_us.html'},
-                {to: '/FormularioNuevaRevista', text: 'Postula revistas', active: true, isVuePag: false, link: 'http://journals-research.com/acuerdo_research.html'},
-                {to: '/Login', text: 'Ingresa', active: false, isVuePag: true, link: ''},
-                {to: '/Registro', text: 'Registrate', active: false, isVuePag: true, link: ''}
-            ]
         };
     },
-    components:{BarraBusqueda, LogoResearch, HeaderInicial}
+    created (){
+    }
 };
 </script>
 
@@ -46,7 +43,6 @@ export default {
 .headerResearchContainer{
     border-bottom: solid 1px;
     border-color: #bfbdbd;
-    min-height: 5em;
     background-color: #fff;
 }
 ul{

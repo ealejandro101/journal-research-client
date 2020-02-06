@@ -124,8 +124,8 @@
 </template>
 
 <script>
-import SuscriptionButton from "@/components/SuscriptionButton.vue";
-import summaryJournalCard from "@/components/summaryJournalCard ";
+import SuscriptionButton from "@/components/journals/view/SuscriptionButton.vue";
+import summaryJournalCard from "@/components/journals/view/summaryJournalCard ";
 import inputOptions from "@/utilities/inputOptions.js"
 import mixins from "@/utilities/mixins.js"
 import models from "@/utilities/models.js"

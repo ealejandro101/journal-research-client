@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import ProviderServices from "../providerServices/providerServices";
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 
 export default {
@@ -86,10 +85,11 @@ export default {
       descripcion: '',
       urlImg: '',
       announcementFinalDate: '',
-      providerServices: new ProviderServices(process.env.ROOT_API)
+      providerServices: null
     };
   },
   created() {
+    this.providerServices = this.$store.getters.providerService
     this.getInfo();
     this.currentDate = new Date()
     let auxFinalDate = this.announcementFinalDate

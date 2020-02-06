@@ -62,11 +62,11 @@
 <script>
 import { EventBus } from '@/event-bus.js';
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
-import HeaderResearch from "@/components/HeaderResearch";
-import FooterResearch from "@/components/FooterResearch";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import FooterResearch from "@/components/generals/FooterResearch";
 import LoadingDardo from "@/components/generals/LoadingDardo"
-import JournalGeneralForm from "@/components/journalEdition/JournalGeneralForm"
-import ErrorNotification from "@/components/ErrorNotification.vue";
+import JournalGeneralForm from "@/components/journals/edition/JournalGeneralForm"
+import ErrorNotification from "@/components/generals/ErrorNotification.vue";
 
 export default {
   name: "nueva-revista",

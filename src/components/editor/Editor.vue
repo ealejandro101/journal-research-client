@@ -55,6 +55,11 @@ export default {
     }
   },
   created(){
+    this.$store.getters.providerService.postModel('../custom/Admin/Stadistic/getGeneralStadistics').then(res => {
+      console.log(res);
+      
+    })
+
     this.$store.getters.providerService
       .getEditorFullObject()
       .then(response => {

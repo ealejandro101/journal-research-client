@@ -89,14 +89,14 @@
 </template>
 
 <script>
-import HeaderInicial from "@/components/HeaderInicial";
-import HeaderResearch from "@/components/HeaderResearch";
-import BarraBusqueda from "@/components/BarraBusqueda";
-import LogoResearch from "@/components/LogoResearch";
-import FiltrosBusqueda from "@/components/FiltrosBusqueda";
-import Categorias from "@/components/Categorias";
-import FooterResearch from "@/components/FooterResearch";
-import Announcements from "@/components/Announcements";
+import HeaderInicial from "@/components/pages/research/HeaderInicial";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import BarraBusqueda from "@/components/journals/search/BarraBusqueda";
+import LogoResearch from "@/components/generals/LogoResearch";
+import FiltrosBusqueda from "@/components/journals/search/FiltrosBusqueda";
+import Categorias from "@/components/pages/research/Categorias";
+import FooterResearch from "@/components/generals/FooterResearch";
+import Announcements from "@/components/pages/research/Announcements";
 import axios from "axios";
 import ingenieriaLogo from "@/assets/ingenieria-200x167.png";
 import cienciasAgricolas from "@/assets/ciencias-agricolas-y-ambientales-200x167.png";

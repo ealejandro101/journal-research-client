@@ -152,10 +152,10 @@
 <script>
 import axios from "axios";
 
-import AddThis from '@/components/AddThis.vue'
-import SuscriptionButton from '@/components/SuscriptionButton.vue'
-import itemDescription from "@/components/itemDescription";
-import Articles from "@/components/journalView/Articles.vue"
+import AddThis from '@/components/journals/view/AddThis.vue'
+import SuscriptionButton from '@/components/journals/view/SuscriptionButton.vue'
+import itemDescription from "@/components/journals/view/itemDescription";
+import Articles from "@/components/journals/view/Articles.vue"
 
 import imgJournalDefoult from "@/assets/journalImgDefault.jpeg";
 import ingenieriaLogo from "@/assets/ingenieria-200x167.png";

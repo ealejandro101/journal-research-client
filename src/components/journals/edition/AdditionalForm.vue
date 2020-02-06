@@ -172,7 +172,7 @@
 </template>
 
 <script>
-import ErrorNotification from "@/components/ErrorNotification.vue";
+import ErrorNotification from "@/components/generals/ErrorNotification.vue";
 import models from "@/utilities/models.js"
 import mixins from "@/utilities/mixins.js"
 

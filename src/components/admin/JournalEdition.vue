@@ -67,8 +67,8 @@
 <script>
 import mixins from "@/utilities/mixins.js"
 import models from "@/utilities/models.js"
-import JournalGeneralForm from "@/components/journalEdition/JournalGeneralForm"
-import ErrorNotification from "@/components/ErrorNotification.vue";
+import JournalGeneralForm from "@/components/journals/edition/JournalGeneralForm"
+import ErrorNotification from "@/components/generals/ErrorNotification.vue";
 import LoadingDardo from "@/components/generals/LoadingDardo.vue"
 
 export default {

@@ -1,6 +1,6 @@
 <template>
   <!--<form @submit.prevent="save">-->
-    <div class="d-flex flex-column">
+    <div class="d-flow-root">
       <div v-if="general.errors.length > 0">
         <error-notification :errors="general.errors"></error-notification>
       </div>
@@ -240,7 +240,7 @@
 </template>
 
 <script>
-import ErrorNotification from "@/components/ErrorNotification.vue"
+import ErrorNotification from "@/components/generals/ErrorNotification.vue"
 import models from "@/utilities/models.js"
 import Autocomplete from "vuejs-auto-complete";
 import mixins from "@/utilities/mixins.js"

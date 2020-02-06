@@ -160,8 +160,8 @@
 </template>
 
 <script>
-import HeaderResearch from "@/components/HeaderResearch";
-import FooterResearch from "@/components/FooterResearch";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import FooterResearch from "@/components/generals/FooterResearch";
 import jsonHeaderOptions from "@/utilities/headerOptions.js";
 
 export default {

@@ -27,10 +27,10 @@
 </template>
 
 <script>
-import HeaderResearch from "@/components/HeaderResearch";
-import FooterResearch from "@/components/FooterResearch";
-import Editor from "@/components/Editor";
-import Admin from "@/components/Admin";
+import HeaderResearch from "@/components/generals/HeaderResearch";
+import FooterResearch from "@/components/generals/FooterResearch";
+import Editor from "@/components/editor/Editor";
+import Admin from "@/components/admin/Admin";
 
 export default {
   name: "perfil-page",
