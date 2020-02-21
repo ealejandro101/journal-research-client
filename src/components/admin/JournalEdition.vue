@@ -195,7 +195,7 @@ export default {
       }
       let journal = {}
       journal = this.journals[this.currentJournalIndex]
-      
+      this.$emit('changeJournal', journal.id)
       if (!journal.infoAdicional) {
         journal.infoAdicional = JSON.parse(JSON.stringify(this.$store.getters.models.radicional))
       }
@@ -282,6 +282,7 @@ export default {
           }).then(response => {
             this.journals = response.data
             this.currentJournalIndex = null
+            this.$emit('changeJournal', 0)
           })
       } else {
         this.$store.getters.providerService

@@ -14,7 +14,7 @@
           <b-card v-if="editor.propietarioRevista.length !== 0" no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
               <b-button block v-b-toggle.accordion-edit-journal variant="light">
-                <p class="text-left font-weight-bold m-0">Edición de revistas</p>
+                <p class="text-left font-weight-bold m-0">Mis revistas</p>
               </b-button>
             </b-card-header>
             <b-collapse id="accordion-edit-journal" visible accordion="my-accordion" role="tabpanel">
@@ -55,11 +55,6 @@ export default {
     }
   },
   created(){
-    this.$store.getters.providerService.postModel('../custom/Admin/Stadistic/getGeneralStadistics').then(res => {
-      console.log(res);
-      
-    })
-
     this.$store.getters.providerService
       .getEditorFullObject()
       .then(response => {

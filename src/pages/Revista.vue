@@ -20,9 +20,9 @@
             <li @click="changeCurrentSection(1)" class="nav-item">
               <p :class="{active: currentSection == 1 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Revista</p>
             </li>
-            <li v-if="hasCrossref" @click="changeCurrentSection(2)" class="nav-item">
+            <!--<li v-if="hasCrossref" @click="changeCurrentSection(2)" class="nav-item">
               <p :class="{active: currentSection == 2 && initialAnnouncement === undefined}" class="nav-link mb-0 cursor-pointer">Cited by</p>
-            </li>
+            </li>-->
             <li v-for="(item, index) in convocatorias" :key="index" @click="changeCurrentSection(index + 3)" class="nav-item">
               <p :class="{active: currentSection == index + 3 || initialAnnouncement == item.id}" class="liNavConvocatorias nav-link text-dark mb-0 cursor-pointer">
                 {{ 'Call for Papers ' + (index + 1) }}
@@ -40,9 +40,11 @@
         </div>
         <div v-show="currentSection === 1 && initialAnnouncement === undefined" class="col">
           <DetailedJournalCard 
-            v-if="idJournal !== ''" 
-            :id="idJournal" @refreshCategory="refreshJournals"
+            v-if="idJournal !== '' && revista.id" 
+            :revista="revista"
+            :id="idJournal" 
             :isSubscribed="isSubscribed"
+            @refreshCategory="refreshJournals"
             @loaded="loaded"
             @unsubscribe="unsubscribe"
             @subscribe="subscribe">
@@ -55,12 +57,13 @@
         <template v-for="(item, index) in convocatorias">
           <div :key="index" v-if="currentSection == index + 3 || initialAnnouncement == item.id" class="col">
             <DetailedAnnouncements 
+              :revista="revista"
+              :isSubscribed="isSubscribed"
+              :idConvocatoria="item.id"
               @loaded="loaded" 
               @subscribe="subscribe"
-              :isSubscribed="isSubscribed"
               @unsubscribe="unsubscribe"
-              :idConvocatoria="item.id">
-            </DetailedAnnouncements>
+            />
           </div>
         </template>
         
@@ -98,7 +101,7 @@ import axios from "axios";
 import ProviderService from "@/providerServices/providerServices.js";
 import jsonHeaderOptions from "@/utilities/headerOptions.js"
 
-import DetailedJournalCard from "@/components/journals/view/DetailedJournalCard";
+import DetailedJournalCard from "@/components/journals/view/detailedJournalCard/DetailedJournalCard";
 import DetailedAnnouncements from "@/components/announcements/DetailedAnnouncements";
 import Articles from "@/components/journals/view/Articles.vue"
 import HeaderResearch from "@/components/generals/HeaderResearch";
@@ -128,6 +131,7 @@ export default {
   },
   data() {
     return {
+      revista: {},
       revistas: [],
       idJournal: "",
       loadingGif: undefined,
@@ -185,6 +189,8 @@ export default {
     restartPage(){
       let _self = this
       this.changeParams(function(err, data){
+        //
+        _self.initDetailedJournal()
         //Generador de datos para las estadisticas
         _self.$store.getters.providerService.addJournalInteraction(_self.idJournal, 'nroVisitas')
 
@@ -322,7 +328,47 @@ export default {
     changeCurrentSection(index){
       this.currentSection =  index
       this.initialAnnouncement = undefined
-    }
+    },
+    initDetailedJournal () {
+      this.revista = {}
+      this.$store.getters.providerService.getModel(`/Revista/${this.idJournal}`, {
+        fields: ['id', 'titulo', 'imagen', 'descripcion', 'licenciaId'],
+        include: [
+          {
+            relation: 'categorias'
+          },
+          {
+            relation: 'indexaciones',
+            scope: {
+              include: 'indexacion'
+            }
+          },
+          {
+            relation: 'plabrasclaves'
+          },
+          {
+            relation: 'licencia'
+          },
+          {
+            relation: 'infoAdicional',
+            scope: {
+              fields: ['videopresentacion']
+            }
+          }
+        ]
+      }).then(res => {
+        this.revista =  res.data
+        
+        //Busca las palabras claves (No funciona la busqueda por relacion)
+        this.$store.getters.providerService.getModel(`Revista/${this.revista.id}/plabrasclaves`).then(res => {
+          this.revista.plabrasclaves = res.data
+        })
+        //Video
+        if (this.revista.infoAdicional.videopresentacion !== null) {
+          this.revista.infoAdicional.videopresentacion = this.revista.infoAdicional.videopresentacion.split("&")[0].replace("watch?v=","embed/");
+        }
+      })
+    },
   }
 };
 </script>

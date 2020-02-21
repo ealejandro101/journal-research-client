@@ -24,7 +24,7 @@ const router = new Router({
     },
     {
       path: "/Revista/:search",
-      name: "Research",
+      name: "RevistasSearch",
       component: Revista,
       meta: {
         allowedForGuest: true,

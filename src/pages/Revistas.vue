@@ -102,7 +102,6 @@
 <script>
 import axios from "axios";
 import summaryJournalCard from "@/components/journals/view/summaryJournalCard ";
-import DetailedJournalCard from "@/components/journals/view/DetailedJournalCard";
 import HeaderResearch from "@/components/generals/HeaderResearch";
 import BarraBusqueda from "@/components/journals/search/BarraBusqueda";
 import LogoResearch from "@/components/generals/LogoResearch";

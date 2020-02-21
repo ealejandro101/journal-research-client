@@ -8,21 +8,32 @@
           </div>
           <div v-else>
             <div class="container-fluid">
-              <div class="row mb-1">
-                <div class="col-12 text-left mt-4 font-weight-bold">
-                  <p v-text="convocatoria.titulo"></p>
+              <div class="row">
+                <div class="col-12 text-left mt-4">
+                  <div class="journalActionsCardComponent">
+                    <JournalActionsCard 
+                      :title="revista.titulo" 
+                      :image="revista.imagen" 
+                      :isSubscribed="isSubscribed" 
+                      @unsubscribe="$emit('unsubscribe')" 
+                      @subscribe="$emit('subscribe')" 
+                    />
+                  </div>
+                  <span class="font-weight-bold" v-text="convocatoria.titulo" /><br>
+                  <span v-if="convocatoria.estadisticas">
+                    <i class="fas fa-eye"></i> 
+                    <span v-text="convocatoria.estadisticas.nroVisitas" />
+                  </span>
                   <div class="mb-3 d-flex justify-content-left">
                     <suscription-button :isSubscribed="isSubscribed" :text="'Suscribirse a la revista'" @unsubscribe="$emit('unsubscribe')" @subscribe="$emit('subscribe')"></suscription-button>
                   </div>
-                </div>
-                <div class="col-12">
                   <p class="text-secondary text-left">Fecha de inicio: {{ convocatoria.fechaInicio | datesFilter }}</p>
                   <p class="text-secondary text-left">Fecha de cierre: {{ convocatoria.fechaFinal | datesFilter }}</p>
+                  <p v-text="convocatoria.descripcion" class="text-justify text-body"></p>
                 </div>
               </div>
               <div class="row justify-content-center">
                 <div class="col mb-2 order-1 order-md-0">
-                  <p v-text="convocatoria.descripcion" class="text-justify text-body"></p>
                   <p
                     class="text-left"
                   >Para obtener más información, no dude en ponerse en contacto con:</p>
@@ -63,6 +74,10 @@
                           download>
                           <button class="btn btn-info mr-3" title="Descargar pdf"><i class="fas fa-download"></i></button>
                         </a>
+                        <span v-if="convocatoria.estadisticas">
+                          <i class="fas fa-long-arrow-alt-down"></i>
+                          <span v-text="convocatoria.estadisticas.descargasPdf" />
+                        </span>
                       </li>
                     </template>
                     <template v-if="convocatoria.radicional !== undefined && convocatoria.radicional.guiaAutores !== null && convocatoria.radicional.guiaAutores !== undefined && convocatoria.radicional.guiaAutores !== 0">
@@ -161,11 +176,12 @@
 import ProviderService from "@/providerServices/providerServices.js";
 import AddThis from '@/components/journals/view/AddThis.vue'
 import SuscriptionButton from '@/components/journals/view/SuscriptionButton.vue'
+import JournalActionsCard from "@/components/journals/view/detailedJournalCard/JournalActionsCard.vue"
 
 export default {
-  props: ["idConvocatoria", "isSubscribed"],
+  props: ["idConvocatoria", "isSubscribed", 'revista'],
   components: {
-    AddThis, SuscriptionButton
+    AddThis, SuscriptionButton, JournalActionsCard
   },
   data() {
     return {
@@ -183,7 +199,7 @@ export default {
             gte: Date.now()
           }
         },
-        include: ['radicional', 'revista', 'contacto']
+        include: ['radicional', 'revista', 'contacto', 'estadisticas']
       })
       .then(response => {
         _self.convocatoria = response.data[0];
@@ -221,7 +237,16 @@ export default {
 </script>
 
 <style scoped>
-.imgConvocatoria {
+.imgConvocatoria, .journalActionsCardComponent{
   max-width: 15em;
+}
+.journalActionsCardComponent{
+  float: left;
+}
+@media (max-width: 768px){
+  .journalActionsCardComponent{
+    float: none;
+    margin: auto;
+  }
 }
 </style>

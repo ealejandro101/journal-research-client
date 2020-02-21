@@ -8,15 +8,14 @@ import App from './App'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueCarousel from 'vue-carousel';
 import { VueEditor } from "vue2-editor";
-
-library.add(faCoffee)
+import zingchartVue from 'zingchart-vue';
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('zingchart', zingchartVue);
+
 Vue.use(VueEditor);
 Vue.use(BootstrapVue)
 Vue.use(VueCarousel);

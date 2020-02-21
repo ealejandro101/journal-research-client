@@ -41,7 +41,16 @@
         <div class="col-12 journalStatistics">
           <b-tabs content-class="mt-3">
             <b-tab title="Revista" active>
-              <b-table v-if="journalStatistics.length > 0" hover :items="journalStatistics"></b-table>
+              <div v-if="journalStatistics.length > 0" class="container-fluid">
+                <div class="row">
+                  <div class="col-12 col-xl-9">
+                    <b-table hover :items="journalStatistics"></b-table>
+                  </div>
+                  <div class="col-12 col-xl-3 visitorStatistics d-flex justify-content-center">
+                    <VisitorStatistics :journalId="currentJournalId" />
+                  </div>
+                </div>
+              </div>
               <span v-else>No hay registro de las visitas a la revista.</span>
             </b-tab>
             <b-tab title="Convocatorias">
@@ -51,11 +60,14 @@
           </b-tabs>
         </div>
       </div>
+      
     </form>
   </div>
 </template>
 
 <script>
+import VisitorStatistics from "@/components/journals/statistics/VisitorStatistics.vue"
+
 export default {
   name: "AdvancedStatistics",
   data() {
@@ -66,6 +78,9 @@ export default {
       journalStatistics: [],
       announcementsStatistics: []
     };
+  },
+  components: {
+    VisitorStatistics
   },
   created() {
     this.$store.getters.providerService.postModel(`../custom/Admin/Statistics/getJournals`).then(response => {
@@ -131,5 +146,8 @@ export default {
 <style>
 .journalStatistics{
   min-height: 10em;
+}
+.visitorStatistics{
+  min-height: 7em;
 }
 </style>
